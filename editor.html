@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Afsane — Site Editor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Cormorant+Garamond:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #0D0F1A; --navy-l: #161929; --navy-m: #1e2235;
+      --gold: #C9A84C; --gold-l: #e0c068; --gold-d: #9A7A2E;
+      --ivory: #F5F0E8; --ivory-d: #d8d0c0;
+      --burg: #6B1E2E; --rose: #C4987F; --sage: #8A9E8C;
+      --border: rgba(255,255,255,0.07);
+      --border-gold: rgba(201,168,76,0.25);
+      --text: #c8c4bc; --text-dim: #70686a; --text-bright: #F5F0E8;
+    }
+    html, body { height: 100%; overflow: hidden; background: var(--navy); color: var(--text); font-family: 'Inter', sans-serif; font-size: 13px; }
+
+    /* ── Layout ──────────────────────────────────────── */
+    .layout { display: flex; flex-direction: column; height: 100vh; }
+    .topbar { display: flex; align-items: center; gap: 0; height: 52px; background: var(--navy); border-bottom: 1px solid var(--border-gold); flex-shrink: 0; padding: 0 16px; }
+    .main { display: flex; flex: 1; overflow: hidden; }
+    .sidebar { width: 320px; flex-shrink: 0; display: flex; flex-direction: column; background: #0a0c14; border-right: 1px solid var(--border); overflow: hidden; }
+    .preview-pane { flex: 1; display: flex; flex-direction: column; background: var(--navy-m); overflow: hidden; }
+    iframe#preview { flex: 1; border: none; width: 100%; }
+
+    /* ── Topbar ──────────────────────────────────────── */
+    .topbar-logo { font-family: 'Cormorant Garamond', serif; font-size: 18px; letter-spacing: .3em; font-weight: 500; color: var(--ivory); margin-right: 8px; }
+    .topbar-badge { font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); border: 1px solid var(--gold-d); padding: 2px 8px; border-radius: 2px; }
+    .topbar-spacer { flex: 1; }
+    .topbar-btn { cursor: pointer; background: none; border: 1px solid var(--border); color: var(--text); font-size: 11px; letter-spacing: .15em; text-transform: uppercase; padding: 6px 14px; transition: all .2s; font-family: 'Inter', sans-serif; }
+    .topbar-btn:hover { border-color: var(--gold); color: var(--gold); }
+    .topbar-btn.primary { background: var(--gold); color: var(--navy); border-color: var(--gold); font-weight: 600; }
+    .topbar-btn.primary:hover { background: var(--gold-l); }
+    .topbar-btn.danger { border-color: rgba(180,60,60,.4); color: #c05050; }
+    .topbar-btn.danger:hover { border-color: #c05050; background: rgba(180,60,60,.1); }
+    .topbar-sep { width: 1px; height: 24px; background: var(--border); margin: 0 10px; }
+
+    /* ── Preview toolbar ─────────────────────────────── */
+    .preview-toolbar { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--navy-l); border-bottom: 1px solid var(--border); flex-shrink: 0; }
+    .preview-toolbar span { font-size: 10px; letter-spacing: .15em; text-transform: uppercase; color: var(--text-dim); }
+    .viewport-btn { cursor: pointer; background: none; border: 1px solid transparent; color: var(--text-dim); padding: 4px 8px; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; font-family: 'Inter', sans-serif; transition: all .2s; border-radius: 2px; }
+    .viewport-btn.on, .viewport-btn:hover { border-color: var(--border-gold); color: var(--gold); }
+    .preview-page-select { background: var(--navy-m); border: 1px solid var(--border); color: var(--text); font-size: 10px; padding: 4px 8px; letter-spacing: .1em; font-family: 'Inter', sans-serif; cursor: pointer; margin-left: auto; }
+    .preview-page-select:focus { outline: none; border-color: var(--gold); }
+
+    /* ── Sidebar header ──────────────────────────────── */
+    .sidebar-header { padding: 14px 16px 10px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+    .sidebar-header p { font-size: 9px; letter-spacing: .25em; text-transform: uppercase; color: var(--text-dim); }
+
+    /* ── Section nav tabs ────────────────────────────── */
+    .section-tabs { display: flex; flex-direction: column; gap: 1px; padding: 8px; flex-shrink: 0; border-bottom: 1px solid var(--border); }
+    .stab { cursor: pointer; display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 3px; transition: background .15s; }
+    .stab:hover { background: rgba(255,255,255,.04); }
+    .stab.on { background: rgba(201,168,76,.12); }
+    .stab-icon { width: 18px; height: 18px; color: var(--text-dim); flex-shrink: 0; }
+    .stab.on .stab-icon { color: var(--gold); }
+    .stab-label { font-size: 11px; letter-spacing: .08em; color: var(--text); }
+    .stab.on .stab-label { color: var(--gold); font-weight: 500; }
+    .stab-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--gold); margin-left: auto; opacity: 0; transition: opacity .2s; }
+    .stab.modified .stab-dot { opacity: 1; }
+
+    /* ── Panel content ───────────────────────────────── */
+    .panels { flex: 1; overflow-y: auto; scrollbar-width: thin; scrollbar-color: rgba(201,168,76,.2) transparent; }
+    .panels::-webkit-scrollbar { width: 3px; }
+    .panels::-webkit-scrollbar-thumb { background: rgba(201,168,76,.2); }
+    .panel { display: none; padding: 16px; }
+    .panel.on { display: block; }
+
+    /* ── Form elements ───────────────────────────────── */
+    .field { margin-bottom: 16px; }
+    .field-group { background: rgba(255,255,255,.025); border: 1px solid var(--border); border-radius: 4px; padding: 12px 14px; margin-bottom: 12px; }
+    .field-group-label { font-size: 9px; letter-spacing: .25em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; display: block; }
+    label { display: block; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 5px; }
+    input[type="text"], input[type="email"], textarea, select {
+      width: 100%; background: rgba(255,255,255,.04); border: 1px solid var(--border);
+      color: var(--text-bright); font-size: 12px; padding: 7px 10px;
+      font-family: 'Inter', sans-serif; transition: border-color .2s; border-radius: 2px;
+      resize: vertical;
+    }
+    input[type="text"]:focus, input[type="email"]:focus, textarea:focus, select:focus {
+      outline: none; border-color: var(--gold);
+    }
+    textarea { min-height: 60px; line-height: 1.6; }
+    input[type="color"] { width: 36px; height: 36px; border: 1px solid var(--border); padding: 2px; background: transparent; cursor: pointer; border-radius: 2px; }
+    input[type="color"]:focus { outline: 1px solid var(--gold); }
+
+    /* ── Color row ───────────────────────────────────── */
+    .color-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .color-row label { flex: 1; margin: 0; }
+    .color-preview { width: 36px; height: 36px; border-radius: 2px; border: 1px solid var(--border); flex-shrink: 0; }
+    .color-hex { width: 80px; font-size: 11px; padding: 6px 8px; text-transform: uppercase; letter-spacing: .05em; flex-shrink: 0; }
+
+    /* ── Product list ────────────────────────────────── */
+    .product-row { border: 1px solid var(--border); border-radius: 3px; margin-bottom: 6px; overflow: hidden; }
+    .product-row-head { display: flex; align-items: center; gap: 8px; padding: 8px 10px; cursor: pointer; background: rgba(255,255,255,.02); transition: background .15s; }
+    .product-row-head:hover { background: rgba(255,255,255,.05); }
+    .product-row-num { font-size: 10px; color: var(--gold); width: 18px; flex-shrink: 0; }
+    .product-row-name { flex: 1; font-size: 12px; color: var(--text-bright); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .product-row-price { font-size: 11px; color: var(--text-dim); flex-shrink: 0; }
+    .product-row-chevron { color: var(--text-dim); transition: transform .2s; flex-shrink: 0; }
+    .product-row-chevron.open { transform: rotate(180deg); }
+    .product-row-body { display: none; padding: 10px 10px 12px; border-top: 1px solid var(--border); background: rgba(0,0,0,.15); }
+    .product-row-body.open { display: block; }
+    .product-row-body .field { margin-bottom: 8px; }
+    .product-row-body label { font-size: 9px; }
+
+    /* ── Badge selector ──────────────────────────────── */
+    .badge-opts { display: flex; gap: 5px; }
+    .badge-opt { cursor: pointer; font-size: 9px; letter-spacing: .15em; text-transform: uppercase; padding: 4px 10px; border: 1px solid var(--border); border-radius: 2px; color: var(--text-dim); transition: all .2s; }
+    .badge-opt.on, .badge-opt:hover { border-color: var(--gold); color: var(--gold); background: rgba(201,168,76,.08); }
+
+    /* ── Section divider ─────────────────────────────── */
+    .section-divider { display: flex; align-items: center; gap: 8px; margin: 14px 0 10px; }
+    .section-divider::before, .section-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .section-divider span { font-size: 9px; letter-spacing: .25em; text-transform: uppercase; color: var(--text-dim); white-space: nowrap; }
+
+    /* ── Article editor ──────────────────────────────── */
+    .article-card { border: 1px solid var(--border); border-radius: 3px; padding: 12px; margin-bottom: 8px; }
+    .article-card-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    .article-num { font-size: 9px; letter-spacing: .2em; color: var(--gold); }
+    .cat-badge { font-size: 9px; letter-spacing: .12em; text-transform: uppercase; padding: 2px 7px; border: 1px solid var(--border-gold); color: var(--gold); border-radius: 2px; }
+
+    /* ── Toast ───────────────────────────────────────── */
+    #toast { position: fixed; bottom: 20px; right: 20px; background: var(--navy-m); border: 1px solid var(--border-gold); color: var(--gold); font-size: 11px; letter-spacing: .12em; padding: 10px 18px; border-radius: 2px; transform: translateY(80px); opacity: 0; transition: all .3s cubic-bezier(.16,1,.3,1); z-index: 999; pointer-events: none; }
+    #toast.show { transform: translateY(0); opacity: 1; }
+
+    /* ── Save indicator ──────────────────────────────── */
+    #save-indicator { font-size: 10px; letter-spacing: .12em; color: var(--text-dim); display: flex; align-items: center; gap: 5px; }
+    .save-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--sage); }
+    .save-dot.unsaved { background: var(--rose); animation: pulse .8s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+    /* ── Char counter ────────────────────────────────── */
+    .char-count { font-size: 9px; color: var(--text-dim); text-align: right; margin-top: 3px; letter-spacing: .05em; }
+    .char-count.warn { color: var(--rose); }
+
+    /* ── Image selector ──────────────────────────────── */
+    .img-swatches { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 5px; }
+    .img-swatch { width: 32px; height: 40px; border-radius: 2px; cursor: pointer; border: 2px solid transparent; transition: border-color .15s; }
+    .img-swatch.on { border-color: var(--gold); }
+
+    /* ── Scrollbar ───────────────────────────────────── */
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(201,168,76,.2); border-radius: 3px; }
+
+    /* ── Focus ───────────────────────────────────────── */
+    button:focus-visible, a:focus-visible { outline: 1px solid var(--gold); outline-offset: 2px; }
+
+    /* ── Mobile warning ──────────────────────────────── */
+    @media (max-width: 900px) {
+      .mob-warn { display: flex !important; }
+    }
+    .mob-warn { display: none; position: fixed; inset: 0; background: var(--navy); z-index: 999; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 40px; gap: 16px; }
+  </style>
+</head>
+<body>
+
+<!-- Mobile warning -->
+<div class="mob-warn">
+  <p style="font-family:'Cormorant Garamond',serif;font-size:2rem;letter-spacing:.2em;color:#F5F0E8">AFSANE</p>
+  <p style="font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--gold)">Site Editor</p>
+  <p style="font-size:13px;color:var(--text-dim);max-width:280px;line-height:1.7">The editor requires a desktop screen (960px+) for the best experience.</p>
+</div>
+
+<div class="layout">
+  <!-- ── TOPBAR ─────────────────────────────────────── -->
+  <div class="topbar">
+    <span class="topbar-logo">AFSANE</span>
+    <span class="topbar-badge">Editor</span>
+    <div class="topbar-sep"></div>
+    <div id="save-indicator">
+      <div class="save-dot" id="save-dot"></div>
+      <span id="save-label">All changes saved</span>
+    </div>
+    <div class="topbar-spacer"></div>
+    <button class="topbar-btn" onclick="resetAll()" title="Reset all edits to original content">Reset</button>
+    <div class="topbar-sep"></div>
+    <button class="topbar-btn" onclick="saveToStorage()">Save</button>
+    <button class="topbar-btn primary" onclick="downloadSite()" style="margin-left:6px">
+      Download HTML ↓
+    </button>
+  </div>
+
+  <div class="main">
+    <!-- ── SIDEBAR ──────────────────────────────────── -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <p>Website Content Editor</p>
+      </div>
+
+      <!-- Nav tabs -->
+      <div class="section-tabs">
+        <div class="stab on" data-panel="brand" onclick="switchPanel('brand',this)">
+          <svg class="stab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          <span class="stab-label">Brand Identity</span>
+          <div class="stab-dot"></div>
+        </div>
+        <div class="stab" data-panel="colors" onclick="switchPanel('colors',this)">
+          <svg class="stab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 0 20"/><path d="M12 2C6.48 2 2 6.48 2 12"/></svg>
+          <span class="stab-label">Colors</span>
+          <div class="stab-dot"></div>
+        </div>
+        <div class="stab" data-panel="homepage" onclick="switchPanel('homepage',this)">
+          <svg class="stab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <span class="stab-label">Homepage</span>
+          <div class="stab-dot"></div>
+        </div>
+        <div class="stab" data-panel="products" onclick="switchPanel('products',this)">
+          <svg class="stab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          <span class="stab-label">Products</span>
+          <div class="stab-dot"></div>
+        </div>
+        <div class="stab" data-panel="collections" onclick="switchPanel('collections',this)">
+          <svg class="stab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+          <span class="stab-label">Collections</span>
+          <div class="stab-dot"></div>
+        </div>
+        <div class="stab" data-panel="about" onclick="switchPanel('about',this)">
+          <svg class="stab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span class="stab-label">About Page</span>
+          <div class="stab-dot"></div>
+        </div>
+        <div class="stab" data-panel="journal" onclick="switchPanel('journal',this)">
+          <svg class="stab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          <span class="stab-label">Journal</span>
+          <div class="stab-dot"></div>
+        </div>
+        <div class="stab" data-panel="footer" onclick="switchPanel('footer',this)">
+          <svg class="stab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          <span class="stab-label">Footer</span>
+          <div class="stab-dot"></div>
+        </div>
+      </div>
+
+      <!-- Panels -->
+      <div class="panels">
+
+        <!-- ── BRAND PANEL ──────────────────────────── -->
+        <div class="panel on" id="panel-brand">
+          <div class="field-group">
+            <span class="field-group-label">Site Identity</span>
+            <div class="field">
+              <label>Brand Name</label>
+              <input type="text" data-id="ed-brand-name" data-also="ed-footer-brand" placeholder="AFSANE">
+            </div>
+            <div class="field">
+              <label>Footer Tagline</label>
+              <input type="text" data-id="ed-footer-tagline" placeholder="Premium Persian-inspired clothing...">
+            </div>
+          </div>
+          <div class="field-group">
+            <span class="field-group-label">Brand Statement</span>
+            <div class="field">
+              <label>Quote (shown on homepage)</label>
+              <textarea data-id="ed-brand-quote" data-html="1" placeholder='"We didn't invent fashion. We remembered it."'></textarea>
+            </div>
+            <div class="field">
+              <label>Attribution</label>
+              <input type="text" data-id="ed-brand-attr" placeholder="— Afsane, founded in the myth of what endures">
+            </div>
+          </div>
+          <div class="field-group">
+            <span class="field-group-label">About Mission</span>
+            <div class="field">
+              <label>Mission Quote</label>
+              <textarea data-id="ed-mission-quote" data-html="1" placeholder='"Fashion as a form of cultural memory."'></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── COLORS PANEL ─────────────────────────── -->
+        <div class="panel" id="panel-colors">
+          <div class="field-group">
+            <span class="field-group-label">Brand Colors</span>
+            <p style="font-size:11px;color:var(--text-dim);margin-bottom:12px;line-height:1.6">Changes apply live in the preview. The Persian star pattern and gradient accents update automatically.</p>
+
+            <div class="color-row">
+              <label>Gold (Primary)</label>
+              <input type="color" data-color="gold" value="#C9A84C">
+              <div class="color-preview" id="cp-gold" style="background:#C9A84C"></div>
+              <input type="text" class="color-hex" data-color-hex="gold" value="#C9A84C" maxlength="7">
+            </div>
+            <div class="color-row">
+              <label>Navy (Background)</label>
+              <input type="color" data-color="navy" value="#0D0F1A">
+              <div class="color-preview" id="cp-navy" style="background:#0D0F1A"></div>
+              <input type="text" class="color-hex" data-color-hex="navy" value="#0D0F1A" maxlength="7">
+            </div>
+            <div class="color-row">
+              <label>Ivory (Light)</label>
+              <input type="color" data-color="ivory" value="#F5F0E8">
+              <div class="color-preview" id="cp-ivory" style="background:#F5F0E8"></div>
+              <input type="text" class="color-hex" data-color-hex="ivory" value="#F5F0E8" maxlength="7">
+            </div>
+            <div class="color-row">
+              <label>Burgundy (Accent)</label>
+              <input type="color" data-color="burg" value="#6B1E2E">
+              <div class="color-preview" id="cp-burg" style="background:#6B1E2E"></div>
+              <input type="text" class="color-hex" data-color-hex="burg" value="#6B1E2E" maxlength="7">
+            </div>
+            <div class="color-row">
+              <label>Rose (Accent)</label>
+              <input type="color" data-color="rose" value="#C4987F">
+              <div class="color-preview" id="cp-rose" style="background:#C4987F"></div>
+              <input type="text" class="color-hex" data-color-hex="rose" value="#C4987F" maxlength="7">
+            </div>
+            <div class="color-row">
+              <label>Sage (Accent)</label>
+              <input type="color" data-color="sage" value="#8A9E8C">
+              <div class="color-preview" id="cp-sage" style="background:#8A9E8C"></div>
+              <input type="text" class="color-hex" data-color-hex="sage" value="#8A9E8C" maxlength="7">
+            </div>
+          </div>
+          <button class="topbar-btn" style="width:100%;margin-top:4px" onclick="resetColors()">Reset Colors to Default</button>
+        </div>
+
+        <!-- ── HOMEPAGE PANEL ───────────────────────── -->
+        <div class="panel" id="panel-homepage">
+          <div class="field-group">
+            <span class="field-group-label">Hero Section</span>
+            <div class="field">
+              <label>Eyebrow Label</label>
+              <input type="text" data-id="ed-hero-eyebrow" placeholder="The Legend Lives">
+            </div>
+            <div class="field">
+              <label>Main Headline</label>
+              <textarea data-id="ed-hero-headline" data-html="1" placeholder="Born from Legend.&#10;Worn with Intention." rows="3"></textarea>
+            </div>
+            <div class="field">
+              <label>Subtext</label>
+              <textarea data-id="ed-hero-subtext" placeholder="A Persian-inspired luxury label..."></textarea>
+            </div>
+            <div class="field">
+              <label>Primary CTA Button</label>
+              <input type="text" data-id="ed-hero-cta1" placeholder="Explore the Collection">
+            </div>
+            <div class="field">
+              <label>Secondary CTA Button</label>
+              <input type="text" data-id="ed-hero-cta2" placeholder="Our Story">
+            </div>
+          </div>
+
+          <div class="field-group">
+            <span class="field-group-label">Collections Section</span>
+            <div class="field">
+              <label>Section Heading</label>
+              <input type="text" data-id="ed-coll-heading" placeholder="Three Worlds. One Lineage.">
+            </div>
+          </div>
+
+          <div class="field-group">
+            <span class="field-group-label">Heritage Section</span>
+            <div class="field">
+              <label>Section Heading</label>
+              <textarea data-id="ed-heritage-heading" data-html="1" rows="2" placeholder="Rooted in Legend. Refined for Now."></textarea>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <span class="field-group-label">Email Capture Section</span>
+            <div class="field">
+              <label>Heading</label>
+              <textarea data-id="ed-email-heading" data-html="1" rows="2" placeholder="Join the Inner Circle"></textarea>
+            </div>
+            <div class="field">
+              <label>Subtext</label>
+              <textarea data-id="ed-email-sub" placeholder="Be the first to know..."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── PRODUCTS PANEL ───────────────────────── -->
+        <div class="panel" id="panel-products">
+          <p style="font-size:11px;color:var(--text-dim);margin-bottom:12px;line-height:1.6">Edit product name, price, category and badge. Changes update the Shop grid live.</p>
+          <div id="product-list"></div>
+        </div>
+
+        <!-- ── COLLECTIONS PANEL ────────────────────── -->
+        <div class="panel" id="panel-collections">
+          <p style="font-size:11px;color:var(--text-dim);margin-bottom:12px;line-height:1.6">Edit the four editorial collection cards shown on the Collections page.</p>
+          <div id="collection-list"></div>
+        </div>
+
+        <!-- ── ABOUT PANEL ──────────────────────────── -->
+        <div class="panel" id="panel-about">
+          <div class="field-group">
+            <span class="field-group-label">Heritage Pillars</span>
+            <div class="field">
+              <label>Pillar I — Title</label>
+              <input type="text" id="pillar-1-title" placeholder="The Shahnameh">
+            </div>
+            <div class="field">
+              <label>Pillar I — Body</label>
+              <textarea id="pillar-1-body" rows="3"></textarea>
+            </div>
+            <div class="field">
+              <label>Pillar II — Title</label>
+              <input type="text" id="pillar-2-title" placeholder="The Simurgh">
+            </div>
+            <div class="field">
+              <label>Pillar II — Body</label>
+              <textarea id="pillar-2-body" rows="3"></textarea>
+            </div>
+            <div class="field">
+              <label>Pillar III — Title</label>
+              <input type="text" id="pillar-3-title" placeholder="The Persian Garden">
+            </div>
+            <div class="field">
+              <label>Pillar III — Body</label>
+              <textarea id="pillar-3-body" rows="3"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── JOURNAL PANEL ────────────────────────── -->
+        <div class="panel" id="panel-journal">
+          <p style="font-size:11px;color:var(--text-dim);margin-bottom:12px;line-height:1.6">Edit article titles, categories and excerpts for the Journal page.</p>
+          <div id="journal-list"></div>
+        </div>
+
+        <!-- ── FOOTER PANEL ─────────────────────────── -->
+        <div class="panel" id="panel-footer">
+          <div class="field-group">
+            <span class="field-group-label">Footer Content</span>
+            <div class="field">
+              <label>Copyright Text</label>
+              <input type="text" data-id="ed-copyright" placeholder="© 2025 Afsane. All rights reserved.">
+            </div>
+          </div>
+          <div class="field-group">
+            <span class="field-group-label">Social Handles</span>
+            <div class="field"><label>Instagram URL</label><input type="text" id="social-instagram" placeholder="https://instagram.com/afsane"></div>
+            <div class="field"><label>Pinterest URL</label><input type="text" id="social-pinterest" placeholder="https://pinterest.com/afsane"></div>
+            <div class="field"><label>TikTok URL</label><input type="text" id="social-tiktok" placeholder="https://tiktok.com/@afsane"></div>
+          </div>
+          <div class="field-group">
+            <span class="field-group-label">Contact</span>
+            <div class="field"><label>Contact Email</label><input type="email" id="contact-email" placeholder="hello@afsane.com"></div>
+          </div>
+        </div>
+
+      </div><!-- /panels -->
+    </aside>
+
+    <!-- ── PREVIEW PANE ──────────────────────────── -->
+    <div class="preview-pane">
+      <div class="preview-toolbar">
+        <span>Live Preview</span>
+        <button class="viewport-btn on" onclick="setViewport('100%', this)" title="Full width">Desktop</button>
+        <button class="viewport-btn" onclick="setViewport('768px', this)" title="Tablet width">Tablet</button>
+        <button class="viewport-btn" onclick="setViewport('390px', this)" title="Mobile width">Mobile</button>
+        <select class="preview-page-select" onchange="previewPage(this.value)" aria-label="Navigate preview to page">
+          <option value="home">↳ Home</option>
+          <option value="shop">↳ Shop</option>
+          <option value="collections">↳ Collections</option>
+          <option value="product">↳ Product Detail</option>
+          <option value="about">↳ About</option>
+          <option value="journal">↳ Journal</option>
+        </select>
+      </div>
+      <div id="preview-wrap" style="flex:1;overflow:auto;display:flex;justify-content:center;background:var(--navy-m);padding:0;">
+        <iframe id="preview" src="index.html" title="Afsane website preview" style="width:100%;border:none;"></iframe>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast notification -->
+<div id="toast">Changes saved</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════
+   AFSANE EDITOR — JavaScript
+═══════════════════════════════════════════════════════ */
+
+const STORAGE_KEY = 'afsane_editor_v1';
+const iframe = document.getElementById('preview');
+
+/* ── Default data ──────────────────────────────────── */
+const DEFAULTS = {
+  texts: {
+    'ed-brand-name':       'AFSANE',
+    'ed-footer-brand':     'AFSANE',
+    'ed-footer-tagline':   'Premium Persian-inspired clothing. Born from legend. Crafted with intention.',
+    'ed-copyright':        '© 2025 Afsane. All rights reserved. Born from legend.',
+    'ed-hero-eyebrow':     'The Legend Lives',
+    'ed-hero-headline':    'Born from Legend.<br><em class="italic text-gold-l font-light">Worn with Intention.</em>',
+    'ed-hero-subtext':     'A Persian-inspired luxury label for those who carry history within them.',
+    'ed-hero-cta1':        'Explore the Collection',
+    'ed-hero-cta2':        'Our Story',
+    'ed-brand-quote':      '"We didn\'t invent fashion. We <span class="gold-text not-italic font-normal">remembered</span> it."',
+    'ed-brand-attr':       '— Afsane, founded in the myth of what endures',
+    'ed-coll-heading':     'Three Worlds. One Lineage.',
+    'ed-heritage-heading': 'Rooted in Legend.<br><em class="italic text-gold-l">Refined for Now.</em>',
+    'ed-email-heading':    'Join the<br><em class="italic gold-text">Inner Circle</em>',
+    'ed-email-sub':        'Be the first to know about new arrivals, limited drops, editorial essays, and invitations to exclusive events. No noise — only what matters.',
+    'ed-mission-quote':    '"Fashion as a form<br>of cultural memory."',
+  },
+  colors: { gold:'#C9A84C', navy:'#0D0F1A', ivory:'#F5F0E8', burg:'#6B1E2E', rose:'#C4987F', sage:'#8A9E8C' },
+  products: [
+    { id:1,  name:'The Ardashir Coat',          price:'$485', cat:'Outerwear', img:'ig-p1', tag:'' },
+    { id:2,  name:'Simurgh Blazer',             price:'$325', cat:'Outerwear', img:'ig-p2', tag:'' },
+    { id:3,  name:'Persian Garden Silk Blouse', price:'$210', cat:'Tops',      img:'ig-p3', tag:'New' },
+    { id:4,  name:'Nowruz Trousers',            price:'$245', cat:'Trousers',  img:'ig-p4', tag:'' },
+    { id:5,  name:'The Mythmaker Dress',        price:'$395', cat:'Dresses',   img:'ig-p5', tag:'New' },
+    { id:6,  name:'Shahnameh Hoodie',           price:'$185', cat:'Tops',      img:'ig-p6', tag:'' },
+    { id:7,  name:'Rostam Varsity',             price:'$440', cat:'Outerwear', img:'ig-p7', tag:'Limited' },
+    { id:8,  name:'Cypress Grove Jacket',       price:'$290', cat:'Outerwear', img:'ig-p8', tag:'' },
+    { id:9,  name:'Zal Oversized Tee',          price:'$125', cat:'Tops',      img:'ig-p1', tag:'' },
+    { id:10, name:'Desert Moon Kaftan',         price:'$320', cat:'Dresses',   img:'ig-p2', tag:'Limited' },
+    { id:11, name:'Persepolis Column Tee',      price:'$115', cat:'Tops',      img:'ig-p3', tag:'' },
+    { id:12, name:'The Afsane Classic Shirt',   price:'$195', cat:'Tops',      img:'ig-p4', tag:'New' },
+  ],
+  collections: [
+    { num:'I',   badge:'New Season', name:'The Mythos Collection', tagline:'Inspired by the great Persian epic', desc:'Each piece in this collection carries the weight of a name: Ardashir, Simurgh, Rostam. Wear these names with the dignity they deserve.', count:'8 pieces', cta:'Shop Collection' },
+    { num:'II',  badge:'',           name:'The Essentials',         tagline:'Timeless foundations built to last', desc:'These are not basics. These are anchors — refined silhouettes, premium fabrics, zero compromise.', count:'12 pieces', cta:'Shop Collection' },
+    { num:'III', badge:'Limited',    name:'Spring Equinox Nowruz Drop', tagline:'Nowruz — the Persian New Year', desc:'Only 50 units per style, never restocked. This limited drop captures the spirit of the turning year.', count:'Limited · 4 styles remain', cta:'Shop the Drop' },
+    { num:'IV',  badge:'',           name:'Statement Pieces',        tagline:'For moments that demand presence', desc:'Structured silhouettes, considered embellishments, editorial cuts that make their own declaration.', count:'6 pieces', cta:'Shop Collection' },
+  ],
+  articles: [
+    { num:1, cat:'Cultural Essay',   title:'The Legend of the Simurgh: How Ancient Persian Myth Shapes the Way We Dress Today', excerpt:'The Simurgh has been woven into Persian consciousness for more than three thousand years...', mins:'8 min read' },
+    { num:2, cat:'Collection Story', title:'Nowruz and the Spirit of Renewal: A Note on the Spring Drop',                        excerpt:'The Persian New Year falls on the spring equinox — the precise moment when light and dark achieve balance.', mins:'5 min' },
+    { num:3, cat:"Founder's Note",   title:'In Conversation: The Artisans Who Make Afsane Possible',                            excerpt:'We traveled to the Istanbul atelier to spend three days watching our craftspeople work.', mins:'4 min' },
+    { num:4, cat:'Cultural Essay',   title:'Persepolis: Reading Architecture as a Language of Dress',                           excerpt:'The columns of Persepolis are not merely structural. They are a statement about proportion, repetition, refinement.', mins:'7 min' },
+    { num:5, cat:'Cultural Essay',   title:'The Persian Garden and Its Influence on Textile Pattern',                           excerpt:'From the pairidaeza of the Achaemenid era to the garden carpets of the Safavid period.', mins:'6 min' },
+    { num:6, cat:'Collection Story', title:'Behind the Mythos Collection: Where the Ideas Were Born',                           excerpt:'Every piece in the Mythos Collection began as a proper noun — a name from the Shahnameh.', mins:'3 min' },
+  ],
+};
+
+/* ── Live data (copy of DEFAULTS, mutated by editor) ─ */
+let data = JSON.parse(JSON.stringify(DEFAULTS));
+let unsaved = false;
+
+/* ── Debounce helper ───────────────────────────────── */
+function debounce(fn, ms) {
+  let t; return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); };
+}
+
+/* ── Send message to iframe ────────────────────────── */
+function send(msg) {
+  try { iframe.contentWindow.postMessage({ type: 'AFSANE_EDIT', ...msg }, '*'); }
+  catch(e) {}
+}
+
+/* ── Mark unsaved ──────────────────────────────────── */
+function markUnsaved() {
+  unsaved = true;
+  document.getElementById('save-dot').classList.add('unsaved');
+  document.getElementById('save-label').textContent = 'Unsaved changes';
+}
+function markSaved() {
+  unsaved = false;
+  document.getElementById('save-dot').classList.remove('unsaved');
+  document.getElementById('save-label').textContent = 'All changes saved';
+}
+
+/* ── Toast ─────────────────────────────────────────── */
+function toast(msg, dur=2200) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), dur);
+}
+
+/* ── Panel switching ───────────────────────────────── */
+function switchPanel(id, tab) {
+  document.querySelectorAll('.stab').forEach(t => t.classList.remove('on'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('on'));
+  tab.classList.add('on');
+  document.getElementById('panel-' + id).classList.add('on');
+}
+
+/* ── Preview viewport ──────────────────────────────── */
+function setViewport(width, btn) {
+  document.querySelectorAll('.viewport-btn').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  iframe.style.width = width;
+  iframe.style.maxWidth = width;
+  const wrap = document.getElementById('preview-wrap');
+  wrap.style.justifyContent = width === '100%' ? 'stretch' : 'center';
+  wrap.style.padding = width === '100%' ? '0' : '20px';
+  if (width !== '100%') iframe.style.boxShadow = '0 0 0 1px rgba(255,255,255,.08), 0 8px 40px rgba(0,0,0,.5)';
+  else iframe.style.boxShadow = 'none';
+}
+
+/* ── Navigate preview to page ──────────────────────── */
+function previewPage(pageId) { send({ action: 'showPage', page: pageId }); }
+
+/* ── Apply text change ─────────────────────────────── */
+function applyText(id, value, isHtml) {
+  data.texts[id] = value;
+  send({ action: 'updateText', id, value, html: !!isHtml });
+  markUnsaved();
+  // Sync sibling inputs (e.g. brand-name → footer-brand)
+  const siblings = document.querySelectorAll(`[data-also="${id}"]`);
+  // handled via data-also attribute: when brand-name changes, footer-brand also gets same value
+}
+
+/* ── Apply colors ──────────────────────────────────── */
+const sendColors = debounce(() => { send({ action: 'updateColors', colors: data.colors }); }, 80);
+function applyColor(key, hex) {
+  data.colors[key] = hex;
+  // Update preview swatch
+  const cp = document.getElementById('cp-' + key);
+  if (cp) cp.style.background = hex;
+  // Sync color input ↔ hex text
+  const colorInput = document.querySelector(`input[type="color"][data-color="${key}"]`);
+  const hexInput = document.querySelector(`input.color-hex[data-color-hex="${key}"]`);
+  if (colorInput && colorInput.value !== hex) colorInput.value = hex;
+  if (hexInput && hexInput.value !== hex) hexInput.value = hex;
+  sendColors();
+  markUnsaved();
+}
+
+/* ── Apply products ────────────────────────────────── */
+const sendProducts = debounce(() => { send({ action: 'updateProducts', products: data.products }); }, 200);
+
+/* ── Save / Load ───────────────────────────────────── */
+function saveToStorage() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  markSaved();
+  toast('Changes saved ✓');
+}
+function loadFromStorage() {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (saved) { try { data = JSON.parse(saved); } catch(e) {} }
+}
+function resetAll() {
+  if (!confirm('Reset ALL content to original defaults? This cannot be undone.')) return;
+  data = JSON.parse(JSON.stringify(DEFAULTS));
+  localStorage.removeItem(STORAGE_KEY);
+  populateForms();
+  applyAllToPreview();
+  markSaved();
+  toast('Reset to original ✓');
+}
+function resetColors() {
+  data.colors = { ...DEFAULTS.colors };
+  populateColors();
+  sendColors();
+  markUnsaved();
+  toast('Colors reset ✓');
+}
+
+/* ── Apply all to preview (on iframe load / reset) ─── */
+function applyAllToPreview() {
+  send({ action: 'setAll', data: { texts: data.texts, colors: data.colors, products: data.products } });
+}
+
+/* ── Populate form fields from data ────────────────── */
+function populateForms() {
+  // Text fields with data-id
+  document.querySelectorAll('[data-id]').forEach(el => {
+    const id = el.getAttribute('data-id');
+    if (data.texts[id] !== undefined) {
+      // Strip HTML tags for display in plain inputs
+      el.value = data.texts[id].replace(/<[^>]+>/g, match => {
+        // Keep line breaks as newlines in textareas
+        return match === '<br>' ? '\n' : '';
+      });
+    }
+  });
+  // Colors
+  populateColors();
+  // Products
+  renderProductList();
+  // Collections
+  renderCollectionList();
+  // Articles
+  renderArticleList();
+}
+
+function populateColors() {
+  Object.entries(data.colors).forEach(([key, hex]) => {
+    const colorEl = document.querySelector(`input[type="color"][data-color="${key}"]`);
+    const hexEl = document.querySelector(`input.color-hex[data-color-hex="${key}"]`);
+    const preview = document.getElementById('cp-' + key);
+    if (colorEl) colorEl.value = hex;
+    if (hexEl) hexEl.value = hex;
+    if (preview) preview.style.background = hex;
+  });
+}
+
+/* ── Render product rows ───────────────────────────── */
+function renderProductList() {
+  const container = document.getElementById('product-list');
+  const cats = ['Outerwear','Tops','Trousers','Dresses'];
+  const badges = ['', 'New', 'Limited'];
+  const imgs = ['ig-p1','ig-p2','ig-p3','ig-p4','ig-p5','ig-p6','ig-p7','ig-p8'];
+
+  container.innerHTML = data.products.map((p, i) => `
+    <div class="product-row">
+      <div class="product-row-head" onclick="toggleProductRow(${i})">
+        <span class="product-row-num">${p.id}</span>
+        <span class="product-row-name">${p.name}</span>
+        <span class="product-row-price">${p.price}</span>
+        <svg class="product-row-chevron" id="pchev-${i}" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="product-row-body" id="pbody-${i}">
+        <div class="field">
+          <label>Product Name</label>
+          <input type="text" value="${p.name}" onchange="updateProduct(${i},'name',this.value)" oninput="updateProduct(${i},'name',this.value)">
+        </div>
+        <div class="field">
+          <label>Price</label>
+          <input type="text" value="${p.price}" onchange="updateProduct(${i},'price',this.value)" style="width:120px">
+        </div>
+        <div class="field">
+          <label>Category</label>
+          <select onchange="updateProduct(${i},'cat',this.value)">
+            ${cats.map(c => `<option${c===p.cat?' selected':''}>${c}</option>`).join('')}
+          </select>
+        </div>
+        <div class="field">
+          <label>Badge</label>
+          <div class="badge-opts">
+            ${badges.map(b => `<div class="badge-opt${b===p.tag?' on':''}" onclick="updateProduct(${i},'tag','${b}');updateBadgeOpts(this,${i})">${b||'None'}</div>`).join('')}
+          </div>
+        </div>
+        <div class="field">
+          <label>Image Style</label>
+          <div class="img-swatches">
+            ${imgs.map(img => `<div class="img-swatch ${img}${img===p.img?' on':''}" onclick="updateProduct(${i},'img','${img}');updateImgSwatches(this,${i})" title="${img}"></div>`).join('')}
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleProductRow(i) {
+  const body = document.getElementById('pbody-' + i);
+  const chev = document.getElementById('pchev-' + i);
+  const open = body.classList.contains('open');
+  // Close all
+  document.querySelectorAll('.product-row-body').forEach(b => b.classList.remove('open'));
+  document.querySelectorAll('.product-row-chevron').forEach(c => c.classList.remove('open'));
+  if (!open) { body.classList.add('open'); chev.classList.add('open'); }
+}
+
+function updateProduct(i, key, val) {
+  data.products[i][key] = val;
+  // Update name in header live
+  if (key === 'name') {
+    const nameEl = document.querySelector(`#pbody-${i}`).previousElementSibling.querySelector('.product-row-name');
+    if (nameEl) nameEl.textContent = val;
+  }
+  if (key === 'price') {
+    const priceEl = document.querySelector(`#pbody-${i}`).previousElementSibling.querySelector('.product-row-price');
+    if (priceEl) priceEl.textContent = val;
+  }
+  sendProducts();
+  markUnsaved();
+}
+
+function updateBadgeOpts(el, i) {
+  el.closest('.badge-opts').querySelectorAll('.badge-opt').forEach(b => b.classList.remove('on'));
+  el.classList.add('on');
+}
+function updateImgSwatches(el, i) {
+  el.closest('.img-swatches').querySelectorAll('.img-swatch').forEach(s => s.classList.remove('on'));
+  el.classList.add('on');
+}
+
+/* ── Render collection rows ────────────────────────── */
+function renderCollectionList() {
+  const container = document.getElementById('collection-list');
+  container.innerHTML = data.collections.map((c, i) => `
+    <div class="article-card" style="margin-bottom:10px">
+      <div class="article-card-head">
+        <span class="article-num">Collection ${c.num}</span>
+        ${c.badge ? `<span class="cat-badge">${c.badge}</span>` : ''}
+      </div>
+      <div class="field"><label>Name</label>
+        <input type="text" value="${c.name}" oninput="updateCollection(${i},'name',this.value)"></div>
+      <div class="field"><label>Tagline</label>
+        <input type="text" value="${c.tagline}" oninput="updateCollection(${i},'tagline',this.value)"></div>
+      <div class="field"><label>Description</label>
+        <textarea rows="3" oninput="updateCollection(${i},'desc',this.value)">${c.desc}</textarea></div>
+      <div class="field"><label>CTA Button</label>
+        <input type="text" value="${c.cta}" oninput="updateCollection(${i},'cta',this.value)" style="width:160px"></div>
+    </div>
+  `).join('');
+}
+function updateCollection(i, key, val) {
+  data.collections[i][key] = val;
+  markUnsaved();
+}
+
+/* ── Render journal articles ───────────────────────── */
+function renderArticleList() {
+  const container = document.getElementById('journal-list');
+  container.innerHTML = data.articles.map((a, i) => `
+    <div class="article-card">
+      <div class="article-card-head">
+        <span class="article-num">Article ${a.num}</span>
+        <span class="cat-badge" style="font-size:9px">${a.cat}</span>
+      </div>
+      <div class="field"><label>Category</label>
+        <input type="text" value="${a.cat}" oninput="updateArticle(${i},'cat',this.value)"></div>
+      <div class="field"><label>Title</label>
+        <textarea rows="2" oninput="updateArticle(${i},'title',this.value)">${a.title}</textarea></div>
+      <div class="field"><label>Excerpt</label>
+        <textarea rows="2" oninput="updateArticle(${i},'excerpt',this.value)">${a.excerpt}</textarea></div>
+      <div class="field"><label>Read Time</label>
+        <input type="text" value="${a.mins}" oninput="updateArticle(${i},'mins',this.value)" style="width:100px"></div>
+    </div>
+  `).join('');
+}
+function updateArticle(i, key, val) {
+  data.articles[i][key] = val;
+  markUnsaved();
+}
+
+/* ── Download modified site ────────────────────────── */
+async function downloadSite() {
+  const btn = document.querySelector('.topbar-btn.primary');
+  const orig = btn.textContent;
+  btn.textContent = 'Generating…';
+  btn.disabled = true;
+  try {
+    const resp = await fetch('index.html');
+    let html = await resp.text();
+    // Build injection script
+    const injection = `<script id="afsane-editor-data">
+(function(){
+  var D = ${JSON.stringify(data)};
+  // Apply texts after DOM ready
+  document.addEventListener('DOMContentLoaded', function(){
+    Object.entries(D.texts).forEach(function(e){
+      var el = document.getElementById(e[0]);
+      if(el) el.innerHTML = e[1];
+    });
+    // Apply color overrides
+    var s = document.getElementById('dyn-colors');
+    if(s){
+      var c = D.colors;
+      s.textContent = ':root{--ed-gold:'+c.gold+';--ed-navy:'+c.navy+';--ed-ivory:'+c.ivory+';--ed-burg:'+c.burg+';--ed-rose:'+c.rose+';--ed-sage:'+c.sage+'}.bg-gold,button.bg-gold{background-color:var(--ed-gold)!important}.text-gold{color:var(--ed-gold)!important}.border-gold{border-color:var(--ed-gold)!important}.bg-navy{background-color:var(--ed-navy)!important}.text-navy{color:var(--ed-navy)!important}.gold-text{background:linear-gradient(135deg,var(--ed-gold),color-mix(in srgb,var(--ed-gold) 80%,white),color-mix(in srgb,var(--ed-gold) 70%,black))!important;-webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;background-clip:text!important}';
+    }
+    // Apply products
+    if(D.products){ window._edProducts = D.products; }
+  });
+})();
+<\/script>`;
+    html = html.replace('<body class="antialiased">', '<body class="antialiased">\n' + injection);
+    const blob = new Blob([html], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'index.html'; a.click();
+    URL.revokeObjectURL(url);
+    toast('Downloaded! ✓');
+  } catch(e) {
+    toast('Error: open via a local server (not file://)');
+    console.error(e);
+  }
+  btn.textContent = orig;
+  btn.disabled = false;
+}
+
+/* ── Wire up form events ───────────────────────────── */
+function wireTextInputs() {
+  // data-id inputs/textareas → live update
+  document.querySelectorAll('[data-id]').forEach(el => {
+    el.addEventListener('input', debounce(function() {
+      const id = this.getAttribute('data-id');
+      const isHtml = !!this.getAttribute('data-html');
+      let value = this.value;
+      // Re-add <br> tags for newlines if html field
+      if (isHtml) value = value.replace(/\n/g, '<br>');
+      data.texts[id] = value;
+      send({ action: 'updateText', id, value, html: isHtml });
+      // Sync data-also elements
+      const alsoId = this.getAttribute('data-also');
+      if (alsoId) {
+        data.texts[alsoId] = value;
+        send({ action: 'updateText', id: alsoId, value, html: isHtml });
+      }
+      markUnsaved();
+    }, 200));
+  });
+
+  // Also handle brand-name updating footer-brand simultaneously
+  const brandInput = document.querySelector('[data-id="ed-brand-name"]');
+  if (brandInput) {
+    brandInput.addEventListener('input', debounce(function() {
+      data.texts['ed-footer-brand'] = this.value;
+      send({ action: 'updateText', id: 'ed-footer-brand', value: this.value, html: false });
+    }, 200));
+  }
+}
+
+function wireColorInputs() {
+  // Color picker → hex text + preview
+  document.querySelectorAll('input[type="color"][data-color]').forEach(el => {
+    el.addEventListener('input', function() { applyColor(this.dataset.color, this.value); });
+  });
+  // Hex text → color picker
+  document.querySelectorAll('input.color-hex[data-color-hex]').forEach(el => {
+    el.addEventListener('input', function() {
+      const v = this.value.trim();
+      if (/^#[0-9a-fA-F]{6}$/.test(v)) applyColor(this.dataset.colorHex, v);
+    });
+  });
+}
+
+/* ── Auto-save on changes ──────────────────────────── */
+const autoSave = debounce(saveToStorage, 4000);
+document.addEventListener('input', () => { markUnsaved(); autoSave(); });
+
+/* ── Iframe ready → apply all data ─────────────────── */
+iframe.addEventListener('load', () => {
+  setTimeout(applyAllToPreview, 300);
+});
+
+/* ── Keyboard shortcuts ────────────────────────────── */
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); saveToStorage(); }
+});
+
+/* ── Init ──────────────────────────────────────────── */
+loadFromStorage();
+populateForms();
+wireTextInputs();
+wireColorInputs();
+</script>
+</body>
+</html>

@@ -147,6 +147,7 @@
   </style>
 </head>
 <body class="antialiased">
+<style id="dyn-colors"></style>
 
 <!-- ═══════════════════════════════════════════════════════
      NAVIGATION
@@ -160,7 +161,7 @@
       <a onclick="showPage('journal')" href="#" class="cursor-pointer text-xs tracking-[.22em] text-ivory/70 hover:text-gold transition-colors duration-200 uppercase font-sans">Journal</a>
     </div>
     <!-- Logo -->
-    <a onclick="showPage('home')" href="#" class="cursor-pointer absolute left-1/2 -translate-x-1/2 font-serif text-2xl md:text-3xl tracking-[.35em] font-medium text-ivory hover:text-gold transition-colors duration-300">AFSANE</a>
+    <a id="ed-brand-name" onclick="showPage('home')" href="#" class="cursor-pointer absolute left-1/2 -translate-x-1/2 font-serif text-2xl md:text-3xl tracking-[.35em] font-medium text-ivory hover:text-gold transition-colors duration-300">AFSANE</a>
     <!-- Right icons -->
     <div class="flex items-center gap-3 ml-auto">
       <button onclick="toggleSearch()" aria-label="Search" class="cursor-pointer hidden md:flex w-9 h-9 items-center justify-center text-ivory/70 hover:text-gold transition-colors duration-200">
@@ -248,14 +249,14 @@
     <div class="absolute bottom-16 left-6 md:left-12 w-12 h-12 border-l border-b border-gold/20 pointer-events-none"></div>
     <div class="absolute bottom-16 right-6 md:right-12 w-12 h-12 border-r border-b border-gold/20 pointer-events-none"></div>
     <div class="relative z-10 text-center px-6 max-w-5xl mx-auto">
-      <p class="text-xs tracking-[.35em] uppercase text-gold mb-6 md:mb-8 font-sans" data-r>The Legend Lives</p>
-      <h1 class="font-serif text-[clamp(3rem,8vw,7.5rem)] font-light leading-[1.05] tracking-wide text-ivory mb-6 md:mb-8" data-r data-d="1">
+      <p id="ed-hero-eyebrow" class="text-xs tracking-[.35em] uppercase text-gold mb-6 md:mb-8 font-sans" data-r>The Legend Lives</p>
+      <h1 id="ed-hero-headline" class="font-serif text-[clamp(3rem,8vw,7.5rem)] font-light leading-[1.05] tracking-wide text-ivory mb-6 md:mb-8" data-r data-d="1">
         Born from Legend.<br><em class="italic text-gold-l font-light">Worn with Intention.</em>
       </h1>
-      <p class="font-sans text-base md:text-lg font-light text-ivory/65 max-w-xl mx-auto mb-10 md:mb-12 leading-relaxed" data-r data-d="2">A Persian-inspired luxury label for those who carry history within them.</p>
+      <p id="ed-hero-subtext" class="font-sans text-base md:text-lg font-light text-ivory/65 max-w-xl mx-auto mb-10 md:mb-12 leading-relaxed" data-r data-d="2">A Persian-inspired luxury label for those who carry history within them.</p>
       <div class="flex flex-col sm:flex-row gap-4 justify-center items-center" data-r data-d="3">
-        <button onclick="showPage('shop')" class="cursor-pointer bg-gold hover:bg-gold-l text-navy text-xs tracking-[.25em] uppercase font-semibold px-8 py-4 transition-colors duration-200 font-sans min-w-[200px]">Explore the Collection</button>
-        <button onclick="showPage('about')" class="cursor-pointer border border-ivory/30 hover:border-gold text-ivory hover:text-gold text-xs tracking-[.25em] uppercase font-sans px-8 py-4 transition-all duration-200 min-w-[200px]">Our Story</button>
+        <button id="ed-hero-cta1" onclick="showPage('shop')" class="cursor-pointer bg-gold hover:bg-gold-l text-navy text-xs tracking-[.25em] uppercase font-semibold px-8 py-4 transition-colors duration-200 font-sans min-w-[200px]">Explore the Collection</button>
+        <button id="ed-hero-cta2" onclick="showPage('about')" class="cursor-pointer border border-ivory/30 hover:border-gold text-ivory hover:text-gold text-xs tracking-[.25em] uppercase font-sans px-8 py-4 transition-all duration-200 min-w-[200px]">Our Story</button>
       </div>
     </div>
     <!-- Scroll indicator -->
@@ -271,10 +272,10 @@
       <div class="orn mb-10" data-r>
         <span class="text-[10px] tracking-[.3em] uppercase text-gold/60 font-sans whitespace-nowrap">Our Belief</span>
       </div>
-      <blockquote class="font-serif text-[clamp(2rem,4.5vw,3.75rem)] font-light italic leading-[1.2] text-ivory/95 mb-8" data-r data-d="1">
+      <blockquote id="ed-brand-quote" class="font-serif text-[clamp(2rem,4.5vw,3.75rem)] font-light italic leading-[1.2] text-ivory/95 mb-8" data-r data-d="1">
         "We didn't invent fashion.<br>We <span class="gold-text not-italic font-normal">remembered</span> it."
       </blockquote>
-      <p class="font-sans text-sm text-ivory/35 tracking-[.2em] uppercase" data-r data-d="2">— Afsane, founded in the myth of what endures</p>
+      <p id="ed-brand-attr" class="font-sans text-sm text-ivory/35 tracking-[.2em] uppercase" data-r data-d="2">— Afsane, founded in the myth of what endures</p>
       <div class="orn mt-10" data-r data-d="3">
         <span class="text-[10px] tracking-[.3em] uppercase text-gold/60 font-sans whitespace-nowrap">Since 2022</span>
       </div>
@@ -286,7 +287,7 @@
     <div class="max-w-7xl mx-auto">
       <div class="text-center mb-14" data-r>
         <p class="text-[10px] tracking-[.35em] uppercase text-navy/40 font-sans mb-3">The Collections</p>
-        <h2 class="font-serif text-4xl md:text-5xl font-light text-navy tracking-wide">Three Worlds. One Lineage.</h2>
+        <h2 id="ed-coll-heading" class="font-serif text-4xl md:text-5xl font-light text-navy tracking-wide">Three Worlds. One Lineage.</h2>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <!-- Collection 1: The Mythos -->
@@ -421,7 +422,7 @@
       </div>
       <div data-r data-d="1">
         <p class="text-[10px] tracking-[.35em] uppercase text-gold/60 font-sans mb-5">Our Heritage</p>
-        <h2 class="font-serif text-4xl md:text-5xl font-light text-ivory tracking-wide leading-[1.1] mb-8">Rooted in Legend.<br><em class="italic text-gold-l">Refined for Now.</em></h2>
+        <h2 id="ed-heritage-heading" class="font-serif text-4xl md:text-5xl font-light text-ivory tracking-wide leading-[1.1] mb-8">Rooted in Legend.<br><em class="italic text-gold-l">Refined for Now.</em></h2>
         <div class="space-y-5 text-ivory/60 font-sans text-sm leading-[1.85] font-light">
           <p>Afsane was born from a question: what would it mean to dress in a way that honors where you come from? We are a label shaped by the Persian literary tradition — by the Shahnameh's heroes, by Hafez's verse, by the geometric poetry of Isfahan's tiles.</p>
           <p>Every piece we create carries an intention. The Ardashir Coat was named for a king who understood that power is worn, not declared. The Simurgh Blazer takes its form from the mythical bird of paradise — structured yet free, ancient yet forward.</p>
@@ -485,8 +486,8 @@
       <div class="orn mb-8" data-r>
         <span class="text-[9px] tracking-[.35em] uppercase text-gold/50 font-sans whitespace-nowrap">Exclusive Access</span>
       </div>
-      <h2 class="font-serif text-4xl md:text-5xl font-light text-ivory tracking-wide mb-5" data-r data-d="1">Join the<br><em class="italic gold-text">Inner Circle</em></h2>
-      <p class="text-sm text-ivory/45 font-sans leading-relaxed mb-10 font-light" data-r data-d="2">Be the first to know about new arrivals, limited drops, editorial essays, and invitations to exclusive events. No noise — only what matters.</p>
+      <h2 id="ed-email-heading" class="font-serif text-4xl md:text-5xl font-light text-ivory tracking-wide mb-5" data-r data-d="1">Join the<br><em class="italic gold-text">Inner Circle</em></h2>
+      <p id="ed-email-sub" class="text-sm text-ivory/45 font-sans leading-relaxed mb-10 font-light" data-r data-d="2">Be the first to know about new arrivals, limited drops, editorial essays, and invitations to exclusive events. No noise — only what matters.</p>
       <form onsubmit="handleNewsletterSubmit(event)" class="flex flex-col sm:flex-row gap-0 max-w-md mx-auto" data-r data-d="3">
         <input type="email" placeholder="Your email address" required class="nl-in flex-1 bg-transparent border-b border-ivory/20 text-ivory placeholder:text-ivory/25 text-sm font-sans px-0 py-3 transition-colors duration-200 sm:mr-4 mb-4 sm:mb-0" aria-label="Email address">
         <button type="submit" class="cursor-pointer bg-gold hover:bg-gold-l text-navy text-xs tracking-[.22em] uppercase font-semibold px-6 py-3 transition-colors duration-200 font-sans whitespace-nowrap">Subscribe</button>
@@ -930,7 +931,7 @@
       <div class="orn mb-10" data-r>
         <span class="text-[9px] tracking-[.35em] uppercase text-navy/35 font-sans whitespace-nowrap">Our Mission</span>
       </div>
-      <h2 class="font-serif text-[clamp(2rem,4.5vw,3.5rem)] font-light text-navy leading-[1.15] mb-8" data-r data-d="1">"Fashion as a form<br>of cultural memory."</h2>
+      <h2 id="ed-mission-quote" class="font-serif text-[clamp(2rem,4.5vw,3.5rem)] font-light text-navy leading-[1.15] mb-8" data-r data-d="1">"Fashion as a form<br>of cultural memory."</h2>
       <p class="text-sm text-navy/55 font-sans leading-[1.9] max-w-2xl mx-auto font-light mb-10" data-r data-d="2">We believe that what you wear is never neutral. It communicates identity, inheritance, aspiration. Our mission is to give people — particularly those from the Persian diaspora and those who love what Persia has given the world — clothing that is worthy of that communication. Premium in quality. Thoughtful in reference. Beautiful without apology.</p>
       <div data-r data-d="3">
         <button onclick="showPage('shop')" class="cursor-pointer bg-navy hover:bg-navy/85 text-ivory text-xs tracking-[.25em] uppercase font-semibold px-8 py-4 transition-colors duration-200 font-sans">Explore the Collection</button>
@@ -1070,8 +1071,8 @@
     <div class="grid grid-cols-2 md:grid-cols-4 gap-10 md:gap-8 mb-14">
       <!-- Brand -->
       <div class="col-span-2 md:col-span-1">
-        <div class="font-serif text-2xl tracking-[.35em] font-medium text-ivory mb-4">AFSANE</div>
-        <p class="text-xs text-ivory/35 font-sans leading-relaxed font-light mb-6">Premium Persian-inspired clothing. Born from legend. Crafted with intention.</p>
+        <div id="ed-footer-brand" class="font-serif text-2xl tracking-[.35em] font-medium text-ivory mb-4">AFSANE</div>
+        <p id="ed-footer-tagline" class="text-xs text-ivory/35 font-sans leading-relaxed font-light mb-6">Premium Persian-inspired clothing. Born from legend. Crafted with intention.</p>
         <div class="flex gap-4">
           <a href="#" aria-label="Instagram" class="cursor-pointer w-8 h-8 flex items-center justify-center border border-white/10 hover:border-gold text-ivory/40 hover:text-gold transition-all duration-200">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
@@ -1122,7 +1123,7 @@
     </div>
     <!-- Bottom bar -->
     <div class="pt-8 border-t border-white/6 flex flex-col md:flex-row items-center justify-between gap-4 text-[10px] text-ivory/20 font-sans tracking-wide">
-      <p>© 2025 Afsane. All rights reserved. Born from legend.</p>
+      <p id="ed-copyright">© 2025 Afsane. All rights reserved. Born from legend.</p>
       <div class="flex gap-5">
         <a href="#" class="cursor-pointer hover:text-gold/50 transition-colors">Privacy Policy</a>
         <a href="#" class="cursor-pointer hover:text-gold/50 transition-colors">Terms of Service</a>
@@ -1161,7 +1162,8 @@ let cartItems = [];
 function renderShopGrid(filter = 'all') {
   const grid = document.getElementById('shop-grid');
   if (!grid) return;
-  const filtered = filter === 'all' ? products : products.filter(p => p.cat === filter);
+  const src = window._edProducts || products;
+  const filtered = filter === 'all' ? src : src.filter(p => p.cat === filter);
   grid.innerHTML = filtered.map(p => `
     <div class="pcard cursor-pointer" onclick="showPage('product')">
       <div class="relative overflow-hidden aspect-[3/4] mb-3">
@@ -1386,6 +1388,71 @@ document.addEventListener('DOMContentLoaded', () => {
   // Re-run reveal on scroll
   window.addEventListener('scroll', runReveal, { passive: true });
 });
+
+/* ── Editor postMessage bridge ─────────────────────── */
+window.addEventListener('message', function(e) {
+  const msg = e.data;
+  if (!msg || msg.type !== 'AFSANE_EDIT') return;
+
+  if (msg.action === 'updateText') {
+    const el = document.getElementById(msg.id);
+    if (el) {
+      if (msg.html) el.innerHTML = msg.value;
+      else el.textContent = msg.value;
+    }
+  }
+
+  if (msg.action === 'updateColors') {
+    const s = document.getElementById('dyn-colors');
+    if (!s) return;
+    const c = msg.colors;
+    s.textContent = `
+      :root {
+        --ed-gold: ${c.gold}; --ed-navy: ${c.navy};
+        --ed-ivory: ${c.ivory}; --ed-burg: ${c.burg};
+        --ed-rose: ${c.rose}; --ed-sage: ${c.sage};
+      }
+      .bg-gold, button.bg-gold { background-color: var(--ed-gold) !important; }
+      .text-gold { color: var(--ed-gold) !important; }
+      .border-gold { border-color: var(--ed-gold) !important; }
+      .bg-navy, #nav.solid, body { background-color: var(--ed-navy) !important; }
+      .text-navy { color: var(--ed-navy) !important; }
+      .bg-ivory { background-color: var(--ed-ivory) !important; }
+      .text-ivory { color: var(--ed-ivory) !important; }
+      .bg-burg { background-color: var(--ed-burg) !important; }
+      .text-burg { color: var(--ed-burg) !important; }
+      .gold-text { background: linear-gradient(135deg, var(--ed-gold), color-mix(in srgb, var(--ed-gold) 80%, white), color-mix(in srgb, var(--ed-gold) 70%, black)) !important; -webkit-background-clip: text !important; -webkit-text-fill-color: transparent !important; background-clip: text !important; }
+      .hover\\:bg-gold-l:hover { background-color: color-mix(in srgb, var(--ed-gold) 80%, white) !important; }
+      .ig-c1 { background: linear-gradient(135deg, color-mix(in srgb, var(--ed-burg) 30%, black) 0%, var(--ed-burg) 100%) !important; }
+      .persian-bg { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cpolygon points='40,4 46,22 64,22 50,34 56,52 40,42 24,52 30,34 16,22 34,22' fill='none' stroke='${encodeURIComponent(c.gold)}' stroke-width='0.6' opacity='0.12'/%3E%3Crect x='2' y='2' width='76' height='76' fill='none' stroke='${encodeURIComponent(c.gold)}' stroke-width='0.25' opacity='0.05'/%3E%3C/svg%3E") !important; }
+    `;
+  }
+
+  if (msg.action === 'updateProducts') {
+    window._edProducts = msg.products;
+    if (document.getElementById('page-shop').classList.contains('active')) {
+      renderShopGrid();
+    }
+  }
+
+  if (msg.action === 'showPage') {
+    showPage(msg.page);
+  }
+
+  if (msg.action === 'setAll') {
+    // Apply all stored data at once (used on initial load from editor)
+    const d = msg.data;
+    if (d.texts) Object.entries(d.texts).forEach(([id, val]) => {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = val;
+    });
+    if (d.colors) window.dispatchEvent(new MessageEvent('message', { data: { type: 'AFSANE_EDIT', action: 'updateColors', colors: d.colors } }));
+    if (d.products) { window._edProducts = d.products; }
+  }
+});
+
+// Allow editor to override products array
+const _origRenderShopGrid = renderShopGrid;
 </script>
 
 </body>
