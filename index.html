@@ -1,0 +1,1392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Afsane — Born from Legend. Worn with Intention.</title>
+  <meta name="description" content="Afsane is a premium Persian-inspired clothing brand. Rooted in ancient myth, crafted for those who carry history within them.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy:     '#0D0F1A',
+            ivory:    '#F5F0E8',
+            gold:     '#C9A84C',
+            'gold-l': '#E8C96A',
+            'gold-d': '#9A7A2E',
+            rose:     '#C4987F',
+            burg:     '#6B1E2E',
+            sage:     '#8A9E8C',
+          },
+          fontFamily: {
+            serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+            sans:  ['Inter', 'system-ui', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{background:#0D0F1A;color:#F5F0E8;font-family:'Inter',sans-serif;overflow-x:hidden}
+
+    /* ── Image gradients ─────────────────────────────────── */
+    .ig-hero  {background:linear-gradient(160deg,#0a0c14 0%,#16101e 30%,#221618 65%,#160c08 100%)}
+    .ig-c1    {background:linear-gradient(135deg,#1a080d 0%,#3d1018 45%,#6B1E2E 100%)}
+    .ig-c2    {background:linear-gradient(135deg,#080a10 0%,#141c28 50%,#1e2d3a 100%)}
+    .ig-c3    {background:linear-gradient(135deg,#100e04 0%,#2d2808 45%,#4a3e10 100%)}
+    .ig-story {background:linear-gradient(155deg,#120e06 0%,#261d0a 40%,#4a1a10 100%)}
+    .ig-j1    {background:linear-gradient(135deg,#1a0e0e 0%,#2a1818 55%,#3a2222 100%)}
+    .ig-j2    {background:linear-gradient(135deg,#0e1410 0%,#18201a 55%,#222c24 100%)}
+    .ig-j3    {background:linear-gradient(135deg,#14100a 0%,#201a12 55%,#2c2418 100%)}
+    .ig-p1    {background:linear-gradient(135deg,#181428 0%,#241c38 55%,#302448 100%)}
+    .ig-p2    {background:linear-gradient(135deg,#0e1818 0%,#182828 55%,#243838 100%)}
+    .ig-p3    {background:linear-gradient(135deg,#180a0c 0%,#281418 55%,#381e22 100%)}
+    .ig-p4    {background:linear-gradient(135deg,#141008 0%,#241c10 55%,#342c18 100%)}
+    .ig-p5    {background:linear-gradient(135deg,#0a0c10 0%,#141820 55%,#1e2430 100%)}
+    .ig-p6    {background:linear-gradient(135deg,#180c14 0%,#281420 55%,#38202e 100%)}
+    .ig-p7    {background:linear-gradient(135deg,#0e1420 0%,#181e2c 55%,#222838 100%)}
+    .ig-p8    {background:linear-gradient(135deg,#100e0a 0%,#1c1a14 55%,#282418 100%)}
+
+    /* ── Persian geometric pattern ───────────────────────── */
+    .persian-bg{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cpolygon points='40,4 46,22 64,22 50,34 56,52 40,42 24,52 30,34 16,22 34,22' fill='none' stroke='%23C9A84C' stroke-width='0.6' opacity='0.12'/%3E%3Crect x='2' y='2' width='76' height='76' fill='none' stroke='%23C9A84C' stroke-width='0.25' opacity='0.05'/%3E%3C/svg%3E")}
+
+    /* ── Scroll-reveal ───────────────────────────────────── */
+    [data-r]{opacity:0;transform:translateY(36px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}
+    [data-r].on{opacity:1;transform:translateY(0)}
+    [data-r][data-d="1"]{transition-delay:.1s}
+    [data-r][data-d="2"]{transition-delay:.2s}
+    [data-r][data-d="3"]{transition-delay:.35s}
+    [data-r][data-d="4"]{transition-delay:.5s}
+    @media(prefers-reduced-motion:reduce){[data-r]{opacity:1;transform:none;transition:none}}
+
+    /* ── Gold gradient text ──────────────────────────────── */
+    .gold-text{background:linear-gradient(135deg,#C9A84C,#E8C96A,#9A7A2E);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+    /* ── Ornament divider ────────────────────────────────── */
+    .orn{display:flex;align-items:center;gap:1.25rem}
+    .orn::before,.orn::after{content:'';flex:1;height:1px;background:linear-gradient(to right,transparent,rgba(201,168,76,.4),transparent)}
+
+    /* ── Navigation ──────────────────────────────────────── */
+    #nav{position:fixed;top:0;left:0;right:0;z-index:50;transition:background .4s,border-color .4s}
+    #nav.solid{background:rgba(13,15,26,.96);backdrop-filter:blur(20px);border-bottom:1px solid rgba(201,168,76,.15)}
+
+    /* ── Pages ───────────────────────────────────────────── */
+    .page{display:none}
+    .page.active{display:block;animation:pfade .45s ease}
+    @keyframes pfade{from{opacity:0}to{opacity:1}}
+
+    /* ── Product cards ───────────────────────────────────── */
+    .pcard-img{transition:transform .7s cubic-bezier(.16,1,.3,1)}
+    .pcard:hover .pcard-img{transform:scale(1.05)}
+    .pcard-ov{opacity:0;transition:opacity .3s}
+    .pcard:hover .pcard-ov{opacity:1}
+
+    /* ── Collection cards ────────────────────────────────── */
+    .ccard-img{transition:transform .7s cubic-bezier(.16,1,.3,1)}
+    .ccard:hover .ccard-img{transform:scale(1.04)}
+    .ccard-ov{opacity:0;transition:opacity .35s}
+    .ccard:hover .ccard-ov{opacity:1}
+
+    /* ── Accordion ───────────────────────────────────────── */
+    .acc-body{max-height:0;overflow:hidden;transition:max-height .4s cubic-bezier(.16,1,.3,1)}
+    .acc-body.open{max-height:400px}
+    .acc-icon{transition:transform .3s}
+    .acc-icon.open{transform:rotate(180deg)}
+
+    /* ── Cart drawer ─────────────────────────────────────── */
+    #cart{position:fixed;top:0;right:0;bottom:0;z-index:60;width:min(380px,100vw);background:#12141f;border-left:1px solid rgba(201,168,76,.15);transform:translateX(100%);transition:transform .4s cubic-bezier(.16,1,.3,1)}
+    #cart.open{transform:translateX(0)}
+    #cart-mask{position:fixed;inset:0;z-index:55;background:rgba(0,0,0,.6);opacity:0;pointer-events:none;transition:opacity .4s}
+    #cart-mask.open{opacity:1;pointer-events:all}
+
+    /* ── Mobile menu ─────────────────────────────────────── */
+    #mob-menu{position:fixed;inset:0;z-index:45;background:#0D0F1A;transform:translateY(-100%);transition:transform .5s cubic-bezier(.16,1,.3,1)}
+    #mob-menu.open{transform:translateY(0)}
+
+    /* ── Size buttons ────────────────────────────────────── */
+    .sz{transition:all .2s;cursor:pointer;border:1px solid rgba(255,255,255,.18)}
+    .sz:hover,.sz.on{background:#C9A84C;color:#0D0F1A;border-color:#C9A84C}
+    .sz.na{opacity:.3;cursor:not-allowed;position:relative}
+    .sz.na::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom right,transparent calc(50% - .5px),rgba(255,255,255,.3),transparent calc(50% + .5px))}
+
+    /* ── Gallery thumbs ──────────────────────────────────── */
+    .gthumb{cursor:pointer;transition:border-color .25s;border:1px solid rgba(255,255,255,.1)}
+    .gthumb.on{border-color:#C9A84C}
+    .gthumb:hover:not(.on){border-color:rgba(201,168,76,.45)}
+
+    /* ── Filter chips ────────────────────────────────────── */
+    .fchip{cursor:pointer;transition:all .2s}
+    .fchip:hover,.fchip.on{background:#C9A84C;color:#0D0F1A;border-color:#C9A84C}
+
+    /* ── Mobile sticky CTA ───────────────────────────────── */
+    #mob-cta{position:fixed;bottom:0;left:0;right:0;z-index:40;background:rgba(13,15,26,.97);backdrop-filter:blur(16px);border-top:1px solid rgba(201,168,76,.25);padding:1rem 1.25rem;transform:translateY(100%);transition:transform .3s}
+    #mob-cta.show{transform:translateY(0)}
+    @media(min-width:768px){#mob-cta{display:none!important}}
+
+    /* ── Input focus ─────────────────────────────────────── */
+    .nl-in:focus{outline:none;border-bottom-color:#C9A84C}
+
+    /* ── Horizontal carousel ─────────────────────────────── */
+    .h-scroll{overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
+    .h-scroll::-webkit-scrollbar{display:none}
+
+    /* ── Scrollbar ───────────────────────────────────────── */
+    ::-webkit-scrollbar{width:4px}
+    ::-webkit-scrollbar-track{background:#0D0F1A}
+    ::-webkit-scrollbar-thumb{background:rgba(201,168,76,.35);border-radius:4px}
+
+    /* ── Focus states ────────────────────────────────────── */
+    button:focus-visible,a:focus-visible{outline:2px solid #C9A84C;outline-offset:3px;border-radius:2px}
+  </style>
+</head>
+<body class="antialiased">
+
+<!-- ═══════════════════════════════════════════════════════
+     NAVIGATION
+═══════════════════════════════════════════════════════ -->
+<nav id="nav" aria-label="Main navigation">
+  <div class="max-w-7xl mx-auto px-4 sm:px-8 flex items-center justify-between h-16 md:h-20">
+    <!-- Left links (desktop) -->
+    <div class="hidden md:flex items-center gap-8">
+      <a onclick="showPage('shop')" href="#" class="cursor-pointer text-xs tracking-[.22em] text-ivory/70 hover:text-gold transition-colors duration-200 uppercase font-sans">Shop</a>
+      <a onclick="showPage('collections')" href="#" class="cursor-pointer text-xs tracking-[.22em] text-ivory/70 hover:text-gold transition-colors duration-200 uppercase font-sans">Collections</a>
+      <a onclick="showPage('journal')" href="#" class="cursor-pointer text-xs tracking-[.22em] text-ivory/70 hover:text-gold transition-colors duration-200 uppercase font-sans">Journal</a>
+    </div>
+    <!-- Logo -->
+    <a onclick="showPage('home')" href="#" class="cursor-pointer absolute left-1/2 -translate-x-1/2 font-serif text-2xl md:text-3xl tracking-[.35em] font-medium text-ivory hover:text-gold transition-colors duration-300">AFSANE</a>
+    <!-- Right icons -->
+    <div class="flex items-center gap-3 ml-auto">
+      <button onclick="toggleSearch()" aria-label="Search" class="cursor-pointer hidden md:flex w-9 h-9 items-center justify-center text-ivory/70 hover:text-gold transition-colors duration-200">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </button>
+      <button onclick="toggleCart()" aria-label="Cart" class="cursor-pointer relative flex w-9 h-9 items-center justify-center text-ivory/70 hover:text-gold transition-colors duration-200">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span id="cart-badge" class="absolute -top-0.5 -right-0.5 w-4 h-4 bg-gold text-navy text-[9px] font-semibold rounded-full flex items-center justify-center hidden">0</span>
+      </button>
+      <button onclick="toggleMobMenu()" aria-label="Menu" id="hamburger" class="cursor-pointer md:hidden flex w-9 h-9 items-center justify-center text-ivory/70 hover:text-gold transition-colors duration-200">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════
+     MOBILE MENU
+═══════════════════════════════════════════════════════ -->
+<div id="mob-menu" aria-modal="true" role="dialog" aria-label="Mobile navigation">
+  <div class="flex flex-col h-full px-8 py-6">
+    <div class="flex justify-between items-center mb-16">
+      <span class="font-serif text-2xl tracking-[.35em] font-medium">AFSANE</span>
+      <button onclick="toggleMobMenu()" aria-label="Close menu" class="cursor-pointer w-10 h-10 flex items-center justify-center text-ivory/60 hover:text-gold transition-colors">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <nav class="flex flex-col gap-2">
+      <a onclick="showPage('home');toggleMobMenu()" href="#" class="cursor-pointer font-serif text-5xl font-light tracking-wide text-ivory/90 hover:text-gold transition-colors py-2">Home</a>
+      <a onclick="showPage('shop');toggleMobMenu()" href="#" class="cursor-pointer font-serif text-5xl font-light tracking-wide text-ivory/90 hover:text-gold transition-colors py-2">Shop</a>
+      <a onclick="showPage('collections');toggleMobMenu()" href="#" class="cursor-pointer font-serif text-5xl font-light tracking-wide text-ivory/90 hover:text-gold transition-colors py-2">Collections</a>
+      <a onclick="showPage('about');toggleMobMenu()" href="#" class="cursor-pointer font-serif text-5xl font-light tracking-wide text-ivory/90 hover:text-gold transition-colors py-2">About</a>
+      <a onclick="showPage('journal');toggleMobMenu()" href="#" class="cursor-pointer font-serif text-5xl font-light tracking-wide text-ivory/90 hover:text-gold transition-colors py-2">Journal</a>
+    </nav>
+    <div class="mt-auto">
+      <div class="w-12 h-px bg-gold/30 mb-6"></div>
+      <p class="text-xs tracking-[.2em] text-ivory/40 uppercase font-sans">Born from Legend</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     CART DRAWER
+═══════════════════════════════════════════════════════ -->
+<div id="cart-mask" onclick="toggleCart()" aria-hidden="true"></div>
+<aside id="cart" aria-label="Shopping cart">
+  <div class="flex flex-col h-full">
+    <div class="flex justify-between items-center px-6 py-5 border-b border-white/8">
+      <h2 class="font-serif text-xl tracking-[.15em] font-medium">Your Cart</h2>
+      <button onclick="toggleCart()" aria-label="Close cart" class="cursor-pointer w-9 h-9 flex items-center justify-center text-ivory/50 hover:text-gold transition-colors">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div id="cart-items" class="flex-1 overflow-y-auto px-6 py-4">
+      <div id="cart-empty" class="flex flex-col items-center justify-center h-full gap-4 text-center">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" class="text-ivory/20"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <p class="font-serif text-lg text-ivory/40 italic">Your cart is empty</p>
+        <p class="text-xs text-ivory/30 tracking-wider">Begin your legend</p>
+      </div>
+      <div id="cart-list" class="hidden flex-col gap-4"></div>
+    </div>
+    <div id="cart-footer" class="px-6 py-5 border-t border-white/8 hidden">
+      <div class="flex justify-between items-center mb-4">
+        <span class="text-xs tracking-[.18em] uppercase text-ivory/50 font-sans">Subtotal</span>
+        <span id="cart-total" class="font-serif text-xl">$0</span>
+      </div>
+      <p class="text-xs text-ivory/35 mb-4 font-sans">Shipping & taxes calculated at checkout</p>
+      <button class="cursor-pointer w-full bg-gold hover:bg-gold-l text-navy text-xs tracking-[.22em] uppercase font-semibold py-4 transition-colors duration-200 font-sans">Proceed to Checkout</button>
+    </div>
+  </div>
+</aside>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     PAGE: HOME
+═══════════════════════════════════════════════════════ -->
+<div id="page-home" class="page active">
+
+  <!-- HERO -->
+  <section class="relative h-screen min-h-[600px] flex items-center justify-center ig-hero persian-bg overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-b from-navy/40 via-transparent to-navy/80 pointer-events-none"></div>
+    <!-- Decorative corner ornaments -->
+    <div class="absolute top-24 left-6 md:left-12 w-12 h-12 border-l border-t border-gold/20 pointer-events-none"></div>
+    <div class="absolute top-24 right-6 md:right-12 w-12 h-12 border-r border-t border-gold/20 pointer-events-none"></div>
+    <div class="absolute bottom-16 left-6 md:left-12 w-12 h-12 border-l border-b border-gold/20 pointer-events-none"></div>
+    <div class="absolute bottom-16 right-6 md:right-12 w-12 h-12 border-r border-b border-gold/20 pointer-events-none"></div>
+    <div class="relative z-10 text-center px-6 max-w-5xl mx-auto">
+      <p class="text-xs tracking-[.35em] uppercase text-gold mb-6 md:mb-8 font-sans" data-r>The Legend Lives</p>
+      <h1 class="font-serif text-[clamp(3rem,8vw,7.5rem)] font-light leading-[1.05] tracking-wide text-ivory mb-6 md:mb-8" data-r data-d="1">
+        Born from Legend.<br><em class="italic text-gold-l font-light">Worn with Intention.</em>
+      </h1>
+      <p class="font-sans text-base md:text-lg font-light text-ivory/65 max-w-xl mx-auto mb-10 md:mb-12 leading-relaxed" data-r data-d="2">A Persian-inspired luxury label for those who carry history within them.</p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center items-center" data-r data-d="3">
+        <button onclick="showPage('shop')" class="cursor-pointer bg-gold hover:bg-gold-l text-navy text-xs tracking-[.25em] uppercase font-semibold px-8 py-4 transition-colors duration-200 font-sans min-w-[200px]">Explore the Collection</button>
+        <button onclick="showPage('about')" class="cursor-pointer border border-ivory/30 hover:border-gold text-ivory hover:text-gold text-xs tracking-[.25em] uppercase font-sans px-8 py-4 transition-all duration-200 min-w-[200px]">Our Story</button>
+      </div>
+    </div>
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce">
+      <span class="text-[10px] tracking-[.25em] uppercase text-ivory/30 font-sans">Scroll</span>
+      <svg width="12" height="20" viewBox="0 0 12 20" fill="none" class="text-gold/40"><path d="M6 0v20M1 14l5 5 5-5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+  </section>
+
+  <!-- BRAND STATEMENT -->
+  <section class="bg-navy py-24 md:py-32 px-6 overflow-hidden">
+    <div class="max-w-4xl mx-auto text-center">
+      <div class="orn mb-10" data-r>
+        <span class="text-[10px] tracking-[.3em] uppercase text-gold/60 font-sans whitespace-nowrap">Our Belief</span>
+      </div>
+      <blockquote class="font-serif text-[clamp(2rem,4.5vw,3.75rem)] font-light italic leading-[1.2] text-ivory/95 mb-8" data-r data-d="1">
+        "We didn't invent fashion.<br>We <span class="gold-text not-italic font-normal">remembered</span> it."
+      </blockquote>
+      <p class="font-sans text-sm text-ivory/35 tracking-[.2em] uppercase" data-r data-d="2">— Afsane, founded in the myth of what endures</p>
+      <div class="orn mt-10" data-r data-d="3">
+        <span class="text-[10px] tracking-[.3em] uppercase text-gold/60 font-sans whitespace-nowrap">Since 2022</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURED COLLECTIONS -->
+  <section class="bg-ivory py-20 md:py-28 px-4 sm:px-8">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-14" data-r>
+        <p class="text-[10px] tracking-[.35em] uppercase text-navy/40 font-sans mb-3">The Collections</p>
+        <h2 class="font-serif text-4xl md:text-5xl font-light text-navy tracking-wide">Three Worlds. One Lineage.</h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- Collection 1: The Mythos -->
+        <div class="ccard relative overflow-hidden cursor-pointer group aspect-[4/5]" onclick="showPage('collections')" data-r>
+          <div class="ccard-img absolute inset-0 ig-c1"></div>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+          <div class="ccard-ov absolute inset-0 bg-burg/30 flex items-center justify-center">
+            <span class="border border-ivory/50 text-ivory text-xs tracking-[.25em] uppercase px-6 py-3 font-sans">Explore</span>
+          </div>
+          <div class="absolute bottom-0 left-0 right-0 p-7">
+            <p class="text-[10px] tracking-[.3em] uppercase text-gold font-sans mb-1">I</p>
+            <h3 class="font-serif text-2xl font-light text-ivory leading-tight">The Mythos<br>Collection</h3>
+          </div>
+        </div>
+        <!-- Collection 2: Essentials -->
+        <div class="ccard relative overflow-hidden cursor-pointer group aspect-[4/5] md:mt-12" onclick="showPage('collections')" data-r data-d="1">
+          <div class="ccard-img absolute inset-0 ig-c2"></div>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+          <div class="ccard-ov absolute inset-0 bg-navy/40 flex items-center justify-center">
+            <span class="border border-ivory/50 text-ivory text-xs tracking-[.25em] uppercase px-6 py-3 font-sans">Explore</span>
+          </div>
+          <div class="absolute bottom-0 left-0 right-0 p-7">
+            <p class="text-[10px] tracking-[.3em] uppercase text-gold font-sans mb-1">II</p>
+            <h3 class="font-serif text-2xl font-light text-ivory leading-tight">The Essentials</h3>
+          </div>
+        </div>
+        <!-- Collection 3: Limited -->
+        <div class="ccard relative overflow-hidden cursor-pointer group aspect-[4/5]" onclick="showPage('collections')" data-r data-d="2">
+          <div class="ccard-img absolute inset-0 ig-c3"></div>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+          <div class="ccard-ov absolute inset-0 bg-gold-d/30 flex items-center justify-center">
+            <span class="border border-ivory/50 text-ivory text-xs tracking-[.25em] uppercase px-6 py-3 font-sans">Explore</span>
+          </div>
+          <div class="absolute bottom-0 left-0 right-0 p-7">
+            <span class="inline-block text-[9px] tracking-[.3em] uppercase text-gold border border-gold/50 px-2 py-0.5 font-sans mb-2">Limited Drop</span>
+            <h3 class="font-serif text-2xl font-light text-ivory leading-tight">Spring<br>Equinox</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BEST SELLERS -->
+  <section class="bg-navy py-20 md:py-28 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-8 mb-10">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4" data-r>
+        <div>
+          <p class="text-[10px] tracking-[.35em] uppercase text-gold/60 font-sans mb-3">Most Coveted</p>
+          <h2 class="font-serif text-4xl md:text-5xl font-light text-ivory tracking-wide">The Pieces They<br><em class="italic">Remember You In</em></h2>
+        </div>
+        <a onclick="showPage('shop')" href="#" class="cursor-pointer text-xs tracking-[.22em] uppercase text-gold hover:text-gold-l transition-colors font-sans border-b border-gold/40 hover:border-gold pb-0.5 whitespace-nowrap">View All Pieces →</a>
+      </div>
+    </div>
+    <div class="h-scroll flex gap-4 px-4 sm:px-8 pb-4" data-r data-d="1">
+      <!-- Product cards -->
+      <div class="pcard flex-shrink-0 w-[260px] md:w-[300px] cursor-pointer" onclick="showPage('product')">
+        <div class="relative overflow-hidden aspect-[3/4] mb-4">
+          <div class="pcard-img absolute inset-0 ig-p1"></div>
+          <div class="pcard-ov absolute inset-0 bg-black/40 flex items-end justify-center pb-6">
+            <span class="bg-gold text-navy text-xs tracking-[.2em] uppercase px-5 py-2.5 font-semibold font-sans">Quick Add</span>
+          </div>
+        </div>
+        <p class="font-serif text-lg font-light text-ivory leading-snug">The Ardashir Coat</p>
+        <p class="text-sm text-ivory/45 font-sans mt-0.5">$485 USD</p>
+      </div>
+      <div class="pcard flex-shrink-0 w-[260px] md:w-[300px] cursor-pointer" onclick="showPage('product')">
+        <div class="relative overflow-hidden aspect-[3/4] mb-4">
+          <div class="pcard-img absolute inset-0 ig-p2"></div>
+          <div class="pcard-ov absolute inset-0 bg-black/40 flex items-end justify-center pb-6">
+            <span class="bg-gold text-navy text-xs tracking-[.2em] uppercase px-5 py-2.5 font-semibold font-sans">Quick Add</span>
+          </div>
+        </div>
+        <p class="font-serif text-lg font-light text-ivory leading-snug">Simurgh Blazer</p>
+        <p class="text-sm text-ivory/45 font-sans mt-0.5">$325 USD</p>
+      </div>
+      <div class="pcard flex-shrink-0 w-[260px] md:w-[300px] cursor-pointer" onclick="showPage('product')">
+        <div class="relative overflow-hidden aspect-[3/4] mb-4">
+          <div class="pcard-img absolute inset-0 ig-p5"></div>
+          <div class="pcard-ov absolute inset-0 bg-black/40 flex items-end justify-center pb-6">
+            <span class="bg-gold text-navy text-xs tracking-[.2em] uppercase px-5 py-2.5 font-semibold font-sans">Quick Add</span>
+          </div>
+        </div>
+        <p class="font-serif text-lg font-light text-ivory leading-snug">The Mythmaker Dress</p>
+        <p class="text-sm text-ivory/45 font-sans mt-0.5">$395 USD</p>
+      </div>
+      <div class="pcard flex-shrink-0 w-[260px] md:w-[300px] cursor-pointer" onclick="showPage('product')">
+        <div class="relative overflow-hidden aspect-[3/4] mb-4">
+          <div class="pcard-img absolute inset-0 ig-p4"></div>
+          <div class="pcard-ov absolute inset-0 bg-black/40 flex items-end justify-center pb-6">
+            <span class="bg-gold text-navy text-xs tracking-[.2em] uppercase px-5 py-2.5 font-semibold font-sans">Quick Add</span>
+          </div>
+        </div>
+        <p class="font-serif text-lg font-light text-ivory leading-snug">Nowruz Trousers</p>
+        <p class="text-sm text-ivory/45 font-sans mt-0.5">$245 USD</p>
+      </div>
+      <div class="pcard flex-shrink-0 w-[260px] md:w-[300px] cursor-pointer" onclick="showPage('product')">
+        <div class="relative overflow-hidden aspect-[3/4] mb-4">
+          <div class="pcard-img absolute inset-0 ig-p7"></div>
+          <div class="pcard-ov absolute inset-0 bg-black/40 flex items-end justify-center pb-6">
+            <span class="bg-gold text-navy text-xs tracking-[.2em] uppercase px-5 py-2.5 font-semibold font-sans">Quick Add</span>
+          </div>
+        </div>
+        <p class="font-serif text-lg font-light text-ivory leading-snug">Rostam Varsity</p>
+        <p class="text-sm text-ivory/45 font-sans mt-0.5">$440 USD</p>
+      </div>
+      <div class="pcard flex-shrink-0 w-[260px] md:w-[300px] cursor-pointer" onclick="showPage('product')">
+        <div class="relative overflow-hidden aspect-[3/4] mb-4">
+          <div class="pcard-img absolute inset-0 ig-p6"></div>
+          <div class="pcard-ov absolute inset-0 bg-black/40 flex items-end justify-center pb-6">
+            <span class="bg-gold text-navy text-xs tracking-[.2em] uppercase px-5 py-2.5 font-semibold font-sans">Quick Add</span>
+          </div>
+        </div>
+        <p class="font-serif text-lg font-light text-ivory leading-snug">Shahnameh Hoodie</p>
+        <p class="text-sm text-ivory/45 font-sans mt-0.5">$185 USD</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- STORY / HERITAGE -->
+  <section class="bg-[#0e100c] persian-bg py-20 md:py-28 px-4 sm:px-8">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 items-center">
+      <div class="relative aspect-[4/5] overflow-hidden" data-r>
+        <div class="absolute inset-0 ig-story"></div>
+        <div class="absolute inset-0 persian-bg opacity-20"></div>
+        <!-- Decorative frame -->
+        <div class="absolute inset-4 border border-gold/15 pointer-events-none"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none"></div>
+        <div class="absolute bottom-6 left-6 right-6">
+          <div class="h-px bg-gold/25 mb-4"></div>
+          <p class="text-[9px] tracking-[.3em] uppercase text-gold/50 font-sans">Founded in Tehran · Made for the World</p>
+        </div>
+      </div>
+      <div data-r data-d="1">
+        <p class="text-[10px] tracking-[.35em] uppercase text-gold/60 font-sans mb-5">Our Heritage</p>
+        <h2 class="font-serif text-4xl md:text-5xl font-light text-ivory tracking-wide leading-[1.1] mb-8">Rooted in Legend.<br><em class="italic text-gold-l">Refined for Now.</em></h2>
+        <div class="space-y-5 text-ivory/60 font-sans text-sm leading-[1.85] font-light">
+          <p>Afsane was born from a question: what would it mean to dress in a way that honors where you come from? We are a label shaped by the Persian literary tradition — by the Shahnameh's heroes, by Hafez's verse, by the geometric poetry of Isfahan's tiles.</p>
+          <p>Every piece we create carries an intention. The Ardashir Coat was named for a king who understood that power is worn, not declared. The Simurgh Blazer takes its form from the mythical bird of paradise — structured yet free, ancient yet forward.</p>
+          <p>We don't make costume. We make clothing for people who carry their history with grace.</p>
+        </div>
+        <div class="mt-10">
+          <button onclick="showPage('about')" class="cursor-pointer text-xs tracking-[.25em] uppercase text-gold hover:text-gold-l transition-colors font-sans border-b border-gold/40 hover:border-gold pb-0.5">Read Our Full Story →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDITORIAL TEASER -->
+  <section class="bg-ivory py-20 md:py-28 px-4 sm:px-8">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-12" data-r>
+        <p class="text-[10px] tracking-[.35em] uppercase text-navy/40 font-sans mb-2">From the Archive</p>
+        <h2 class="font-serif text-4xl md:text-5xl font-light text-navy tracking-wide">The Journal</h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Featured large -->
+        <div class="md:col-span-2 cursor-pointer group" onclick="showPage('journal')" data-r>
+          <div class="relative overflow-hidden aspect-video md:aspect-[16/9] mb-5">
+            <div class="pcard-img absolute inset-0 ig-j1"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+            <div class="absolute bottom-5 left-5 right-5">
+              <span class="text-[9px] tracking-[.3em] uppercase text-gold font-sans">Cultural Essay</span>
+            </div>
+          </div>
+          <h3 class="font-serif text-2xl md:text-3xl font-light text-navy leading-snug group-hover:text-burg transition-colors mb-3">The Legend of the Simurgh: How Ancient Persian Myth Shapes the Way We Dress Today</h3>
+          <p class="text-sm text-navy/55 font-sans leading-relaxed line-clamp-2">The Simurgh — that great bird of paradise perched atop the world tree — has always been more than myth. It is a philosophy of transcendence, woven into everything we make.</p>
+        </div>
+        <!-- Two smaller articles -->
+        <div class="flex flex-col gap-6">
+          <div class="cursor-pointer group" onclick="showPage('journal')" data-r data-d="1">
+            <div class="relative overflow-hidden aspect-[4/3] mb-4">
+              <div class="pcard-img absolute inset-0 ig-j2"></div>
+            </div>
+            <span class="text-[9px] tracking-[.3em] uppercase text-burg font-sans">Collection Story</span>
+            <h3 class="font-serif text-lg font-light text-navy mt-1.5 leading-snug group-hover:text-burg transition-colors">Nowruz and the Spirit of Renewal</h3>
+          </div>
+          <div class="cursor-pointer group" onclick="showPage('journal')" data-r data-d="2">
+            <div class="relative overflow-hidden aspect-[4/3] mb-4">
+              <div class="pcard-img absolute inset-0 ig-j3"></div>
+            </div>
+            <span class="text-[9px] tracking-[.3em] uppercase text-sage-dark font-sans">Founder's Note</span>
+            <h3 class="font-serif text-lg font-light text-navy mt-1.5 leading-snug group-hover:text-burg transition-colors">In Conversation: Our Founding Artisans</h3>
+          </div>
+        </div>
+      </div>
+      <div class="text-center mt-12" data-r>
+        <button onclick="showPage('journal')" class="cursor-pointer border border-navy/25 hover:border-navy text-navy text-xs tracking-[.22em] uppercase font-sans px-8 py-3.5 transition-all duration-200 hover:bg-navy hover:text-ivory">Explore the Journal</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- EMAIL CAPTURE -->
+  <section class="bg-navy persian-bg py-20 md:py-28 px-6 relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-burg/5 via-transparent to-gold/5 pointer-events-none"></div>
+    <div class="relative max-w-xl mx-auto text-center">
+      <div class="orn mb-8" data-r>
+        <span class="text-[9px] tracking-[.35em] uppercase text-gold/50 font-sans whitespace-nowrap">Exclusive Access</span>
+      </div>
+      <h2 class="font-serif text-4xl md:text-5xl font-light text-ivory tracking-wide mb-5" data-r data-d="1">Join the<br><em class="italic gold-text">Inner Circle</em></h2>
+      <p class="text-sm text-ivory/45 font-sans leading-relaxed mb-10 font-light" data-r data-d="2">Be the first to know about new arrivals, limited drops, editorial essays, and invitations to exclusive events. No noise — only what matters.</p>
+      <form onsubmit="handleNewsletterSubmit(event)" class="flex flex-col sm:flex-row gap-0 max-w-md mx-auto" data-r data-d="3">
+        <input type="email" placeholder="Your email address" required class="nl-in flex-1 bg-transparent border-b border-ivory/20 text-ivory placeholder:text-ivory/25 text-sm font-sans px-0 py-3 transition-colors duration-200 sm:mr-4 mb-4 sm:mb-0" aria-label="Email address">
+        <button type="submit" class="cursor-pointer bg-gold hover:bg-gold-l text-navy text-xs tracking-[.22em] uppercase font-semibold px-6 py-3 transition-colors duration-200 font-sans whitespace-nowrap">Subscribe</button>
+      </form>
+      <p class="text-[10px] text-ivory/25 font-sans mt-4 tracking-wide" data-r data-d="4">By subscribing you agree to our Privacy Policy. Unsubscribe at any time.</p>
+    </div>
+  </section>
+
+</div><!-- /page-home -->
+
+
+<!-- ═══════════════════════════════════════════════════════
+     PAGE: SHOP
+═══════════════════════════════════════════════════════ -->
+<div id="page-shop" class="page">
+  <!-- Shop Header -->
+  <div class="bg-navy pt-28 pb-12 px-4 sm:px-8 border-b border-white/6">
+    <div class="max-w-7xl mx-auto">
+      <p class="text-[10px] tracking-[.35em] uppercase text-gold/50 font-sans mb-3">The Archive</p>
+      <h1 class="font-serif text-5xl md:text-6xl font-light text-ivory tracking-wide">All Pieces</h1>
+      <p class="text-sm text-ivory/35 font-sans mt-2">12 pieces · Free shipping over $150</p>
+    </div>
+  </div>
+  <!-- Filters -->
+  <div class="bg-navy border-b border-white/6 sticky top-16 md:top-20 z-30">
+    <div class="max-w-7xl mx-auto px-4 sm:px-8 py-4 flex items-center gap-3 overflow-x-auto scrollbar-hide" role="group" aria-label="Product filters">
+      <button class="fchip on flex-shrink-0 border border-ivory/15 text-ivory/70 text-[10px] tracking-[.2em] uppercase font-sans px-4 py-2 rounded-sm" data-filter="all" onclick="filterProducts('all',this)">All</button>
+      <button class="fchip flex-shrink-0 border border-ivory/15 text-ivory/70 text-[10px] tracking-[.2em] uppercase font-sans px-4 py-2 rounded-sm" data-filter="Outerwear" onclick="filterProducts('Outerwear',this)">Outerwear</button>
+      <button class="fchip flex-shrink-0 border border-ivory/15 text-ivory/70 text-[10px] tracking-[.2em] uppercase font-sans px-4 py-2 rounded-sm" data-filter="Tops" onclick="filterProducts('Tops',this)">Tops</button>
+      <button class="fchip flex-shrink-0 border border-ivory/15 text-ivory/70 text-[10px] tracking-[.2em] uppercase font-sans px-4 py-2 rounded-sm" data-filter="Trousers" onclick="filterProducts('Trousers',this)">Trousers</button>
+      <button class="fchip flex-shrink-0 border border-ivory/15 text-ivory/70 text-[10px] tracking-[.2em] uppercase font-sans px-4 py-2 rounded-sm" data-filter="Dresses" onclick="filterProducts('Dresses',this)">Dresses</button>
+      <div class="flex-shrink-0 ml-auto hidden md:block">
+        <select class="bg-transparent border border-ivory/15 text-ivory/50 text-[10px] tracking-[.2em] uppercase font-sans px-4 py-2 cursor-pointer focus:outline-none focus:border-gold" aria-label="Sort products">
+          <option>Sort: Featured</option>
+          <option>Price: Low to High</option>
+          <option>Price: High to Low</option>
+          <option>New Arrivals</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <!-- Product Grid -->
+  <div class="bg-navy py-10 px-4 sm:px-8">
+    <div class="max-w-7xl mx-auto">
+      <div id="shop-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-10">
+        <!-- Products injected by JS -->
+      </div>
+    </div>
+  </div>
+</div><!-- /page-shop -->
+
+<!-- ═══════════════════════════════════════════════════════
+     PAGE: COLLECTIONS
+═══════════════════════════════════════════════════════ -->
+<div id="page-collections" class="page">
+  <!-- Header -->
+  <div class="ig-hero persian-bg pt-32 pb-20 px-4 sm:px-8 relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-b from-transparent to-navy/80 pointer-events-none"></div>
+    <div class="relative max-w-4xl mx-auto text-center">
+      <p class="text-[10px] tracking-[.35em] uppercase text-gold font-sans mb-4">Afsane Universes</p>
+      <h1 class="font-serif text-5xl md:text-7xl font-light text-ivory tracking-wide leading-tight">Our Collections</h1>
+      <p class="text-sm md:text-base text-ivory/55 font-sans mt-5 font-light max-w-lg mx-auto leading-relaxed">Each collection is a world unto itself — a different facet of Persian heritage, brought into a modern register.</p>
+    </div>
+  </div>
+  <!-- Collections list -->
+  <div class="bg-navy py-4 px-4 sm:px-8">
+    <div class="max-w-7xl mx-auto space-y-1">
+
+      <!-- Collection 1 -->
+      <div class="group grid grid-cols-1 md:grid-cols-2 gap-0 overflow-hidden border border-white/6 hover:border-gold/20 transition-colors duration-300" data-r>
+        <div class="relative overflow-hidden aspect-[4/3] md:aspect-auto min-h-[320px]">
+          <div class="ccard-img absolute inset-0 ig-c1 group-hover:scale-[1.03] transition-transform duration-700"></div>
+          <div class="absolute inset-0 bg-gradient-to-r from-transparent to-navy/30 pointer-events-none"></div>
+          <div class="absolute top-5 left-5">
+            <span class="text-[9px] tracking-[.3em] uppercase text-gold border border-gold/40 px-2.5 py-1 font-sans">New Season</span>
+          </div>
+        </div>
+        <div class="flex flex-col justify-center p-8 md:p-12 bg-navy/95">
+          <p class="text-[9px] tracking-[.35em] uppercase text-gold/55 font-sans mb-4">Collection I</p>
+          <h2 class="font-serif text-3xl md:text-4xl font-light text-ivory leading-tight mb-5">The Mythos<br>Collection</h2>
+          <p class="text-sm text-ivory/50 font-sans leading-relaxed mb-8 font-light">Inspired by the great Persian epic, the Shahnameh — Ferdowsi's poem of kings, heroes, and the persistence of beauty through time. Each piece in this collection carries the weight of a name: Ardashir, Simurgh, Rostam. Wear these names with the dignity they deserve.</p>
+          <div class="flex items-center gap-6">
+            <button onclick="showPage('shop')" class="cursor-pointer bg-gold hover:bg-gold-l text-navy text-xs tracking-[.22em] uppercase font-semibold px-6 py-3 transition-colors font-sans">Shop Collection</button>
+            <span class="text-xs text-ivory/30 font-sans">8 pieces</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Collection 2 -->
+      <div class="group grid grid-cols-1 md:grid-cols-2 gap-0 overflow-hidden border border-white/6 hover:border-gold/20 transition-colors duration-300" data-r data-d="1">
+        <div class="flex flex-col justify-center p-8 md:p-12 bg-navy/95 md:order-first order-last">
+          <p class="text-[9px] tracking-[.35em] uppercase text-gold/55 font-sans mb-4">Collection II</p>
+          <h2 class="font-serif text-3xl md:text-4xl font-light text-ivory leading-tight mb-5">The Essentials</h2>
+          <p class="text-sm text-ivory/50 font-sans leading-relaxed mb-8 font-light">Timeless foundations built to last beyond seasons. The Essentials are for the person who dresses with intentionality every day — refined silhouettes, premium fabrics, zero compromise. These are not basics. These are anchors.</p>
+          <div class="flex items-center gap-6">
+            <button onclick="showPage('shop')" class="cursor-pointer bg-gold hover:bg-gold-l text-navy text-xs tracking-[.22em] uppercase font-semibold px-6 py-3 transition-colors font-sans">Shop Collection</button>
+            <span class="text-xs text-ivory/30 font-sans">12 pieces</span>
+          </div>
+        </div>
+        <div class="relative overflow-hidden aspect-[4/3] md:aspect-auto min-h-[320px] order-first md:order-last">
+          <div class="ccard-img absolute inset-0 ig-c2 group-hover:scale-[1.03] transition-transform duration-700"></div>
+        </div>
+      </div>
+
+      <!-- Collection 3 -->
+      <div class="group grid grid-cols-1 md:grid-cols-2 gap-0 overflow-hidden border border-white/6 hover:border-gold/20 transition-colors duration-300" data-r data-d="2">
+        <div class="relative overflow-hidden aspect-[4/3] md:aspect-auto min-h-[320px]">
+          <div class="ccard-img absolute inset-0 ig-c3 group-hover:scale-[1.03] transition-transform duration-700"></div>
+          <div class="absolute top-5 left-5">
+            <span class="text-[9px] tracking-[.3em] uppercase text-ivory bg-burg px-2.5 py-1 font-sans tracking-widest">Limited</span>
+          </div>
+        </div>
+        <div class="flex flex-col justify-center p-8 md:p-12 bg-navy/95">
+          <p class="text-[9px] tracking-[.35em] uppercase text-gold/55 font-sans mb-4">Limited Drop · SS25</p>
+          <h2 class="font-serif text-3xl md:text-4xl font-light text-ivory leading-tight mb-5">Spring Equinox<br><em class="italic">Nowruz Drop</em></h2>
+          <p class="text-sm text-ivory/50 font-sans leading-relaxed mb-8 font-light">Nowruz — the Persian New Year, the festival of spring renewal. This limited drop captures the spirit of the turning year: warmth returning, color blooming, history repeating in a new key. Only 50 units per style, never restocked.</p>
+          <div class="flex items-center gap-6">
+            <button onclick="showPage('shop')" class="cursor-pointer bg-gold hover:bg-gold-l text-navy text-xs tracking-[.22em] uppercase font-semibold px-6 py-3 transition-colors font-sans">Shop the Drop</button>
+            <span class="text-xs text-gold/60 font-sans">Limited · 4 styles remain</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Collection 4 -->
+      <div class="group grid grid-cols-1 md:grid-cols-2 gap-0 overflow-hidden border border-white/6 hover:border-gold/20 transition-colors duration-300" data-r data-d="3">
+        <div class="flex flex-col justify-center p-8 md:p-12 bg-navy/95 md:order-first order-last">
+          <p class="text-[9px] tracking-[.35em] uppercase text-gold/55 font-sans mb-4">Collection IV</p>
+          <h2 class="font-serif text-3xl md:text-4xl font-light text-ivory leading-tight mb-5">Statement<br>Pieces</h2>
+          <p class="text-sm text-ivory/50 font-sans leading-relaxed mb-8 font-light">For the moments that demand presence. These are the pieces that begin conversations — structured silhouettes, considered embellishments, editorial cuts that make their own declaration. Designed to be the thing people remember about you.</p>
+          <div class="flex items-center gap-6">
+            <button onclick="showPage('shop')" class="cursor-pointer bg-gold hover:bg-gold-l text-navy text-xs tracking-[.22em] uppercase font-semibold px-6 py-3 transition-colors font-sans">Shop Collection</button>
+            <span class="text-xs text-ivory/30 font-sans">6 pieces</span>
+          </div>
+        </div>
+        <div class="relative overflow-hidden aspect-[4/3] md:aspect-auto min-h-[320px] order-first md:order-last">
+          <div class="ccard-img absolute inset-0 ig-story group-hover:scale-[1.03] transition-transform duration-700"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div><!-- /page-collections -->
+
+
+<!-- ═══════════════════════════════════════════════════════
+     PAGE: PRODUCT DETAIL
+═══════════════════════════════════════════════════════ -->
+<div id="page-product" class="page">
+  <div class="bg-navy pt-20 md:pt-24">
+    <!-- Breadcrumb -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-8 py-4 flex items-center gap-2 text-[10px] tracking-[.2em] uppercase text-ivory/30 font-sans">
+      <a onclick="showPage('home')" href="#" class="cursor-pointer hover:text-gold transition-colors">Home</a>
+      <span>/</span>
+      <a onclick="showPage('shop')" href="#" class="cursor-pointer hover:text-gold transition-colors">Shop</a>
+      <span>/</span>
+      <span class="text-ivory/60">The Ardashir Coat</span>
+    </div>
+    <!-- Main product layout -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-8 pb-20">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16">
+        <!-- LEFT: Gallery -->
+        <div>
+          <!-- Main image -->
+          <div id="gallery-main" class="relative overflow-hidden aspect-[4/5] mb-3 ig-p1">
+            <div class="absolute inset-0 bg-gradient-to-br from-transparent to-black/20 pointer-events-none"></div>
+            <div class="absolute top-4 left-4">
+              <span class="text-[9px] tracking-[.25em] uppercase text-gold/60 font-sans border border-gold/20 px-2 py-1">Mythos Collection</span>
+            </div>
+          </div>
+          <!-- Thumbnails -->
+          <div class="grid grid-cols-4 gap-2">
+            <div class="gthumb on aspect-square ig-p1" onclick="setGalleryImg('ig-p1',this)" role="button" aria-label="View image 1"></div>
+            <div class="gthumb aspect-square ig-p2" onclick="setGalleryImg('ig-p2',this)" role="button" aria-label="View image 2"></div>
+            <div class="gthumb aspect-square ig-p3" onclick="setGalleryImg('ig-p3',this)" role="button" aria-label="View image 3"></div>
+            <div class="gthumb aspect-square ig-p4" onclick="setGalleryImg('ig-p4',this)" role="button" aria-label="View image 4"></div>
+          </div>
+        </div>
+
+        <!-- RIGHT: Product Details -->
+        <div class="md:sticky md:top-28 md:self-start">
+          <p class="text-[9px] tracking-[.32em] uppercase text-gold/60 font-sans mb-3">Outerwear — The Mythos Collection</p>
+          <h1 class="font-serif text-4xl md:text-5xl font-light text-ivory leading-tight mb-4">The Ardashir Coat</h1>
+          <p class="font-serif text-2xl text-ivory/80 mb-6">$485 <span class="text-sm font-sans text-ivory/35">USD</span></p>
+
+          <!-- Low stock -->
+          <div class="flex items-center gap-2 mb-6">
+            <div class="w-1.5 h-1.5 rounded-full bg-rose animate-pulse flex-shrink-0"></div>
+            <p class="text-xs text-rose/80 font-sans tracking-wide">Only 4 left in your size</p>
+          </div>
+
+          <!-- Short description -->
+          <p class="text-sm text-ivory/55 font-sans leading-relaxed mb-8 font-light">Named for Ardashir I, founder of the Sassanid Empire — a man who understood that authority is expressed through presence. This coat is structured authority, refined into elegance.</p>
+
+          <!-- Size selector -->
+          <div class="mb-6">
+            <div class="flex items-center justify-between mb-3">
+              <p class="text-[10px] tracking-[.22em] uppercase text-ivory/50 font-sans">Select Size</p>
+              <button class="cursor-pointer text-[10px] tracking-[.18em] uppercase text-gold hover:text-gold-l transition-colors font-sans border-b border-gold/30">Size Guide</button>
+            </div>
+            <div class="grid grid-cols-6 gap-2" role="group" aria-label="Size selection">
+              <button class="sz text-xs font-sans py-3 text-ivory/70 hover:text-navy" aria-label="Size XS">XS</button>
+              <button class="sz text-xs font-sans py-3 text-ivory/70 hover:text-navy" aria-label="Size S">S</button>
+              <button class="sz on text-xs font-sans py-3 text-navy" aria-label="Size M, selected">M</button>
+              <button class="sz text-xs font-sans py-3 text-ivory/70 hover:text-navy" aria-label="Size L">L</button>
+              <button class="sz text-xs font-sans py-3 text-ivory/70 hover:text-navy" aria-label="Size XL">XL</button>
+              <button class="sz na text-xs font-sans py-3 text-ivory/20" aria-label="Size XXL, unavailable" disabled>XXL</button>
+            </div>
+          </div>
+
+          <!-- Add to cart -->
+          <button id="add-to-cart" onclick="addToCart('The Ardashir Coat','$485')" class="cursor-pointer w-full bg-gold hover:bg-gold-l text-navy text-xs tracking-[.25em] uppercase font-semibold py-4.5 py-[18px] transition-colors duration-200 font-sans mb-3">Add to Cart</button>
+          <button class="cursor-pointer w-full border border-ivory/15 hover:border-gold text-ivory/60 hover:text-gold text-xs tracking-[.22em] uppercase font-sans py-4 transition-all duration-200 flex items-center justify-center gap-2">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            Add to Wishlist
+          </button>
+
+          <!-- Trust badges -->
+          <div class="flex flex-wrap gap-x-6 gap-y-2 mt-6 pt-6 border-t border-white/8">
+            <div class="flex items-center gap-2 text-[10px] text-ivory/35 font-sans tracking-wide">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              Free shipping over $150
+            </div>
+            <div class="flex items-center gap-2 text-[10px] text-ivory/35 font-sans tracking-wide">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.65"/></svg>
+              30-day free returns
+            </div>
+            <div class="flex items-center gap-2 text-[10px] text-ivory/35 font-sans tracking-wide">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              Ethically crafted
+            </div>
+          </div>
+
+          <!-- Accordions -->
+          <div class="mt-8 border-t border-white/8 divide-y divide-white/8">
+            <!-- The Story -->
+            <div>
+              <button onclick="toggleAcc(this)" class="cursor-pointer w-full flex items-center justify-between py-4 text-left" aria-expanded="false">
+                <span class="text-xs tracking-[.22em] uppercase text-ivory/70 font-sans">The Story</span>
+                <svg class="acc-icon w-4 h-4 text-gold/60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="acc-body">
+                <p class="text-sm text-ivory/50 font-sans leading-relaxed pb-5 font-light">The Ardashir Coat takes its name and its posture from Ardashir I — the warrior-philosopher king who founded Persia's greatest empire through strategy, not just force. Like the man it honors, this coat is built for those who understand that gravitas is quiet. The structured shoulders reference the architectural precision of Persepolis. The drape of the fabric recalls the ceremonial robes depicted in ancient reliefs at Naqsh-e Rustam. This is history you can wear.</p>
+              </div>
+            </div>
+            <!-- Materials & Care -->
+            <div>
+              <button onclick="toggleAcc(this)" class="cursor-pointer w-full flex items-center justify-between py-4 text-left" aria-expanded="false">
+                <span class="text-xs tracking-[.22em] uppercase text-ivory/70 font-sans">Materials &amp; Care</span>
+                <svg class="acc-icon w-4 h-4 text-gold/60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="acc-body">
+                <div class="pb-5 space-y-3 text-sm text-ivory/50 font-sans font-light leading-relaxed">
+                  <p><strong class="text-ivory/70 font-medium">Fabric:</strong> 80% Virgin Wool, 15% Cashmere, 5% Silk</p>
+                  <p><strong class="text-ivory/70 font-medium">Lining:</strong> 100% Cupro</p>
+                  <p><strong class="text-ivory/70 font-medium">Origin:</strong> Crafted in Istanbul, Turkey</p>
+                  <p><strong class="text-ivory/70 font-medium">Care:</strong> Dry clean only. Store on a wide-shoulder hanger. Brush gently with a natural-bristle garment brush after each wear.</p>
+                </div>
+              </div>
+            </div>
+            <!-- Shipping & Returns -->
+            <div>
+              <button onclick="toggleAcc(this)" class="cursor-pointer w-full flex items-center justify-between py-4 text-left" aria-expanded="false">
+                <span class="text-xs tracking-[.22em] uppercase text-ivory/70 font-sans">Shipping &amp; Returns</span>
+                <svg class="acc-icon w-4 h-4 text-gold/60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="acc-body">
+                <div class="pb-5 space-y-3 text-sm text-ivory/50 font-sans font-light leading-relaxed">
+                  <p><strong class="text-ivory/70 font-medium">Standard Shipping:</strong> 5–7 business days (free over $150)</p>
+                  <p><strong class="text-ivory/70 font-medium">Express Shipping:</strong> 2–3 business days (+$18)</p>
+                  <p><strong class="text-ivory/70 font-medium">International:</strong> 7–14 business days</p>
+                  <p><strong class="text-ivory/70 font-medium">Returns:</strong> Free returns within 30 days. Items must be unworn, unwashed, and in original packaging with all tags attached.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Complete the Look -->
+    <div class="border-t border-white/6 py-16 px-4 sm:px-8">
+      <div class="max-w-7xl mx-auto">
+        <div class="text-center mb-10">
+          <p class="text-[10px] tracking-[.35em] uppercase text-gold/50 font-sans mb-2">Styled Together</p>
+          <h2 class="font-serif text-3xl font-light text-ivory">Complete the Look</h2>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+          <div class="pcard cursor-pointer" onclick="showPage('product')">
+            <div class="relative overflow-hidden aspect-[3/4] mb-3"><div class="pcard-img absolute inset-0 ig-p4"></div><div class="pcard-ov absolute inset-0 bg-black/40 flex items-end justify-center pb-4"><span class="bg-gold text-navy text-[10px] tracking-[.2em] uppercase px-4 py-2 font-semibold font-sans">Quick Add</span></div></div>
+            <p class="font-serif text-base font-light text-ivory">Nowruz Trousers</p>
+            <p class="text-xs text-ivory/40 font-sans mt-0.5">$245 USD</p>
+          </div>
+          <div class="pcard cursor-pointer" onclick="showPage('product')">
+            <div class="relative overflow-hidden aspect-[3/4] mb-3"><div class="pcard-img absolute inset-0 ig-p3"></div><div class="pcard-ov absolute inset-0 bg-black/40 flex items-end justify-center pb-4"><span class="bg-gold text-navy text-[10px] tracking-[.2em] uppercase px-4 py-2 font-semibold font-sans">Quick Add</span></div></div>
+            <p class="font-serif text-base font-light text-ivory">Persian Garden Silk Blouse</p>
+            <p class="text-xs text-ivory/40 font-sans mt-0.5">$210 USD</p>
+          </div>
+          <div class="pcard cursor-pointer hidden md:block" onclick="showPage('product')">
+            <div class="relative overflow-hidden aspect-[3/4] mb-3"><div class="pcard-img absolute inset-0 ig-p2"></div><div class="pcard-ov absolute inset-0 bg-black/40 flex items-end justify-center pb-4"><span class="bg-gold text-navy text-[10px] tracking-[.2em] uppercase px-4 py-2 font-semibold font-sans">Quick Add</span></div></div>
+            <p class="font-serif text-base font-light text-ivory">Simurgh Blazer</p>
+            <p class="text-xs text-ivory/40 font-sans mt-0.5">$325 USD</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reviews -->
+    <div class="border-t border-white/6 py-16 px-4 sm:px-8">
+      <div class="max-w-3xl mx-auto">
+        <div class="text-center mb-10">
+          <p class="text-[10px] tracking-[.35em] uppercase text-gold/50 font-sans mb-2">Verified Reviews</p>
+          <h2 class="font-serif text-3xl font-light text-ivory">What They're Saying</h2>
+        </div>
+        <div class="space-y-8">
+          <div class="border-l-2 border-gold/30 pl-6">
+            <div class="flex gap-0.5 mb-3">
+              <svg class="w-3.5 h-3.5 text-gold fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="w-3.5 h-3.5 text-gold fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="w-3.5 h-3.5 text-gold fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="w-3.5 h-3.5 text-gold fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="w-3.5 h-3.5 text-gold fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </div>
+            <p class="font-serif text-lg italic text-ivory/80 leading-relaxed mb-3">"This coat stopped three people in their tracks. I've worn luxury before — this is something else. It carries a feeling."</p>
+            <p class="text-[10px] tracking-[.2em] uppercase text-ivory/30 font-sans">— Shirin M. · Verified Purchase · Size M</p>
+          </div>
+          <div class="border-l-2 border-gold/30 pl-6">
+            <div class="flex gap-0.5 mb-3">
+              <svg class="w-3.5 h-3.5 text-gold fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="w-3.5 h-3.5 text-gold fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="w-3.5 h-3.5 text-gold fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="w-3.5 h-3.5 text-gold fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="w-3.5 h-3.5 text-gold fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </div>
+            <p class="font-serif text-lg italic text-ivory/80 leading-relaxed mb-3">"The quality is extraordinary — the wool is impossibly soft, the construction meticulous. I feel like I'm wearing a piece of cultural memory. That's not a small thing."</p>
+            <p class="text-[10px] tracking-[.2em] uppercase text-ivory/30 font-sans">— Kamran D. · Verified Purchase · Size L</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <!-- Mobile sticky CTA -->
+  <div id="mob-cta" class="flex items-center gap-3">
+    <div class="flex-1">
+      <p class="font-serif text-base font-light text-ivory leading-tight">The Ardashir Coat</p>
+      <p class="text-xs text-ivory/40 font-sans">$485 USD · Size M</p>
+    </div>
+    <button onclick="addToCart('The Ardashir Coat','$485')" class="cursor-pointer bg-gold hover:bg-gold-l text-navy text-xs tracking-[.22em] uppercase font-semibold px-6 py-3.5 transition-colors font-sans flex-shrink-0">Add to Cart</button>
+  </div>
+</div><!-- /page-product -->
+
+
+<!-- ═══════════════════════════════════════════════════════
+     PAGE: ABOUT
+═══════════════════════════════════════════════════════ -->
+<div id="page-about" class="page">
+
+  <!-- Hero -->
+  <section class="ig-hero persian-bg min-h-[70vh] flex items-end pb-16 px-4 sm:px-8 relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-b from-navy/30 to-navy/85 pointer-events-none"></div>
+    <div class="relative max-w-5xl mx-auto w-full">
+      <p class="text-[10px] tracking-[.35em] uppercase text-gold font-sans mb-4" data-r>The House of Afsane</p>
+      <h1 class="font-serif text-[clamp(3.5rem,7vw,6.5rem)] font-light text-ivory leading-[1.05] tracking-wide" data-r data-d="1">About<br><em class="italic gold-text">Afsane</em></h1>
+      <p class="font-serif text-xl md:text-2xl italic font-light text-ivory/55 mt-5 max-w-lg" data-r data-d="2">A brand born at the intersection of myth and modernity.</p>
+    </div>
+  </section>
+
+  <!-- Our Beginning -->
+  <section class="bg-navy py-20 md:py-28 px-4 sm:px-8">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 items-center">
+      <div data-r>
+        <p class="text-[10px] tracking-[.35em] uppercase text-gold/55 font-sans mb-5">Our Beginning</p>
+        <h2 class="font-serif text-4xl md:text-5xl font-light text-ivory leading-tight mb-8">The Story<br>Behind the Name</h2>
+        <div class="space-y-5 text-ivory/55 font-sans text-sm leading-[1.9] font-light">
+          <p>Afsane began with a simple refusal: the refusal to dress as if your history doesn't matter. Founded in 2022 by a team of designers with roots in Tehran and educations in Milan and London, Afsane was conceived as a response — not to a trend, but to a silence.</p>
+          <p>Persian culture has shaped human civilization for over two thousand years. Its poetry, its architecture, its textile traditions, its philosophy of beauty — all of this exists in the world. Yet the fashion industry largely pretends it doesn't. Afsane exists to end that silence, and to do it elegantly.</p>
+          <p>Our name says everything. <em>Afsane</em> — افسانه — means legend, fable, myth. It is the word Persian parents use to begin a story that they want their children to carry forever. We make clothing for those people. The ones who carry stories worth telling.</p>
+        </div>
+      </div>
+      <div class="relative aspect-[4/5] overflow-hidden" data-r data-d="1">
+        <div class="absolute inset-0 ig-story"></div>
+        <div class="absolute inset-4 border border-gold/12 pointer-events-none"></div>
+        <div class="absolute bottom-6 left-6 right-6">
+          <div class="h-px bg-gold/20 mb-4"></div>
+          <p class="text-[9px] tracking-[.3em] uppercase text-gold/45 font-sans">Tehran · Milan · London</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- The Name: Afsane -->
+  <section class="bg-[#0a0b12] persian-bg py-24 md:py-36 px-4 sm:px-8 text-center relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-burg/5 via-transparent to-gold/5 pointer-events-none"></div>
+    <div class="relative max-w-3xl mx-auto">
+      <div class="orn mb-10" data-r>
+        <span class="text-[9px] tracking-[.35em] uppercase text-gold/45 font-sans whitespace-nowrap">The Name</span>
+      </div>
+      <p class="font-serif text-[5rem] md:text-[8rem] leading-none text-gold/25 mb-4 select-none" data-r>افسانه</p>
+      <p class="text-[11px] tracking-[.35em] uppercase text-ivory/25 font-sans mb-8" data-r data-d="1">Afsane · af·sā·ne · Persian noun</p>
+      <h2 class="font-serif text-3xl md:text-5xl font-light text-ivory leading-tight mb-8" data-r data-d="2">Legend. Fable. <em class="italic gold-text">Myth.</em></h2>
+      <div class="max-w-xl mx-auto space-y-5 text-ivory/50 font-sans text-sm leading-[1.9] font-light">
+        <p data-r data-d="3">In Persian, <em>afsane</em> is the word for the stories that live longer than the people who first told them. It is used for Shahnameh heroes and ancient fables alike. It carries within it a sense of something that was never quite of this world — something that transcends time.</p>
+        <p data-r data-d="4">We chose this name because we believe clothing can function the same way. The best things you wear become part of your story. They accumulate meaning. They outlast you. That is what we build toward, one piece at a time.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Persian Heritage Pillars -->
+  <section class="bg-navy py-20 md:py-28 px-4 sm:px-8">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16" data-r>
+        <p class="text-[10px] tracking-[.35em] uppercase text-gold/55 font-sans mb-3">The Foundations</p>
+        <h2 class="font-serif text-4xl md:text-5xl font-light text-ivory tracking-wide">What We Draw From</h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-px bg-white/6">
+        <!-- Pillar 1: The Shahnameh -->
+        <div class="bg-navy p-10 md:p-12" data-r>
+          <div class="font-serif text-4xl text-gold/30 mb-6 font-light">I</div>
+          <h3 class="font-serif text-2xl font-light text-ivory mb-4 leading-tight">The Shahnameh</h3>
+          <p class="text-sm text-ivory/45 font-sans leading-relaxed font-light">Ferdowsi's 60,000-verse epic poem, completed in 1010 CE, is the longest poem ever written by a single author. It tells the history of Persia through its heroes, kings, and myths — and it remains the spiritual backbone of Persian identity. We name our pieces after its characters not as decoration, but as declaration.</p>
+        </div>
+        <!-- Pillar 2: The Simurgh -->
+        <div class="bg-navy p-10 md:p-12" data-r data-d="1">
+          <div class="font-serif text-4xl text-gold/30 mb-6 font-light">II</div>
+          <h3 class="font-serif text-2xl font-light text-ivory mb-4 leading-tight">The Simurgh</h3>
+          <p class="text-sm text-ivory/45 font-sans leading-relaxed font-light">The Simurgh is the great mythical bird of Persian legend — ancient, all-knowing, perched on the World Tree at the center of the universe. It appears in the Shahnameh as the protector of heroes and the symbol of divine wisdom. We use the Simurgh as our emblem of the eternal: something that carries the past but is never trapped by it.</p>
+        </div>
+        <!-- Pillar 3: The Persian Garden -->
+        <div class="bg-navy p-10 md:p-12" data-r data-d="2">
+          <div class="font-serif text-4xl text-gold/30 mb-6 font-light">III</div>
+          <h3 class="font-serif text-2xl font-light text-ivory mb-4 leading-tight">The Persian Garden</h3>
+          <p class="text-sm text-ivory/45 font-sans leading-relaxed font-light">The Persian garden — the <em>pairidaeza</em>, from which we get the word "paradise" — is a philosophy of ordered beauty. Four rivers, four quadrants, an enclosed world of deliberate harmony. It is the model for our collections: structured, purposeful, beautiful in a way that requires restraint. Every collection is a garden.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mission -->
+  <section class="bg-ivory py-20 md:py-28 px-4 sm:px-8">
+    <div class="max-w-4xl mx-auto text-center">
+      <div class="orn mb-10" data-r>
+        <span class="text-[9px] tracking-[.35em] uppercase text-navy/35 font-sans whitespace-nowrap">Our Mission</span>
+      </div>
+      <h2 class="font-serif text-[clamp(2rem,4.5vw,3.5rem)] font-light text-navy leading-[1.15] mb-8" data-r data-d="1">"Fashion as a form<br>of cultural memory."</h2>
+      <p class="text-sm text-navy/55 font-sans leading-[1.9] max-w-2xl mx-auto font-light mb-10" data-r data-d="2">We believe that what you wear is never neutral. It communicates identity, inheritance, aspiration. Our mission is to give people — particularly those from the Persian diaspora and those who love what Persia has given the world — clothing that is worthy of that communication. Premium in quality. Thoughtful in reference. Beautiful without apology.</p>
+      <div data-r data-d="3">
+        <button onclick="showPage('shop')" class="cursor-pointer bg-navy hover:bg-navy/85 text-ivory text-xs tracking-[.25em] uppercase font-semibold px-8 py-4 transition-colors duration-200 font-sans">Explore the Collection</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Craftsmanship -->
+  <section class="bg-navy py-20 md:py-28 px-4 sm:px-8 border-t border-white/6">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 items-center">
+      <div data-r>
+        <p class="text-[10px] tracking-[.35em] uppercase text-gold/55 font-sans mb-5">How We Make</p>
+        <h2 class="font-serif text-4xl md:text-5xl font-light text-ivory leading-tight mb-8">Craftsmanship<br><em class="italic text-gold-l">Without Compromise</em></h2>
+        <div class="space-y-5 text-ivory/50 font-sans text-sm leading-[1.9] font-light">
+          <p>Every Afsane piece is produced in small batches, working with atelier partners in Istanbul and Milan who share our standards for construction and ethics. We do not produce more than we can stand behind.</p>
+          <p>Our fabrics are sourced from mills in northern Italy and the British Isles — wool, cashmere, silk, and organic cotton that have been built to last far beyond a single season. We are allergic to disposability.</p>
+          <p>We limit production by design. Not to manufacture scarcity, but because we believe quality and scale are, in the end, incompatible. When a piece is gone, it is gone. That is not a marketing decision. That is a values decision.</p>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-3" data-r data-d="1">
+        <div class="aspect-square ig-c1 relative overflow-hidden"><div class="absolute inset-0 bg-gradient-to-br from-transparent to-black/40"></div><div class="absolute bottom-3 left-3 text-[9px] tracking-[.25em] uppercase text-gold/55 font-sans">Istanbul Atelier</div></div>
+        <div class="aspect-square ig-c3 relative overflow-hidden mt-6"><div class="absolute inset-0 bg-gradient-to-br from-transparent to-black/40"></div><div class="absolute bottom-3 left-3 text-[9px] tracking-[.25em] uppercase text-gold/55 font-sans">Italian Mills</div></div>
+        <div class="aspect-square ig-j3 relative overflow-hidden"><div class="absolute inset-0 bg-gradient-to-br from-transparent to-black/40"></div><div class="absolute bottom-3 left-3 text-[9px] tracking-[.25em] uppercase text-gold/55 font-sans">Hand Finishing</div></div>
+        <div class="aspect-square ig-j2 relative overflow-hidden mt-6"><div class="absolute inset-0 bg-gradient-to-br from-transparent to-black/40"></div><div class="absolute bottom-3 left-3 text-[9px] tracking-[.25em] uppercase text-gold/55 font-sans">Small Batches</div></div>
+      </div>
+    </div>
+  </section>
+
+</div><!-- /page-about -->
+
+
+<!-- ═══════════════════════════════════════════════════════
+     PAGE: JOURNAL
+═══════════════════════════════════════════════════════ -->
+<div id="page-journal" class="page">
+  <!-- Header -->
+  <div class="bg-navy pt-28 pb-14 px-4 sm:px-8 border-b border-white/6">
+    <div class="max-w-7xl mx-auto">
+      <p class="text-[10px] tracking-[.35em] uppercase text-gold/50 font-sans mb-3">Essays &amp; Stories</p>
+      <h1 class="font-serif text-5xl md:text-6xl font-light text-ivory tracking-wide">The Journal</h1>
+      <p class="text-sm text-ivory/35 font-sans mt-3 font-light">Essays, collection stories, cultural reflections, and founder's notes from the house of Afsane.</p>
+    </div>
+  </div>
+  <!-- Featured article -->
+  <div class="bg-navy py-12 px-4 sm:px-8">
+    <div class="max-w-7xl mx-auto">
+      <div class="group grid grid-cols-1 md:grid-cols-2 gap-0 border border-white/6 hover:border-gold/20 transition-colors duration-300 cursor-pointer overflow-hidden" data-r>
+        <div class="relative overflow-hidden aspect-video md:aspect-auto min-h-[320px]">
+          <div class="pcard-img absolute inset-0 ig-j1 group-hover:scale-[1.03] transition-transform duration-700"></div>
+          <div class="absolute inset-0 bg-gradient-to-r from-transparent to-navy/40 pointer-events-none"></div>
+          <div class="absolute top-5 left-5">
+            <span class="text-[9px] tracking-[.3em] uppercase text-gold border border-gold/40 px-2.5 py-1 font-sans">Featured</span>
+          </div>
+        </div>
+        <div class="flex flex-col justify-center p-8 md:p-12">
+          <span class="text-[9px] tracking-[.3em] uppercase text-gold/60 font-sans mb-4">Cultural Essay · 8 min read</span>
+          <h2 class="font-serif text-2xl md:text-3xl font-light text-ivory leading-snug mb-5 group-hover:text-gold transition-colors duration-200">The Legend of the Simurgh: How Ancient Persian Myth Shapes the Way We Dress Today</h2>
+          <p class="text-sm text-ivory/45 font-sans leading-relaxed font-light mb-6">The Simurgh — that great bird of paradise perched atop the World Tree at the center of the universe — has been woven into Persian consciousness for more than three thousand years. It appears in the Shahnameh as both protector and oracle. In Attar's <em>Conference of the Birds</em>, it becomes the soul's destination. Here, we consider what it means to dress in the spirit of something that transcends time.</p>
+          <a href="#" class="cursor-pointer text-xs tracking-[.22em] uppercase text-gold hover:text-gold-l transition-colors font-sans border-b border-gold/35 hover:border-gold pb-0.5 self-start">Read the Essay →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Article grid -->
+  <div class="bg-navy pb-20 px-4 sm:px-8">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+
+      <div class="cursor-pointer group" data-r>
+        <div class="relative overflow-hidden aspect-[4/3] mb-5">
+          <div class="pcard-img absolute inset-0 ig-j2 group-hover:scale-[1.04] transition-transform duration-700"></div>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none"></div>
+        </div>
+        <span class="text-[9px] tracking-[.3em] uppercase text-rose font-sans">Collection Story · 5 min</span>
+        <h3 class="font-serif text-xl font-light text-ivory mt-2 mb-3 leading-snug group-hover:text-gold transition-colors">Nowruz and the Spirit of Renewal: A Note on the Spring Drop</h3>
+        <p class="text-xs text-ivory/40 font-sans leading-relaxed line-clamp-3">The Persian New Year falls on the spring equinox — the precise moment when light and dark achieve balance before light begins to win. We built a collection around that moment.</p>
+      </div>
+
+      <div class="cursor-pointer group" data-r data-d="1">
+        <div class="relative overflow-hidden aspect-[4/3] mb-5">
+          <div class="pcard-img absolute inset-0 ig-j3 group-hover:scale-[1.04] transition-transform duration-700"></div>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none"></div>
+        </div>
+        <span class="text-[9px] tracking-[.3em] uppercase text-sage font-sans">Founder's Note · 4 min</span>
+        <h3 class="font-serif text-xl font-light text-ivory mt-2 mb-3 leading-snug group-hover:text-gold transition-colors">In Conversation: The Artisans Who Make Afsane Possible</h3>
+        <p class="text-xs text-ivory/40 font-sans leading-relaxed line-clamp-3">We traveled to the Istanbul atelier to spend three days watching our craftspeople work. What we found was a philosophy, not just a skill set.</p>
+      </div>
+
+      <div class="cursor-pointer group" data-r data-d="2">
+        <div class="relative overflow-hidden aspect-[4/3] mb-5">
+          <div class="pcard-img absolute inset-0 ig-j1 group-hover:scale-[1.04] transition-transform duration-700"></div>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none"></div>
+        </div>
+        <span class="text-[9px] tracking-[.3em] uppercase text-gold/60 font-sans">Cultural Essay · 7 min</span>
+        <h3 class="font-serif text-xl font-light text-ivory mt-2 mb-3 leading-snug group-hover:text-gold transition-colors">Persepolis: Reading Architecture as a Language of Dress</h3>
+        <p class="text-xs text-ivory/40 font-sans leading-relaxed line-clamp-3">The columns of Persepolis are not merely structural. They are a statement about what civilization values — proportion, repetition, refinement. We try to say the same things with fabric.</p>
+      </div>
+
+      <div class="cursor-pointer group" data-r data-d="1">
+        <div class="relative overflow-hidden aspect-[4/3] mb-5">
+          <div class="pcard-img absolute inset-0 ig-j2 group-hover:scale-[1.04] transition-transform duration-700"></div>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none"></div>
+        </div>
+        <span class="text-[9px] tracking-[.3em] uppercase text-gold/60 font-sans">Cultural Essay · 6 min</span>
+        <h3 class="font-serif text-xl font-light text-ivory mt-2 mb-3 leading-snug group-hover:text-gold transition-colors">The Persian Garden and Its Influence on Textile Pattern</h3>
+        <p class="text-xs text-ivory/40 font-sans leading-relaxed line-clamp-3">From the <em>pairidaeza</em> of the Achaemenid era to the garden carpets of the Safavid period — the Persian garden is a grammar, and textile artists have spoken it for centuries.</p>
+      </div>
+
+      <div class="cursor-pointer group" data-r data-d="2">
+        <div class="relative overflow-hidden aspect-[4/3] mb-5">
+          <div class="pcard-img absolute inset-0 ig-c1 group-hover:scale-[1.04] transition-transform duration-700"></div>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none"></div>
+        </div>
+        <span class="text-[9px] tracking-[.3em] uppercase text-rose font-sans">Collection Story · 3 min</span>
+        <h3 class="font-serif text-xl font-light text-ivory mt-2 mb-3 leading-snug group-hover:text-gold transition-colors">Behind the Mythos Collection: Where the Ideas Were Born</h3>
+        <p class="text-xs text-ivory/40 font-sans leading-relaxed line-clamp-3">Every piece in the Mythos Collection began as a proper noun — a name from the Shahnameh. Here, our creative director explains how each name became a garment.</p>
+      </div>
+
+      <div class="cursor-pointer group" data-r data-d="3">
+        <div class="relative overflow-hidden aspect-[4/3] mb-5">
+          <div class="pcard-img absolute inset-0 ig-story group-hover:scale-[1.04] transition-transform duration-700"></div>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none"></div>
+        </div>
+        <span class="text-[9px] tracking-[.3em] uppercase text-sage font-sans">Founder's Note · 5 min</span>
+        <h3 class="font-serif text-xl font-light text-ivory mt-2 mb-3 leading-snug group-hover:text-gold transition-colors">Why We Will Never Make a "Persian-Inspired" Collection for Anyone Else</h3>
+        <p class="text-xs text-ivory/40 font-sans leading-relaxed line-clamp-3">A note on what it means to build a brand from the inside of a culture rather than from the outside of one, and why the difference is everything.</p>
+      </div>
+
+    </div>
+  </div>
+</div><!-- /page-journal -->
+
+<!-- ═══════════════════════════════════════════════════════
+     FOOTER (shared across all pages)
+═══════════════════════════════════════════════════════ -->
+<footer class="bg-[#080910] border-t border-white/6">
+  <div class="max-w-7xl mx-auto px-4 sm:px-8 py-16 md:py-20">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-10 md:gap-8 mb-14">
+      <!-- Brand -->
+      <div class="col-span-2 md:col-span-1">
+        <div class="font-serif text-2xl tracking-[.35em] font-medium text-ivory mb-4">AFSANE</div>
+        <p class="text-xs text-ivory/35 font-sans leading-relaxed font-light mb-6">Premium Persian-inspired clothing. Born from legend. Crafted with intention.</p>
+        <div class="flex gap-4">
+          <a href="#" aria-label="Instagram" class="cursor-pointer w-8 h-8 flex items-center justify-center border border-white/10 hover:border-gold text-ivory/40 hover:text-gold transition-all duration-200">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
+          <a href="#" aria-label="Pinterest" class="cursor-pointer w-8 h-8 flex items-center justify-center border border-white/10 hover:border-gold text-ivory/40 hover:text-gold transition-all duration-200">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 12a4 4 0 0 1 8 0c0 2.21-1.79 4-4 4s-4-1.79-4-4z"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+          </a>
+          <a href="#" aria-label="TikTok" class="cursor-pointer w-8 h-8 flex items-center justify-center border border-white/10 hover:border-gold text-ivory/40 hover:text-gold transition-all duration-200">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.69a4.85 4.85 0 01-1.01.0z"/></svg>
+          </a>
+        </div>
+      </div>
+      <!-- Shop -->
+      <div>
+        <p class="text-[9px] tracking-[.3em] uppercase text-ivory/30 font-sans mb-5">Shop</p>
+        <ul class="space-y-3">
+          <li><a onclick="showPage('shop')" href="#" class="cursor-pointer text-xs text-ivory/50 hover:text-gold transition-colors font-sans">All Pieces</a></li>
+          <li><a onclick="showPage('shop')" href="#" class="cursor-pointer text-xs text-ivory/50 hover:text-gold transition-colors font-sans">New Arrivals</a></li>
+          <li><a onclick="showPage('shop')" href="#" class="cursor-pointer text-xs text-ivory/50 hover:text-gold transition-colors font-sans">Best Sellers</a></li>
+          <li><a onclick="showPage('collections')" href="#" class="cursor-pointer text-xs text-ivory/50 hover:text-gold transition-colors font-sans">Collections</a></li>
+          <li><a onclick="showPage('shop')" href="#" class="cursor-pointer text-xs text-ivory/50 hover:text-gold transition-colors font-sans">Limited Drops</a></li>
+          <li><a onclick="showPage('shop')" href="#" class="cursor-pointer text-xs text-ivory/50 hover:text-gold transition-colors font-sans">Gift Cards</a></li>
+        </ul>
+      </div>
+      <!-- Company -->
+      <div>
+        <p class="text-[9px] tracking-[.3em] uppercase text-ivory/30 font-sans mb-5">Company</p>
+        <ul class="space-y-3">
+          <li><a onclick="showPage('about')" href="#" class="cursor-pointer text-xs text-ivory/50 hover:text-gold transition-colors font-sans">About Afsane</a></li>
+          <li><a onclick="showPage('journal')" href="#" class="cursor-pointer text-xs text-ivory/50 hover:text-gold transition-colors font-sans">The Journal</a></li>
+          <li><a href="#" class="cursor-pointer text-xs text-ivory/50 hover:text-gold transition-colors font-sans">Sustainability</a></li>
+          <li><a href="#" class="cursor-pointer text-xs text-ivory/50 hover:text-gold transition-colors font-sans">Careers</a></li>
+          <li><a href="#" class="cursor-pointer text-xs text-ivory/50 hover:text-gold transition-colors font-sans">Press &amp; Media</a></li>
+          <li><a href="#" class="cursor-pointer text-xs text-ivory/50 hover:text-gold transition-colors font-sans">Contact Us</a></li>
+        </ul>
+      </div>
+      <!-- Support -->
+      <div>
+        <p class="text-[9px] tracking-[.3em] uppercase text-ivory/30 font-sans mb-5">Support</p>
+        <ul class="space-y-3">
+          <li><a href="#" class="cursor-pointer text-xs text-ivory/50 hover:text-gold transition-colors font-sans">Size Guide</a></li>
+          <li><a href="#" class="cursor-pointer text-xs text-ivory/50 hover:text-gold transition-colors font-sans">Shipping &amp; Returns</a></li>
+          <li><a href="#" class="cursor-pointer text-xs text-ivory/50 hover:text-gold transition-colors font-sans">FAQ</a></li>
+          <li><a href="#" class="cursor-pointer text-xs text-ivory/50 hover:text-gold transition-colors font-sans">Care Instructions</a></li>
+          <li><a href="#" class="cursor-pointer text-xs text-ivory/50 hover:text-gold transition-colors font-sans">Track Order</a></li>
+        </ul>
+      </div>
+    </div>
+    <!-- Bottom bar -->
+    <div class="pt-8 border-t border-white/6 flex flex-col md:flex-row items-center justify-between gap-4 text-[10px] text-ivory/20 font-sans tracking-wide">
+      <p>© 2025 Afsane. All rights reserved. Born from legend.</p>
+      <div class="flex gap-5">
+        <a href="#" class="cursor-pointer hover:text-gold/50 transition-colors">Privacy Policy</a>
+        <a href="#" class="cursor-pointer hover:text-gold/50 transition-colors">Terms of Service</a>
+        <a href="#" class="cursor-pointer hover:text-gold/50 transition-colors">Shipping Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<script>
+/* ═══════════════════════════════════════════════════════
+   AFSANE — Site JavaScript
+═══════════════════════════════════════════════════════ */
+
+/* ── Products data ─────────────────────────────────── */
+const products = [
+  { id:1,  name:'The Ardashir Coat',          price:'$485', cat:'Outerwear', img:'ig-p1', tag:'' },
+  { id:2,  name:'Simurgh Blazer',             price:'$325', cat:'Outerwear', img:'ig-p2', tag:'' },
+  { id:3,  name:'Persian Garden Silk Blouse', price:'$210', cat:'Tops',      img:'ig-p3', tag:'New' },
+  { id:4,  name:'Nowruz Trousers',            price:'$245', cat:'Trousers',  img:'ig-p4', tag:'' },
+  { id:5,  name:'The Mythmaker Dress',        price:'$395', cat:'Dresses',   img:'ig-p5', tag:'New' },
+  { id:6,  name:'Shahnameh Hoodie',           price:'$185', cat:'Tops',      img:'ig-p6', tag:'' },
+  { id:7,  name:'Rostam Varsity',             price:'$440', cat:'Outerwear', img:'ig-p7', tag:'Limited' },
+  { id:8,  name:'Cypress Grove Jacket',       price:'$290', cat:'Outerwear', img:'ig-p8', tag:'' },
+  { id:9,  name:'Zal Oversized Tee',          price:'$125', cat:'Tops',      img:'ig-p1', tag:'' },
+  { id:10, name:'Desert Moon Kaftan',         price:'$320', cat:'Dresses',   img:'ig-p2', tag:'Limited' },
+  { id:11, name:'Persepolis Column Tee',      price:'$115', cat:'Tops',      img:'ig-p3', tag:'' },
+  { id:12, name:'The Afsane Classic Shirt',   price:'$195', cat:'Tops',      img:'ig-p4', tag:'New' },
+];
+
+/* ── Cart state ────────────────────────────────────── */
+let cartItems = [];
+
+/* ── Render shop grid ──────────────────────────────── */
+function renderShopGrid(filter = 'all') {
+  const grid = document.getElementById('shop-grid');
+  if (!grid) return;
+  const filtered = filter === 'all' ? products : products.filter(p => p.cat === filter);
+  grid.innerHTML = filtered.map(p => `
+    <div class="pcard cursor-pointer" onclick="showPage('product')">
+      <div class="relative overflow-hidden aspect-[3/4] mb-3">
+        <div class="pcard-img absolute inset-0 ${p.img}"></div>
+        <div class="pcard-ov absolute inset-0 bg-black/40 flex items-end justify-center pb-5">
+          <span class="bg-gold text-navy text-[10px] tracking-[.2em] uppercase px-5 py-2.5 font-semibold font-sans cursor-pointer">Quick Add</span>
+        </div>
+        ${p.tag ? `<div class="absolute top-3 left-3"><span class="text-[9px] tracking-[.25em] uppercase ${p.tag==='Limited'?'bg-burg text-ivory':'bg-gold text-navy'} px-2 py-0.5 font-sans font-medium">${p.tag}</span></div>` : ''}
+      </div>
+      <p class="font-serif text-base font-light text-ivory leading-snug line-clamp-1">${p.name}</p>
+      <p class="text-xs text-ivory/40 font-sans mt-0.5">${p.price} USD</p>
+    </div>
+  `).join('');
+}
+
+/* ── Page navigation ───────────────────────────────── */
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const target = document.getElementById('page-' + id);
+  if (target) {
+    target.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    // Initialize page-specific behavior
+    if (id === 'shop') renderShopGrid();
+    if (id === 'product') initProductPage();
+    // Re-run reveal for newly shown page
+    setTimeout(runReveal, 50);
+  }
+  // Close mobile menu if open
+  document.getElementById('mob-menu').classList.remove('open');
+}
+
+/* ── Nav scroll effect ─────────────────────────────── */
+function initNav() {
+  const nav = document.getElementById('nav');
+  function onScroll() {
+    if (window.scrollY > 60) nav.classList.add('solid');
+    else nav.classList.remove('solid');
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+}
+
+/* ── Scroll reveal ─────────────────────────────────── */
+function runReveal() {
+  const els = document.querySelectorAll('.page.active [data-r]:not(.on)');
+  if (!els.length) return;
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); obs.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  els.forEach(el => obs.observe(el));
+}
+
+/* ── Mobile menu ───────────────────────────────────── */
+function toggleMobMenu() {
+  const menu = document.getElementById('mob-menu');
+  menu.classList.toggle('open');
+  document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
+}
+
+/* ── Cart ──────────────────────────────────────────── */
+function toggleCart() {
+  const cart = document.getElementById('cart');
+  const mask = document.getElementById('cart-mask');
+  cart.classList.toggle('open');
+  mask.classList.toggle('open');
+  document.body.style.overflow = cart.classList.contains('open') ? 'hidden' : '';
+}
+
+function addToCart(name, price) {
+  const existing = cartItems.find(i => i.name === name);
+  if (existing) existing.qty++;
+  else cartItems.push({ name, price, qty: 1 });
+  updateCartUI();
+  if (!document.getElementById('cart').classList.contains('open')) toggleCart();
+}
+
+function removeFromCart(name) {
+  cartItems = cartItems.filter(i => i.name !== name);
+  updateCartUI();
+}
+
+function updateCartUI() {
+  const count = cartItems.reduce((s, i) => s + i.qty, 0);
+  const badge = document.getElementById('cart-badge');
+  badge.textContent = count;
+  badge.classList.toggle('hidden', count === 0);
+
+  const empty = document.getElementById('cart-empty');
+  const list  = document.getElementById('cart-list');
+  const footer= document.getElementById('cart-footer');
+
+  if (count === 0) {
+    empty.classList.remove('hidden');
+    list.classList.add('hidden');
+    footer.classList.add('hidden');
+  } else {
+    empty.classList.add('hidden');
+    list.classList.remove('hidden');
+    list.classList.add('flex');
+    footer.classList.remove('hidden');
+
+    list.innerHTML = cartItems.map(item => `
+      <div class="flex items-center gap-4 py-4 border-b border-white/6">
+        <div class="w-16 h-20 flex-shrink-0 ig-p1 relative overflow-hidden"></div>
+        <div class="flex-1 min-w-0">
+          <p class="font-serif text-sm text-ivory leading-snug truncate">${item.name}</p>
+          <p class="text-xs text-ivory/35 font-sans mt-0.5">Size M · Qty ${item.qty}</p>
+          <p class="text-sm text-gold font-sans mt-1">${item.price}</p>
+        </div>
+        <button onclick="removeFromCart('${item.name}')" aria-label="Remove ${item.name}" class="cursor-pointer text-ivory/25 hover:text-rose transition-colors flex-shrink-0">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+    `).join('');
+
+    // Calculate total (strip $ and sum)
+    const total = cartItems.reduce((s, i) => {
+      const num = parseFloat(item.price.replace('$',''));
+      return s + (isNaN(num) ? 0 : num * i.qty);
+    }, 0);
+    document.getElementById('cart-total').textContent = '$' + cartItems.reduce((s,i) => {
+      const n = parseFloat(i.price.replace('$',''));
+      return s + (isNaN(n) ? 0 : n * i.qty);
+    }, 0).toLocaleString();
+  }
+}
+
+/* ── Accordion ─────────────────────────────────────── */
+function toggleAcc(btn) {
+  const body = btn.nextElementSibling;
+  const icon = btn.querySelector('.acc-icon');
+  const isOpen = body.classList.contains('open');
+  // Close all in same container
+  btn.closest('.divide-y').querySelectorAll('.acc-body.open').forEach(b => b.classList.remove('open'));
+  btn.closest('.divide-y').querySelectorAll('.acc-icon.open').forEach(i => i.classList.remove('open'));
+  btn.closest('.divide-y').querySelectorAll('button[aria-expanded="true"]').forEach(b => b.setAttribute('aria-expanded','false'));
+  if (!isOpen) {
+    body.classList.add('open');
+    icon.classList.add('open');
+    btn.setAttribute('aria-expanded','true');
+  }
+}
+
+/* ── Gallery ───────────────────────────────────────── */
+function setGalleryImg(imgClass, thumb) {
+  const main = document.getElementById('gallery-main');
+  // Remove old image classes
+  ['ig-p1','ig-p2','ig-p3','ig-p4','ig-p5','ig-p6','ig-p7','ig-p8','ig-c1','ig-c2','ig-c3','ig-j1','ig-j2','ig-j3','ig-story'].forEach(c => main.classList.remove(c));
+  main.classList.add(imgClass);
+  // Update active thumb
+  document.querySelectorAll('.gthumb').forEach(t => t.classList.remove('on'));
+  thumb.classList.add('on');
+}
+
+/* ── Size buttons ──────────────────────────────────── */
+function initSizeButtons() {
+  document.querySelectorAll('.sz:not(.na)').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.sz').forEach(b => b.classList.remove('on'));
+      this.classList.add('on');
+    });
+  });
+}
+
+/* ── Product page ──────────────────────────────────── */
+function initProductPage() {
+  initSizeButtons();
+  initMobileCTA();
+}
+
+/* ── Mobile sticky CTA ─────────────────────────────── */
+function initMobileCTA() {
+  const cta   = document.getElementById('mob-cta');
+  const addBtn= document.getElementById('add-to-cart');
+  if (!cta || !addBtn) return;
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => cta.classList.toggle('show', !e.isIntersecting));
+  }, { threshold: 0.1 });
+  obs.observe(addBtn);
+}
+
+/* ── Filter chips ──────────────────────────────────── */
+function filterProducts(cat, chipEl) {
+  document.querySelectorAll('.fchip').forEach(c => c.classList.remove('on'));
+  chipEl.classList.add('on');
+  renderShopGrid(cat);
+}
+
+/* ── Search (stub) ─────────────────────────────────── */
+function toggleSearch() {
+  // Stub: in production this opens a search modal
+  const q = window.prompt('Search Afsane:');
+  if (q && q.trim()) showPage('shop');
+}
+
+/* ── Newsletter submit ─────────────────────────────── */
+function handleNewsletterSubmit(e) {
+  e.preventDefault();
+  const btn = e.target.querySelector('button[type="submit"]');
+  const input = e.target.querySelector('input');
+  btn.textContent = '✓ Welcome';
+  btn.disabled = true;
+  btn.classList.remove('bg-gold','hover:bg-gold-l','text-navy');
+  btn.classList.add('bg-sage','text-ivory');
+  input.value = '';
+  input.placeholder = 'You\'re in the circle.';
+  setTimeout(() => {
+    btn.textContent = 'Subscribe';
+    btn.disabled = false;
+    btn.classList.add('bg-gold','hover:bg-gold-l','text-navy');
+    btn.classList.remove('bg-sage','text-ivory');
+    input.placeholder = 'Your email address';
+  }, 4000);
+}
+
+/* ── Init ──────────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded', () => {
+  initNav();
+  renderShopGrid();
+  runReveal();
+  // Re-run reveal on scroll
+  window.addEventListener('scroll', runReveal, { passive: true });
+});
+</script>
+
+</body>
+</html>
