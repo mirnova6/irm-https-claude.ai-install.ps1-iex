@@ -1,0 +1,493 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BLS Cockpit — EMDR Bilateral Stimulation</title>
+<meta name="description" content="Therapist-controlled EMDR bilateral stimulation cockpit. Visual, auditory and tactile BLS with presets, SUD/VOC tracking, session notes and safety tools. All data stays on your device.">
+<meta name="theme-color" content="#0b1220" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f4f7fb" media="(prefers-color-scheme: light)">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<noscript><p style="padding:2rem;font-family:sans-serif">BLS Cockpit needs JavaScript to run. Please enable it and reload.</p></noscript>
+
+<!-- ============ SVG icon sprite ============ -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+  <symbol id="i-logo" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2" fill="currentColor" stroke="none"/><circle cx="3.6" cy="12" r="1.7" fill="currentColor" stroke="none" opacity=".45"/><circle cx="20.4" cy="12" r="1.7" fill="currentColor" stroke="none" opacity=".45"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-stop" viewBox="0 0 24 24"><rect x="5.5" y="5.5" width="13" height="13" rx="2.5" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-skip" viewBox="0 0 24 24"><path d="M5 5v14l9-7z" fill="currentColor" stroke="none"/><rect x="16.5" y="5" width="2.6" height="14" rx="1.2" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" fill="none"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" fill="none"/></symbol>
+  <symbol id="i-monitor" viewBox="0 0 24 24"><rect x="2.5" y="4" width="19" height="13" rx="2" stroke="currentColor" stroke-width="2" fill="none"/><path d="M9 21h6M12 17.5V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></symbol>
+  <symbol id="i-expand" viewBox="0 0 24 24"><path d="M8 3.5H5.5A2 2 0 0 0 3.5 5.5V8M16 3.5h2.5a2 2 0 0 1 2 2V8M8 20.5H5.5a2 2 0 0 1-2-2V16M16 20.5h2.5a2 2 0 0 0 2-2V16" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2" fill="none"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5 5l1.6 1.6M17.4 17.4 19 19M19 5l-1.6 1.6M6.6 17.4 5 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20.5 14.5A8.5 8.5 0 1 1 9.5 3.5a7 7 0 0 0 11 11z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" fill="none"/></symbol>
+  <symbol id="i-waves" viewBox="0 0 24 24"><path d="M2.5 12c2-4.5 4-4.5 6 0s4 4.5 6 0 4-4.5 6 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></symbol>
+  <symbol id="i-clipboard" viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="17" rx="2" stroke="currentColor" stroke-width="2" fill="none"/><path d="M9 2.8h6v3H9zM9 11h6M9 15h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 2.8 4.5 5.6v6c0 4.6 3.2 7.6 7.5 9.6 4.3-2 7.5-5 7.5-9.6v-6z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" fill="none"/><path d="m8.8 11.8 2.2 2.2 4.2-4.2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+  <symbol id="i-buoy" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="12" cy="12" r="3.6" stroke="currentColor" stroke-width="2" fill="none"/><path d="m5.7 5.7 3.7 3.7M14.6 14.6l3.7 3.7M18.3 5.7l-3.7 3.7M9.4 14.6l-3.7 3.7" stroke="currentColor" stroke-width="2" fill="none"/></symbol>
+  <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 7h9M17 7h3M4 12h3M11 12h9M4 17h9M17 17h3" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/><circle cx="15" cy="7" r="2" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="9" cy="12" r="2" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="15" cy="17" r="2" stroke="currentColor" stroke-width="2" fill="none"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3.5v11M7.5 10.5 12 15l4.5-4.5M4 19.5h16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+  <symbol id="i-print" viewBox="0 0 24 24"><path d="M7 8V3.5h10V8M7 17H4.5V10a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v7H17" stroke="currentColor" stroke-width="2" stroke-linejoin="round" fill="none"/><rect x="7" y="14.5" width="10" height="6" stroke="currentColor" stroke-width="2" fill="none"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 6.5h16M9.5 6.5v-2h5v2M6.5 6.5 7.5 20a1.5 1.5 0 0 0 1.5 1.4h6A1.5 1.5 0 0 0 16.5 20l1-13.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" fill="none"/></symbol>
+  <symbol id="i-volume" viewBox="0 0 24 24"><path d="M4 9.5v5h3.5L12 19V5L7.5 9.5z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" fill="none"/><path d="M15.5 9a4.3 4.3 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></symbol>
+  <symbol id="i-image" viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="15" rx="2" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="9" cy="10" r="1.8" stroke="currentColor" stroke-width="2" fill="none"/><path d="m5 18.5 5-5 3 3 3.5-3.5 3 3" stroke="currentColor" stroke-width="2" stroke-linejoin="round" fill="none"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.6M20 3.5V8h-4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+  <symbol id="i-arrow-h" viewBox="0 0 24 24"><path d="M3.5 12h17M7.5 8l-4 4 4 4M16.5 8l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+  <symbol id="i-arrow-v" viewBox="0 0 24 24"><path d="M12 3.5v17M8 7.5l4-4 4 4M8 16.5l4 4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+  <symbol id="i-diag-up" viewBox="0 0 24 24"><path d="M5 19 19 5M15 5h4v4M9 19H5v-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+  <symbol id="i-diag-down" viewBox="0 0 24 24"><path d="M5 5l14 14M15 19h4v-4M9 5H5v4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+  <symbol id="i-shuffle" viewBox="0 0 24 24"><path d="M3.5 6.5h3.2c5.8 0 5.8 11 11.6 11M3.5 17.5h3.2c2.3 0 3.7-1.7 5-3.7m5-3.6c.9-1.9 2.3-3.7 4.6-3.7h.4" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M18.5 4.5 21 6.5l-2.5 2M18.5 15.5l2.5 2-2.5 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3.5 2.8 19.5h18.4z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" fill="none"/><path d="M12 9.5v4.5M12 16.8v.4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" fill="none"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m4.5 12.5 5 5 10-11" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="2" stroke="currentColor" stroke-width="2" fill="none"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2" fill="none"/></symbol>
+  <symbol id="i-save" viewBox="0 0 24 24"><path d="M5.5 3.5h11l4 4v11a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2v-13a2 2 0 0 1 2-2z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" fill="none"/><path d="M8 3.5V9h7V3.5M8 20.5v-6h8v6" stroke="currentColor" stroke-width="2" stroke-linejoin="round" fill="none"/></symbol>
+</svg>
+
+<!-- ============ App ============ -->
+<div id="app">
+
+  <header class="topbar" id="topbar">
+    <div class="brand">
+      <span class="brand-mark"><svg class="ic"><use href="#i-logo"/></svg></span>
+      <div class="brand-text">
+        <h1>BLS Cockpit</h1>
+        <p>EMDR bilateral stimulation</p>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <span class="client-status" id="clientStatus" hidden><span class="pulse-dot"></span>Client window connected</span>
+      <button class="btn btn-ghost" id="btnClientWindow" type="button">
+        <svg class="ic"><use href="#i-monitor"/></svg><span>Client window</span>
+      </button>
+      <button class="btn btn-ghost" id="btnPresent" type="button">
+        <svg class="ic"><use href="#i-expand"/></svg><span>Present</span>
+      </button>
+      <button class="btn btn-icon" id="btnTheme" type="button" aria-label="Toggle light or dark theme">
+        <svg class="ic icon-sun"><use href="#i-sun"/></svg>
+        <svg class="ic icon-moon"><use href="#i-moon"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="layout">
+
+    <!-- ======== Stage + transport ======== -->
+    <section class="stagecol" aria-label="Stimulus">
+      <div class="stagewrap" id="stagewrap">
+        <div class="stage" id="stage">
+          <div class="dot" id="dot" aria-hidden="true"></div>
+          <div class="stage-overlay countdown" id="countdownOverlay" hidden><span id="countdownNum">3</span></div>
+          <div class="stage-overlay prompt-overlay" id="promptOverlay" hidden>
+            <p id="promptText"></p>
+            <button class="btn btn-soft prompt-dismiss" id="btnPromptDismiss" type="button">Continue</button>
+          </div>
+          <div class="stage-overlay rest-overlay" id="restOverlay" hidden><p id="restText">Set complete</p></div>
+          <div class="stage-overlay waiting-overlay" id="waitingOverlay" hidden>
+            <svg class="ic ic-lg"><use href="#i-logo"/></svg>
+            <p>Waiting for the therapist window…</p>
+          </div>
+          <div class="hud" id="hud" hidden>
+            <span id="hudSet">Set 1</span><span class="hud-sep"></span>
+            <span id="hudPass">0 passes</span><span class="hud-sep"></span>
+            <span id="hudTime">0:00</span><span class="hud-sep"></span>
+            <span id="hudSpeed">60/min</span>
+          </div>
+          <button class="client-stop" id="btnClientStop" type="button" hidden>
+            <svg class="ic"><use href="#i-stop"/></svg> STOP
+          </button>
+          <button class="sound-chip" id="btnEnableSound" type="button" hidden>
+            <svg class="ic"><use href="#i-volume"/></svg> Tap to enable sound
+          </button>
+          <!-- fullscreen floating controls -->
+          <div class="fsbar" id="fsbar">
+            <button class="btn btn-start" id="fsStart" type="button" aria-label="Start or stop"><svg class="ic"><use href="#i-play"/></svg></button>
+            <button class="btn btn-icon" id="fsSlower" type="button" aria-label="Slower"><svg class="ic"><use href="#i-minus"/></svg></button>
+            <span class="fs-speed" id="fsSpeed">60</span>
+            <button class="btn btn-icon" id="fsFaster" type="button" aria-label="Faster"><svg class="ic"><use href="#i-plus"/></svg></button>
+            <button class="btn btn-icon" id="fsExit" type="button" aria-label="Exit fullscreen"><svg class="ic"><use href="#i-x"/></svg></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="transport" id="transport">
+        <button class="btn btn-start btn-xl" id="btnStart" type="button">
+          <svg class="ic ic-play"><use href="#i-play"/></svg>
+          <svg class="ic ic-stop"><use href="#i-stop"/></svg>
+          <span id="btnStartLabel">Start set</span>
+        </button>
+        <button class="btn btn-soft" id="btnEndSet" type="button" title="Finish the current set now">
+          <svg class="ic"><use href="#i-skip"/></svg><span>End set</span>
+        </button>
+        <div class="speed-nudge" role="group" aria-label="Speed">
+          <button class="btn btn-icon" id="btnSlower" type="button" aria-label="Slower"><svg class="ic"><use href="#i-minus"/></svg></button>
+          <div class="speed-readout"><strong id="speedReadout">60</strong><span>passes/min</span></div>
+          <button class="btn btn-icon" id="btnFaster" type="button" aria-label="Faster"><svg class="ic"><use href="#i-plus"/></svg></button>
+        </div>
+        <div class="transport-status" id="transportStatus">Ready — Set 1</div>
+        <div class="kbd-hint" aria-hidden="true"><kbd>Space</kbd> start/stop · <kbd>↑</kbd><kbd>↓</kbd> speed · <kbd>F</kbd> present</div>
+      </div>
+    </section>
+
+    <!-- ======== Control panel ======== -->
+    <aside class="panel" aria-label="Controls">
+      <nav class="tabs" role="tablist" aria-label="Control sections">
+        <button class="tab active" role="tab" aria-selected="true" data-tab="bls" id="tab-bls" type="button"><svg class="ic"><use href="#i-waves"/></svg><span>BLS</span></button>
+        <button class="tab" role="tab" aria-selected="false" data-tab="session" id="tab-session" type="button"><svg class="ic"><use href="#i-clipboard"/></svg><span>Session</span></button>
+        <button class="tab" role="tab" aria-selected="false" data-tab="safety" id="tab-safety" type="button"><svg class="ic"><use href="#i-shield"/></svg><span>Safety</span></button>
+        <button class="tab" role="tab" aria-selected="false" data-tab="emergency" id="tab-emergency" type="button"><svg class="ic"><use href="#i-buoy"/></svg><span>Emergency</span></button>
+        <button class="tab" role="tab" aria-selected="false" data-tab="settings" id="tab-settings" type="button"><svg class="ic"><use href="#i-sliders"/></svg><span>Settings</span></button>
+      </nav>
+
+      <!-- ==== BLS tab ==== -->
+      <section class="tabpane active" id="pane-bls" role="tabpanel" aria-labelledby="tab-bls">
+
+        <div class="card">
+          <h2>Presets</h2>
+          <div class="preset-row" id="presetRow"></div>
+          <div class="preset-save">
+            <input type="text" id="presetName" placeholder="Name current settings…" aria-label="New preset name" maxlength="28">
+            <button class="btn btn-soft" id="btnSavePreset" type="button"><svg class="ic"><use href="#i-save"/></svg>Save</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Motion</h2>
+          <div class="field">
+            <label for="dirSeg">Direction</label>
+            <div class="seg" id="dirSeg" role="group" aria-label="Direction">
+              <button type="button" data-dir="horizontal" class="active" title="Horizontal" aria-label="Horizontal"><svg class="ic"><use href="#i-arrow-h"/></svg></button>
+              <button type="button" data-dir="vertical" title="Vertical" aria-label="Vertical"><svg class="ic"><use href="#i-arrow-v"/></svg></button>
+              <button type="button" data-dir="diag-up" title="Diagonal rising" aria-label="Diagonal rising"><svg class="ic"><use href="#i-diag-up"/></svg></button>
+              <button type="button" data-dir="diag-down" title="Diagonal falling" aria-label="Diagonal falling"><svg class="ic"><use href="#i-diag-down"/></svg></button>
+              <button type="button" data-dir="random" title="Random" aria-label="Random"><svg class="ic"><use href="#i-shuffle"/></svg></button>
+            </div>
+          </div>
+          <div class="field">
+            <label for="speed">Speed <output for="speed" id="speedOut">60 passes/min</output></label>
+            <input type="range" id="speed" min="10" max="120" step="2" value="60">
+          </div>
+          <div class="field">
+            <label for="travel">Travel width <output for="travel" id="travelOut">85%</output></label>
+            <input type="range" id="travel" min="40" max="100" step="5" value="85">
+          </div>
+          <div class="field">
+            <label id="setLenLabel">Set length</label>
+            <div class="seg seg-text" id="setModeSeg" role="group" aria-labelledby="setLenLabel">
+              <button type="button" data-mode="passes" class="active">Passes</button>
+              <button type="button" data-mode="seconds">Seconds</button>
+              <button type="button" data-mode="continuous">Continuous</button>
+            </div>
+            <div class="setlen-inputs">
+              <div class="num-input" id="setPassesWrap">
+                <input type="number" id="setPasses" min="4" max="100" step="1" value="24" aria-label="Passes per set"><span>passes</span>
+              </div>
+              <div class="num-input" id="setSecondsWrap" hidden>
+                <input type="number" id="setSeconds" min="10" max="300" step="5" value="30" aria-label="Seconds per set"><span>sec</span>
+              </div>
+            </div>
+          </div>
+          <div class="field field-row">
+            <label for="countdown">Lead-in countdown</label>
+            <select id="countdown">
+              <option value="0">Off</option>
+              <option value="3" selected>3 seconds</option>
+              <option value="5">5 seconds</option>
+            </select>
+          </div>
+          <div class="field field-row">
+            <label for="autoPrompt">Ask SUD/VOC after each set</label>
+            <button class="switch" id="autoPrompt" type="button" role="switch" aria-checked="true"><span></span></button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Dot</h2>
+          <div class="field">
+            <label for="dotSize">Size <output for="dotSize" id="dotSizeOut">56 px</output></label>
+            <input type="range" id="dotSize" min="16" max="160" step="4" value="56">
+          </div>
+          <div class="field">
+            <label id="dotColorLabel">Color</label>
+            <div class="swatches" id="dotSwatches" role="group" aria-labelledby="dotColorLabel">
+              <button type="button" data-color="#22d3ee" style="--sw:#22d3ee" class="active" aria-label="Cyan"></button>
+              <button type="button" data-color="#f8fafc" style="--sw:#f8fafc" aria-label="White"></button>
+              <button type="button" data-color="#34d399" style="--sw:#34d399" aria-label="Green"></button>
+              <button type="button" data-color="#fbbf24" style="--sw:#fbbf24" aria-label="Amber"></button>
+              <button type="button" data-color="#f87171" style="--sw:#f87171" aria-label="Red"></button>
+              <button type="button" data-color="#a78bfa" style="--sw:#a78bfa" aria-label="Violet"></button>
+              <label class="swatch-custom" title="Custom color"><input type="color" id="dotColorCustom" value="#22d3ee" aria-label="Custom dot color"></label>
+            </div>
+          </div>
+          <div class="field field-row">
+            <label for="dotGlow">Soft glow</label>
+            <button class="switch on" id="dotGlow" type="button" role="switch" aria-checked="true"><span></span></button>
+          </div>
+          <div class="field">
+            <label for="dotImageInput">Custom icon <span class="hint">replaces the dot</span></label>
+            <div class="upload-row">
+              <label class="btn btn-soft upload-btn"><svg class="ic"><use href="#i-image"/></svg>Upload image<input type="file" id="dotImageInput" accept="image/*" hidden></label>
+              <div class="upload-preview" id="dotImagePreview" hidden>
+                <img alt="Custom dot icon preview" id="dotImageThumb">
+                <button class="btn btn-icon" id="btnDotImageClear" type="button" aria-label="Remove custom icon"><svg class="ic"><use href="#i-x"/></svg></button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Background</h2>
+          <div class="field">
+            <div class="seg seg-text" id="bgSeg" role="group" aria-label="Background">
+              <button type="button" data-bg="black" class="active">Black</button>
+              <button type="button" data-bg="gray">Gray</button>
+              <button type="button" data-bg="white">White</button>
+              <button type="button" data-bg="color">Custom</button>
+            </div>
+            <div class="field-row" id="bgColorWrap" hidden>
+              <label for="bgColorCustom">Custom color</label>
+              <input type="color" id="bgColorCustom" value="#1c2430" aria-label="Custom background color">
+            </div>
+          </div>
+          <div class="field">
+            <label for="bgImageInput">Background image</label>
+            <div class="upload-row">
+              <label class="btn btn-soft upload-btn"><svg class="ic"><use href="#i-image"/></svg>Upload image<input type="file" id="bgImageInput" accept="image/*" hidden></label>
+              <div class="upload-preview" id="bgImagePreview" hidden>
+                <img alt="Background image preview" id="bgImageThumb">
+                <button class="btn btn-icon" id="btnBgImageClear" type="button" aria-label="Remove background image"><svg class="ic"><use href="#i-x"/></svg></button>
+              </div>
+            </div>
+          </div>
+          <div class="field" id="bgDimWrap" hidden>
+            <label for="bgDim">Dim image <output for="bgDim" id="bgDimOut">40%</output></label>
+            <input type="range" id="bgDim" min="0" max="80" step="5" value="40">
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Audio &amp; tactile</h2>
+          <div class="field field-row">
+            <label for="sound">Sound</label>
+            <select id="sound">
+              <option value="clock" selected>Grandfather clock</option>
+              <option value="tone">Soft tone</option>
+              <option value="click">Click</option>
+              <option value="chime">Chime</option>
+              <option value="none">None</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="volume">Volume <output for="volume" id="volumeOut">60%</output></label>
+            <div class="volume-row">
+              <input type="range" id="volume" min="0" max="100" step="5" value="60">
+              <button class="btn btn-icon" id="btnPreviewSound" type="button" aria-label="Preview sound"><svg class="ic"><use href="#i-volume"/></svg></button>
+            </div>
+          </div>
+          <div class="field field-row">
+            <label for="audioLocal">Play audio in this window <span class="hint" id="audioLocalHint">audio always plays in the client window</span></label>
+            <button class="switch on" id="audioLocal" type="button" role="switch" aria-checked="true"><span></span></button>
+          </div>
+          <div class="field field-row">
+            <label for="haptics">Vibration on each pass <span class="hint">phones &amp; tablets that support it</span></label>
+            <button class="switch" id="haptics" type="button" role="switch" aria-checked="false"><span></span></button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==== Session tab ==== -->
+      <section class="tabpane" id="pane-session" role="tabpanel" aria-labelledby="tab-session" hidden>
+        <div class="card">
+          <div class="card-head">
+            <h2>Session</h2>
+            <button class="btn btn-soft" id="btnNewSession" type="button" title="Archive this session and start a new one"><svg class="ic"><use href="#i-refresh"/></svg>New</button>
+          </div>
+          <div class="field">
+            <label for="clientLabel">Client label <span class="hint">initials only — avoid full names</span></label>
+            <input type="text" id="clientLabel" maxlength="24" placeholder="e.g. J.D.">
+          </div>
+          <div class="field">
+            <label for="phaseSelect">Protocol phase</label>
+            <select id="phaseSelect"></select>
+            <p class="phase-guide" id="phaseGuide"></p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Assessment (Phase 3)</h2>
+          <div class="field"><label for="fTarget">Target / memory</label><input type="text" id="fTarget"></div>
+          <div class="field"><label for="fImage">Image — worst part</label><input type="text" id="fImage"></div>
+          <div class="field"><label for="fNC">Negative cognition</label><input type="text" id="fNC" placeholder="“I am…”"></div>
+          <div class="field"><label for="fPC">Positive cognition</label><input type="text" id="fPC" placeholder="“I am…”"></div>
+          <div class="field-grid">
+            <div class="field"><label for="fVOC">VOC (1–7)</label><input type="number" id="fVOC" min="1" max="7" step="1"></div>
+            <div class="field"><label for="fSUD">SUD (0–10)</label><input type="number" id="fSUD" min="0" max="10" step="1"></div>
+          </div>
+          <div class="field"><label for="fEmotion">Emotion(s)</label><input type="text" id="fEmotion"></div>
+          <div class="field"><label for="fBody">Body location</label><input type="text" id="fBody"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <h2>Set log</h2>
+            <button class="btn btn-soft" id="btnLogNow" type="button">Log SUD/VOC</button>
+          </div>
+          <div class="sud-chart" id="sudChart" hidden aria-label="SUD across sets"></div>
+          <div class="table-scroll">
+            <table class="setlog" id="setLogTable">
+              <thead><tr><th>#</th><th>Passes</th><th>Speed</th><th>SUD</th><th>VOC</th><th>Note</th></tr></thead>
+              <tbody id="setLogBody"><tr class="empty"><td colspan="6">No sets yet — press Start.</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Session notes</h2>
+          <div class="field"><textarea id="sessionNotes" rows="5" placeholder="Observations, channels, interweaves, closure…"></textarea></div>
+          <div class="btn-row">
+            <button class="btn btn-soft" id="btnExportTxt" type="button"><svg class="ic"><use href="#i-download"/></svg>Text</button>
+            <button class="btn btn-soft" id="btnExportJson" type="button"><svg class="ic"><use href="#i-download"/></svg>JSON</button>
+            <button class="btn btn-soft" id="btnPrint" type="button"><svg class="ic"><use href="#i-print"/></svg>Print</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <h2>Past sessions</h2><span class="hint" id="pastCount"></span>
+          </div>
+          <ul class="past-list" id="pastList"></ul>
+        </div>
+      </section>
+
+      <!-- ==== Safety tab ==== -->
+      <section class="tabpane" id="pane-safety" role="tabpanel" aria-labelledby="tab-safety" hidden>
+        <div class="card">
+          <h2>On-screen prompts</h2>
+          <p class="card-sub">Pauses the stimulation and shows the prompt on every screen, including the client window.</p>
+          <div class="prompt-grid" id="promptGrid"></div>
+          <button class="btn btn-soft" id="btnClearPrompt" type="button" hidden><svg class="ic"><use href="#i-x"/></svg>Clear prompt</button>
+        </div>
+        <div class="card">
+          <details id="editPrompts">
+            <summary>Edit prompt wording</summary>
+            <div id="promptEditors"></div>
+          </details>
+        </div>
+        <div class="card notice">
+          <svg class="ic"><use href="#i-alert"/></svg>
+          <p>Watch for signs of dissociation or flooding: fixed gaze, numbing, loss of present-time contact. Pause, ground, and shorten sets before continuing.</p>
+        </div>
+      </section>
+
+      <!-- ==== Emergency tab ==== -->
+      <section class="tabpane" id="pane-emergency" role="tabpanel" aria-labelledby="tab-emergency" hidden>
+        <div class="card">
+          <h2>Grounding script</h2>
+          <div class="field"><textarea id="emGrounding" rows="7"></textarea></div>
+          <button class="btn btn-primary" id="btnShowGrounding" type="button">Show on screen</button>
+        </div>
+        <div class="card">
+          <h2>Crisis plan</h2>
+          <div class="field"><textarea id="emCrisis" rows="5"></textarea></div>
+        </div>
+        <div class="card">
+          <h2>Supports &amp; contacts</h2>
+          <div class="field"><textarea id="emSupports" rows="4" placeholder="Trusted people, local crisis line, after-hours contact…"></textarea></div>
+          <p class="hint">Saved on this device only. Edit these to match your practice and each client's plan.</p>
+        </div>
+      </section>
+
+      <!-- ==== Settings tab ==== -->
+      <section class="tabpane" id="pane-settings" role="tabpanel" aria-labelledby="tab-settings" hidden>
+        <div class="card">
+          <h2>Appearance</h2>
+          <div class="field field-row">
+            <label for="themeSelect">Theme</label>
+            <select id="themeSelect">
+              <option value="auto">Match system</option>
+              <option value="dark" selected>Dark</option>
+              <option value="light">Light</option>
+            </select>
+          </div>
+        </div>
+        <div class="card">
+          <h2>Privacy</h2>
+          <div class="privacy-row"><svg class="ic"><use href="#i-lock"/></svg>
+            <p>Everything stays on this device. No account, no server, no analytics, no AI training. Session notes live in this browser's local storage — export what you need to keep and erase the rest.</p>
+          </div>
+          <div class="btn-row">
+            <button class="btn btn-soft" id="btnExportAll" type="button"><svg class="ic"><use href="#i-download"/></svg>Export all data</button>
+            <button class="btn btn-danger-soft" id="btnEraseAll" type="button"><svg class="ic"><use href="#i-trash"/></svg>Erase all data</button>
+          </div>
+        </div>
+        <div class="card">
+          <h2>Keyboard shortcuts</h2>
+          <ul class="kbd-list">
+            <li><kbd>Space</kbd><span>Start / stop the set</span></li>
+            <li><kbd>↑</kbd> <kbd>↓</kbd><span>Speed up / slow down</span></li>
+            <li><kbd>F</kbd><span>Present fullscreen</span></li>
+            <li><kbd>Esc</kbd><span>Stop and exit fullscreen</span></li>
+          </ul>
+        </div>
+        <div class="card">
+          <h2>About</h2>
+          <p class="about-text">BLS Cockpit is a bilateral-stimulation control panel for trained EMDR clinicians. It is not a medical device and not a self-therapy app — trauma processing belongs inside a therapeutic relationship. Use screen-share (or the client window) to deliver stimulation in telehealth or in person.</p>
+          <p class="hint" id="versionLine">v1.0</p>
+        </div>
+      </section>
+    </aside>
+  </main>
+</div>
+
+<!-- ============ SUD/VOC modal ============ -->
+<div class="modal-backdrop" id="sudvocModal" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="sudvocTitle">
+    <h2 id="sudvocTitle">Check-in</h2>
+    <p class="modal-sub" id="sudvocSub">After set 1 — “On a scale of 0 to 10, how disturbing does it feel now?”</p>
+    <div class="bigslider">
+      <label for="sudSlider">SUD <span class="hint">0 calm — 10 worst</span></label>
+      <div class="bigslider-row"><input type="range" id="sudSlider" min="0" max="10" step="1" value="5"><output id="sudVal">5</output></div>
+    </div>
+    <div class="bigslider">
+      <label for="vocSlider">VOC <span class="hint">1 false — 7 true · optional</span></label>
+      <div class="bigslider-row"><input type="range" id="vocSlider" min="0" max="7" step="1" value="0"><output id="vocVal">–</output></div>
+    </div>
+    <div class="field"><input type="text" id="setNote" placeholder="Quick note (optional)" maxlength="140" aria-label="Quick note"></div>
+    <div class="btn-row modal-actions">
+      <button class="btn btn-ghost" id="btnSudSkip" type="button">Skip</button>
+      <button class="btn btn-primary" id="btnSudSave" type="button">Log &amp; continue</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ First-run acknowledgement ============ -->
+<div class="modal-backdrop" id="ackModal" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="ackTitle">
+    <div class="ack-mark"><svg class="ic ic-lg"><use href="#i-logo"/></svg></div>
+    <h2 id="ackTitle">For clinician use</h2>
+    <ul class="ack-list">
+      <li><svg class="ic"><use href="#i-check"/></svg>BLS Cockpit is a therapist-controlled tool for use within EMDR therapy — it is not a self-therapy app and does not replace clinical judgment.</li>
+      <li><svg class="ic"><use href="#i-check"/></svg>Bilateral stimulation with trauma material should only happen with a trained clinician present, in session.</li>
+      <li><svg class="ic"><use href="#i-check"/></svg>All settings and notes stay in this browser on this device. Nothing is uploaded anywhere.</li>
+    </ul>
+    <div class="btn-row modal-actions">
+      <button class="btn btn-primary btn-wide" id="btnAck" type="button">I understand — I'm a trained clinician</button>
+    </div>
+  </div>
+</div>
+
+<div id="printReport" hidden></div>
+
+<script src="vendor/motion.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
