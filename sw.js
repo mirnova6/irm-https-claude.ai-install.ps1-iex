@@ -1,5 +1,5 @@
 /* BLS Cockpit service worker — offline app shell */
-const CACHE = 'bls-cockpit-v1';
+const CACHE = 'bls-cockpit-v2';
 const ASSETS = [
   './',
   'index.html',

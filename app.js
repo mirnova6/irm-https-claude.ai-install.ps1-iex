@@ -6,7 +6,7 @@
 (() => {
 'use strict';
 
-const VERSION = '1.0.0';
+const VERSION = '1.1.0';
 
 /* ---------------- helpers ---------------- */
 const $ = (id) => document.getElementById(id);
@@ -501,6 +501,19 @@ function onEngineEvent(type, data) {
   }
 }
 
+/* keep the screen awake while a set is running (phones/tablets) */
+let wakeLock = null;
+async function acquireWakeLock() {
+  try { if ('wakeLock' in navigator) wakeLock = await navigator.wakeLock.request('screen'); } catch {}
+}
+function releaseWakeLock() {
+  try { if (wakeLock) wakeLock.release(); } catch {}
+  wakeLock = null;
+}
+on(document, 'visibilitychange', () => {
+  if (document.visibilityState === 'visible' && engine.state !== 'idle') acquireWakeLock();
+});
+
 /* glide dot back to middle on stop */
 function glideDotHome() {
   renderer.center();
@@ -530,6 +543,7 @@ if (isClient) {
   function clientOnStopped() {
     glideDotHome();
     $('hud').hidden = true;
+    releaseWakeLock();
   }
   clientOnStoppedRef = clientOnStopped;
 
@@ -549,6 +563,7 @@ if (isClient) {
       lastScheduledIdx = -1;
       engine.start(msg.run);
       startLoop();
+      acquireWakeLock();
       const ctx = audio.ensure();
       if (audioEnabledHere() && (!ctx || audio.suspended())) $('btnEnableSound').hidden = false;
     } else if (msg.t === 'speed') {
@@ -669,6 +684,7 @@ function startRun() {
   lastScheduledIdx = -1;
   engine.start(run);
   startLoop();
+  acquireWakeLock();
   post({ t: 'start', run, cfg: cfgSnapshot() });
   running = true;
   document.body.classList.add('running');
@@ -685,6 +701,7 @@ function stopRun(reason) {
   countdownOverlay.hidden = true; lastCountShown = null;
   hud.hidden = true;
   glideDotHome();
+  releaseWakeLock();
   running = false;
   document.body.classList.remove('running');
   $('btnStartLabel').textContent = 'Start set';
@@ -706,6 +723,7 @@ function cockpitFinishSet(reason, data) {
   post({ t: 'stop', reason: 'complete' });
   engine.stop();
   glideDotHome();
+  releaseWakeLock();
   restText.textContent = `Set ${currentSetNumber} complete`;
   restOverlay.hidden = false;
   anim(restOverlay, { opacity: [0, 1] }, { duration: 0.45 });
@@ -736,7 +754,7 @@ function setTransportStatus(text) { $('transportStatus').textContent = text; }
 on($('btnStart'), 'click', () => running ? stopRun('manual') : startRun());
 on($('btnEndSet'), 'click', () => { if (running) stopRun('end-set'); });
 on($('fsStart'), 'click', () => running ? stopRun('manual') : startRun());
-on($('fsExit'), 'click', () => document.exitFullscreen && document.exitFullscreen());
+on($('fsExit'), 'click', () => exitPresent());
 
 /* speed */
 function setSpeed(v, fromSlider) {
@@ -768,15 +786,28 @@ on(document, 'keydown', (e) => {
   else if (e.key === 'ArrowUp') { e.preventDefault(); setSpeed(settings.speed + 5); }
   else if (e.key === 'ArrowDown') { e.preventDefault(); setSpeed(settings.speed - 5); }
   else if (e.key === 'f' || e.key === 'F') { e.preventDefault(); presentFullscreen(); }
-  else if (e.key === 'Escape') { if (running) stopRun('manual'); }
+  else if (e.key === 'Escape') {
+    if (running) stopRun('manual');
+    else if (document.body.classList.contains('presenting')) cssPresent(false);
+  }
 });
 
-/* fullscreen present */
+/* fullscreen present — falls back to a CSS overlay on iPhone Safari,
+   which has no element fullscreen API */
+function cssPresent(onState) {
+  document.body.classList.toggle('presenting', onState);
+  renderer.measure();
+}
+function isPresenting() { return !!document.fullscreenElement || document.body.classList.contains('presenting'); }
 function presentFullscreen() {
   const el = $('stagewrap');
+  if (isPresenting()) { exitPresent(); return; }
+  if (el.requestFullscreen) el.requestFullscreen().catch(() => cssPresent(true));
+  else cssPresent(true);
+}
+function exitPresent() {
   if (document.fullscreenElement) document.exitFullscreen();
-  else if (el.requestFullscreen) el.requestFullscreen();
-  else alert('Fullscreen is not available in this browser.');
+  cssPresent(false);
 }
 on($('btnPresent'), 'click', presentFullscreen);
 on(document, 'fullscreenchange', () => renderer.measure());
