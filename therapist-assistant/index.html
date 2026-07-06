@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CaseCompass — Therapist Assistant</title>
+<meta name="description" content="A HIPAA-conscious, offline-first therapist assistant: client dashboards, DAP notes, master treatment plans, case formulation with change tracking, interventions, safety &amp; rapport strategy, and a clinical knowledge base. All client data stays encrypted on your device.">
+<meta name="theme-color" content="#0b1a20" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f4fafb" media="(prefers-color-scheme: light)">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Noto+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<noscript><p style="padding:2rem;font-family:sans-serif">CaseCompass needs JavaScript to run. Please enable it and reload.</p></noscript>
+
+<!-- ============ SVG icon sprite (Lucide-style, 24x24, stroke) ============ -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+  <symbol id="i-logo" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" fill="none"/><path d="M15.5 8.5 13 13l-4.5 2.5L11 11z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" fill="none"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 10.5 9-7.5 9 7.5V20a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 20z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" fill="none"/><path d="M9.5 21.5v-7h5v7" stroke="currentColor" stroke-width="2" stroke-linejoin="round" fill="none"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5" stroke="currentColor" stroke-width="2" fill="none"/><path d="M2.5 20.5c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6M16 4.9a3.5 3.5 0 0 1 0 6.2M18 14.8c2.1.8 3.5 2.5 3.5 5.7" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></symbol>
+  <symbol id="i-note" viewBox="0 0 24 24"><path d="M6 2.5h9.5L20 7v13a1.5 1.5 0 0 1-1.5 1.5h-12A1.5 1.5 0 0 1 5 20V4A1.5 1.5 0 0 1 6.5 2.5z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" fill="none"/><path d="M15 2.5V7h4.5M8.5 12h7M8.5 16h7M8.5 8H11" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></symbol>
+  <symbol id="i-map" viewBox="0 0 24 24"><path d="M9 4 3.5 6v14L9 18l6 2 5.5-2V4L15 6zM9 4v14M15 6v14" stroke="currentColor" stroke-width="2" stroke-linejoin="round" fill="none"/></symbol>
+  <symbol id="i-id" viewBox="0 0 24 24"><rect x="2.5" y="4.5" width="19" height="15" rx="2" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="8.5" cy="10.5" r="2" stroke="currentColor" stroke-width="2" fill="none"/><path d="M5.5 16.2c.6-1.5 1.7-2.2 3-2.2s2.4.7 3 2.2M14 9.5h4.5M14 13h4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></symbol>
+  <symbol id="i-lightbulb" viewBox="0 0 24 24"><path d="M12 2.5a6.5 6.5 0 0 1 4 11.6c-.8.7-1.3 1.5-1.5 2.4h-5c-.2-.9-.7-1.7-1.5-2.4A6.5 6.5 0 0 1 12 2.5z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" fill="none"/><path d="M9.5 20h5M10.5 22.5h3" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></symbol>
+  <symbol id="i-tools" viewBox="0 0 24 24"><path d="M14.5 6.5a4 4 0 0 1 5-3.9L16.6 5.5l2 2 2.9-2.9a4 4 0 0 1-5.4 4.6L7.6 17.7a2 2 0 1 1-2.8-2.8l8-8a4 4 0 0 1 1.7-.4z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" fill="none"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 2.8 4.5 5.6v6c0 4.6 3.2 7.6 7.5 9.6 4.3-2 7.5-5 7.5-9.6v-6z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" fill="none"/><path d="m8.8 11.8 2.2 2.2 4.2-4.2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+  <symbol id="i-gauge" viewBox="0 0 24 24"><path d="M4.5 18.5a9 9 0 1 1 15 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/><path d="m12 13 3.5-4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/><circle cx="12" cy="13.5" r="1.6" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3.5 2.8 19.5h18.4z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" fill="none"/><path d="M12 9.5v4.5M12 16.8v.4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" fill="none"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h14v17H6a2 2 0 0 0-2 2z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" fill="none"/><path d="M4 20a2 2 0 0 1 2-2h14M9 7h7" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" fill="none"/><path d="M12 2.8 13 5.4a7 7 0 0 1 2.3 1l2.7-.8 1.4 2.4-1.9 2a7 7 0 0 1 0 2.5l1.9 2-1.4 2.4-2.7-.8a7 7 0 0 1-2.3 1L12 21.2 11 18.6a7 7 0 0 1-2.3-1l-2.7.8-1.4-2.4 1.9-2a7 7 0 0 1 0-2.5l-1.9-2 1.4-2.4 2.7.8a7 7 0 0 1 2.3-1z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" fill="none"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" fill="none"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" fill="none"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m4.5 12.5 5 5 10-11" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+  <symbol id="i-edit" viewBox="0 0 24 24"><path d="M16.8 3.7a2.4 2.4 0 0 1 3.4 3.4L8.5 18.8l-4.6 1.2L5.1 15.4z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" fill="none"/><path d="m14.5 6 3.4 3.4" stroke="currentColor" stroke-width="2" fill="none"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 6.5h16M9.5 6.5v-2h5v2M6.5 6.5 7.5 20a1.5 1.5 0 0 0 1.5 1.4h6A1.5 1.5 0 0 0 16.5 20l1-13.5M10 10.5v6M14 10.5v6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="2" stroke="currentColor" stroke-width="2" fill="none"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3M12 14.5v2.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></symbol>
+  <symbol id="i-unlock" viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="2" stroke="currentColor" stroke-width="2" fill="none"/><path d="M8 10.5V7.5a4 4 0 0 1 7.8-1.2M12 14.5v2.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3.5v11M7.5 10.5 12 15l4.5-4.5M4 19.5h16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+  <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 14.5v-11M7.5 8 12 3.5 16.5 8M4 19.5h16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+  <symbol id="i-print" viewBox="0 0 24 24"><path d="M7 8V3.5h10V8M7 17H4.5V10a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v7H17" stroke="currentColor" stroke-width="2" stroke-linejoin="round" fill="none"/><rect x="7" y="14.5" width="10" height="6" stroke="currentColor" stroke-width="2" fill="none"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8.5" y="8.5" width="12" height="12" rx="2" stroke="currentColor" stroke-width="2" fill="none"/><path d="M5.5 15.5h-1a1.5 1.5 0 0 1-1.5-1.5V5a1.5 1.5 0 0 1 1.5-1.5H14A1.5 1.5 0 0 1 15.5 5v1" stroke="currentColor" stroke-width="2" fill="none"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="7" stroke="currentColor" stroke-width="2" fill="none"/><path d="m15.8 15.8 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></symbol>
+  <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M4 12h16M13.5 5.5 20 12l-6.5 6.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+  <symbol id="i-chevron-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" fill="none"/><path d="M12 7v5l3.5 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></symbol>
+  <symbol id="i-history" viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 1 2.3 5.6M4 12H2.5M4 12l-1.5-3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M12 8v4l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></symbol>
+  <symbol id="i-sparkle" viewBox="0 0 24 24"><path d="M12 3.5 13.8 9 19.5 11 13.8 13 12 18.5 10.2 13 4.5 11 10.2 9z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" fill="none"/><path d="M19 3.5v3M17.5 5H20.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2" fill="none"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5 5l1.6 1.6M17.4 17.4 19 19M19 5l-1.6 1.6M6.6 17.4 5 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20.5 14.5A8.5 8.5 0 1 1 9.5 3.5a7 7 0 0 0 11 11z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" fill="none"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" fill="none"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20.5S3.5 15.5 3.5 9.3A4.8 4.8 0 0 1 12 6.4a4.8 4.8 0 0 1 8.5 2.9c0 6.2-8.5 11.2-8.5 11.2z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" fill="none"/></symbol>
+  <symbol id="i-flag" viewBox="0 0 24 24"><path d="M5.5 21.5v-18M5.5 4.5c4-2.4 7 1.8 13 0v9c-6 1.8-9-2.4-13 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M6.5 2.5H14L19.5 8v12a1.5 1.5 0 0 1-1.5 1.5H6.5A1.5 1.5 0 0 1 5 20V4a1.5 1.5 0 0 1 1.5-1.5z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" fill="none"/><path d="M14 2.5V8h5.5" stroke="currentColor" stroke-width="2" stroke-linejoin="round" fill="none"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" fill="none"/><path d="M12 11v5.5M12 7.6v.4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" fill="none"/></symbol>
+  <symbol id="i-cloud-off" viewBox="0 0 24 24"><path d="M6.3 6.5A5.5 5.5 0 0 1 16.7 8.6 4.3 4.3 0 0 1 20 15.5M17 18.5H7a4.5 4.5 0 0 1-1.7-8.7" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/><path d="m3.5 3.5 17 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></symbol>
+  <symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="15.5" r="4.5" stroke="currentColor" stroke-width="2" fill="none"/><path d="m11.5 12 8.5-8.5M17 6l3 3M14 9l2.5 2.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></symbol>
+</svg>
+
+<!-- ============ Lock screen ============ -->
+<div id="lockScreen" class="lock-screen" hidden>
+  <div class="lock-card" role="dialog" aria-labelledby="lockTitle" aria-modal="true">
+    <div class="lock-brand">
+      <span class="brand-mark lg"><svg class="ic ic-lg"><use href="#i-logo"/></svg></span>
+      <h1 id="lockTitle">CaseCompass</h1>
+      <p class="lock-sub">Therapist assistant &middot; encrypted on this device</p>
+    </div>
+
+    <!-- First-run setup -->
+    <form id="setupForm" hidden autocomplete="off">
+      <h2>Create your secure workspace</h2>
+      <p class="muted">All client records are encrypted with a passphrase that only you know. It never leaves this device and <strong>cannot be recovered if forgotten</strong> — store it in a password manager.</p>
+      <label for="setupName">Your name (shown on documents)</label>
+      <input id="setupName" type="text" placeholder="e.g., J. Rivera, LMFT" autocomplete="off">
+      <label for="setupPass">Passphrase <span class="muted">(12+ characters recommended)</span></label>
+      <input id="setupPass" type="password" minlength="8" required autocomplete="new-password">
+      <label for="setupPass2">Confirm passphrase</label>
+      <input id="setupPass2" type="password" minlength="8" required autocomplete="new-password">
+      <div class="pass-strength" id="passStrength" aria-live="polite"></div>
+      <button class="btn btn-primary btn-block" type="submit"><svg class="ic"><use href="#i-shield"/></svg>Create encrypted workspace</button>
+      <p class="tiny muted">Data is encrypted at rest with AES-256-GCM. The key is derived from your passphrase (PBKDF2-SHA-256, 310,000 iterations) and held only in memory while unlocked.</p>
+    </form>
+
+    <!-- Unlock -->
+    <form id="unlockForm" hidden autocomplete="off">
+      <h2>Unlock workspace</h2>
+      <label for="unlockPass">Passphrase</label>
+      <input id="unlockPass" type="password" required autocomplete="current-password" autofocus>
+      <p class="form-error" id="unlockError" role="alert" hidden></p>
+      <button class="btn btn-primary btn-block" type="submit"><svg class="ic"><use href="#i-unlock"/></svg>Unlock</button>
+      <button class="btn btn-ghost btn-block" type="button" id="btnForgot">I forgot my passphrase</button>
+    </form>
+  </div>
+  <p class="lock-footer">Local-only by default &middot; no account &middot; no server &middot; you control every byte</p>
+</div>
+
+<!-- ============ App ============ -->
+<div id="app" hidden>
+  <a class="skip-link" href="#view">Skip to main content</a>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <span class="brand-mark"><svg class="ic"><use href="#i-logo"/></svg></span>
+      <div class="brand-text">
+        <strong>CaseCompass</strong>
+        <span>Therapist Assistant</span>
+      </div>
+      <button class="btn btn-icon sidebar-close" id="btnSidebarClose" type="button" aria-label="Close navigation"><svg class="ic"><use href="#i-x"/></svg></button>
+    </div>
+    <nav class="sidebar-nav" aria-label="Main navigation" id="mainNav">
+      <a href="#/dashboard" data-route="dashboard"><svg class="ic"><use href="#i-home"/></svg>Dashboard</a>
+      <a href="#/clients" data-route="clients"><svg class="ic"><use href="#i-users"/></svg>Clients</a>
+      <a href="#/dap" data-route="dap"><svg class="ic"><use href="#i-note"/></svg>DAP Notes</a>
+      <a href="#/plans" data-route="plans"><svg class="ic"><use href="#i-map"/></svg>Treatment Plans</a>
+      <a href="#/profiles" data-route="profiles"><svg class="ic"><use href="#i-id"/></svg>Client Profiles</a>
+      <a href="#/formulation" data-route="formulation"><svg class="ic"><use href="#i-lightbulb"/></svg>Case Formulation</a>
+      <a href="#/interventions" data-route="interventions"><svg class="ic"><use href="#i-tools"/></svg>Interventions</a>
+      <a href="#/safety" data-route="safety"><svg class="ic"><use href="#i-heart"/></svg>Safety &amp; Rapport</a>
+      <a href="#/assessments" data-route="assessments"><svg class="ic"><use href="#i-gauge"/></svg>Assessments</a>
+      <a href="#/risk" data-route="risk"><svg class="ic"><use href="#i-alert"/></svg>Risk Tracking</a>
+      <a href="#/knowledge" data-route="knowledge"><svg class="ic"><use href="#i-book"/></svg>Knowledge Base</a>
+      <a href="#/settings" data-route="settings"><svg class="ic"><use href="#i-gear"/></svg>Settings</a>
+    </nav>
+    <div class="sidebar-foot">
+      <span class="offline-pill" title="All data stays encrypted on this device"><svg class="ic"><use href="#i-cloud-off"/></svg><span id="aiModePill">Local-only mode</span></span>
+    </div>
+  </aside>
+  <div class="sidebar-scrim" id="sidebarScrim" hidden></div>
+
+  <div class="main">
+    <header class="topbar">
+      <button class="btn btn-icon nav-toggle" id="btnSidebarOpen" type="button" aria-label="Open navigation"><svg class="ic"><use href="#i-menu"/></svg></button>
+      <div class="topbar-search">
+        <svg class="ic"><use href="#i-search"/></svg>
+        <input id="globalSearch" type="search" placeholder="Search clients, notes, knowledge… ( / )" aria-label="Global search">
+        <div class="search-results" id="searchResults" hidden></div>
+      </div>
+      <div class="topbar-actions">
+        <button class="btn btn-icon" id="btnTheme" type="button" aria-label="Toggle light or dark theme">
+          <svg class="ic icon-sun"><use href="#i-sun"/></svg>
+          <svg class="ic icon-moon"><use href="#i-moon"/></svg>
+        </button>
+        <button class="btn btn-soft" id="btnLock" type="button" title="Lock now (Ctrl+L)"><svg class="ic"><use href="#i-lock"/></svg><span>Lock</span></button>
+      </div>
+    </header>
+
+    <div class="draft-banner" id="draftBanner" hidden>
+      <svg class="ic"><use href="#i-info"/></svg>
+      <span>Everything the assistant generates is a <strong>draft or hypothesis for licensed-clinician review</strong> — it does not diagnose, and it never replaces clinical judgment.</span>
+      <button class="btn btn-icon" id="btnDismissBanner" aria-label="Dismiss"><svg class="ic"><use href="#i-x"/></svg></button>
+    </div>
+
+    <main id="view" class="view" tabindex="-1"></main>
+  </div>
+</div>
+
+<!-- ============ Modal + toast roots ============ -->
+<div id="modalRoot"></div>
+<div id="toastRoot" class="toast-root" aria-live="polite"></div>
+
+<script src="js/data.js"></script>
+<script src="js/store.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/views.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

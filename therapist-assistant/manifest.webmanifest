@@ -1,0 +1,15 @@
+{
+  "name": "CaseCompass — Therapist Assistant",
+  "short_name": "CaseCompass",
+  "description": "HIPAA-conscious, offline-first therapist assistant: client dashboards, DAP notes, treatment plans, case formulation with change tracking, interventions, and a clinical knowledge base. All data stays encrypted on your device.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f4fafb",
+  "theme_color": "#0891b2",
+  "icons": [
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
