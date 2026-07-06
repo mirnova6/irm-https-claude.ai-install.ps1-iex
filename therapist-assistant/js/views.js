@@ -37,9 +37,9 @@
     const staleRisk = clients.filter(c => (c.riskLevel === 'high' || c.riskLevel === 'acute') && !E.latestScore(c, 'C-SSRS'));
 
     mount(`
-      ${pageHead('Dashboard', `Welcome back${S().db.settings.clinicianName ? ', ' + esc(S().db.settings.clinicianName) : ''}. Here is your caseload at a glance.`,
-        `<a class="btn btn-cta" href="#/clients?new=1">${icon('plus')}New client</a>
-         <a class="btn" href="#/dap">${icon('note')}New DAP note</a>`)}
+      ${pageHead('Practice Overview', 'Your whole caseload at a glance. Day-to-day work happens inside each client’s workspace.',
+        `<a class="btn btn-primary" href="#/clients">${icon('users')}Choose client</a>
+         <a class="btn" href="#/clients?new=1">${icon('plus')}New client</a>`)}
       <div class="grid grid-4">
         <div class="stat-tile"><div class="stat-label">Active clients</div><div class="stat-value">${clients.length}</div><div class="stat-sub">of ${CC.MAX_CLIENTS} capacity</div></div>
         <div class="stat-tile"><div class="stat-label">Elevated risk</div><div class="stat-value">${hi.length}</div><div class="stat-sub">high or acute</div></div>
@@ -72,30 +72,107 @@
   };
 
   /* ============================================================
-     CLIENTS LIST
+     CHOOSE CLIENT (home screen)
      ============================================================ */
+  const timeAgo = (ts) => {
+    const d = Date.now() - ts;
+    const days = Math.floor(d / 86400000);
+    if (days === 0) return 'today';
+    if (days === 1) return 'yesterday';
+    if (days < 30) return days + 'd ago';
+    return UI.fmtDate(ts);
+  };
+  const lastSessionOf = (c) => {
+    const n = c.dapNotes[c.dapNotes.length - 1];
+    if (!n) return null;
+    return n.sessionDate || UI.fmtDate(n.ts);
+  };
+  const cFilter = { q: '', risk: 'all', plan: 'all', sort: 'updated' };
+
   V.clients = (params) => {
-    const clients = S().clients().sort((a, b) => b.updatedAt - a.updatedAt);
-    const full = clients.length >= CC.MAX_CLIENTS;
+    const all = S().clients();
+    const full = all.length >= CC.MAX_CLIENTS;
+    const hour = new Date().getHours();
+    const salut = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
+    const name = S().db.settings.clinicianName;
+
+    const q = cFilter.q.toLowerCase();
+    let list = all.filter(c => {
+      if (cFilter.risk !== 'all' && c.riskLevel !== cFilter.risk) return false;
+      if (cFilter.plan === 'has' && !c.treatmentPlans.length) return false;
+      if (cFilter.plan === 'none' && c.treatmentPlans.length) return false;
+      if (!q) return true;
+      const dx = (c.diagnoses || []).map(d => d.label).join(' ');
+      return (c.initials + ' ' + (c.name || '') + ' ' + dx + ' ' + (c.presentingProblem || '') + ' ' + c.riskLevel).toLowerCase().includes(q);
+    });
+    const riskOrder = { acute: 0, high: 1, moderate: 2, low: 3 };
+    const lastTs = (c) => c.dapNotes.length ? c.dapNotes[c.dapNotes.length - 1].ts : 0;
+    list.sort({
+      updated: (a, b) => b.updatedAt - a.updatedAt,
+      name: (a, b) => (a.initials + a.name).localeCompare(b.initials + b.name),
+      risk: (a, b) => riskOrder[a.riskLevel] - riskOrder[b.riskLevel] || b.updatedAt - a.updatedAt,
+      session: (a, b) => lastTs(b) - lastTs(a),
+    }[cFilter.sort]);
+
+    const card = (c) => {
+      const dx = E.activeDx(c);
+      const fresh = Date.now() - c.updatedAt < 3 * 86400000;
+      const plan = c.treatmentPlans.length;
+      const ls = lastSessionOf(c);
+      return `
+      <button class="client-card" data-id="${c.id}" aria-label="Open ${esc(c.initials)}">
+        <div class="cc-top">${UI.avatar(c, 'sm')}
+          <div class="cc-name"><strong>${esc(c.initials)}</strong><span>${esc(c.name || (c.age ? 'Age ' + c.age : '')) || '&nbsp;'}</span></div>
+          <span class="cc-open">${icon('arrow-right')}</span>
+        </div>
+        <div class="chip-row">${UI.riskChip(c.riskLevel)}${plan ? `<span class="chip chip-ok">${icon('map')}Plan v${plan}</span>` : `<span class="chip">${icon('map')}No plan yet</span>`}</div>
+        <div class="cc-rows">
+          <div>${icon('file')}<span class="val">${dx.length ? esc(dx[0]) : 'No diagnosis recorded'}</span></div>
+          <div>${icon('clock')}<span class="val">${ls ? 'Last session ' + esc(ls) : 'No sessions documented'}</span></div>
+        </div>
+        <div class="cc-foot">${fresh ? '<span class="fresh-dot" title="Updated in the last 3 days"></span>' : ''}<span class="tiny faint">Updated ${timeAgo(c.updatedAt)}</span></div>
+      </button>`;
+    };
+
     mount(`
-      ${pageHead('Clients', `${clients.length} of ${CC.MAX_CLIENTS} caseload slots in use. Each client has a private dashboard, memory, and full history.`,
-        `<button class="btn btn-cta" id="btnNewClient" ${full ? 'disabled title="Caseload is at the 50-client capacity"' : ''}>${icon('plus')}New client</button>`)}
-      ${clients.length ? `<div class="table-wrap"><table>
-        <thead><tr><th>Client</th><th>Age</th><th>Level of care</th><th>Risk</th><th>Presenting problem</th><th>Last activity</th></tr></thead>
-        <tbody>${clients.map(c => `
-          <tr class="rowlink" data-id="${c.id}" tabindex="0">
-            <td><div style="display:flex;align-items:center;gap:.6rem">${UI.avatar(c, 'sm')}<div><strong>${esc(c.initials)}</strong>${c.name ? `<div class="tiny muted">${esc(c.name)}</div>` : ''}</div></div></td>
-            <td>${esc(c.age || '—')}</td><td>${esc(c.levelOfCare || '—')}</td>
-            <td>${UI.riskChip(c.riskLevel)}</td>
-            <td class="small" style="max-width:26ch">${esc((c.presentingProblem || '—').slice(0, 90))}</td>
-            <td class="small muted">${UI.fmtDate(c.updatedAt)}</td>
-          </tr>`).join('')}</tbody></table></div>`
-        : `<div class="empty">${icon('users')}<p>No clients yet. Add your first client — you can start with just initials and build the record over time.</p><button class="btn btn-primary" id="btnNewClientEmpty">${icon('plus')}Add first client</button></div>`}
+      <div class="greeting">
+        <h1>${salut}${name ? ', ' + esc(name.split(',')[0]) : ''}</h1>
+        <p>Choose a client to open their workspace — everything you create lives inside their record. ${all.length} of ${CC.MAX_CLIENTS} caseload slots in use.</p>
+      </div>
+      <div class="client-toolbar">
+        <div class="ct-search">${icon('search')}<input id="cq" type="search" placeholder="Search initials, name, diagnosis, presenting problem…" value="${esc(cFilter.q)}" aria-label="Search clients"></div>
+        <select id="csort" aria-label="Sort clients">
+          <option value="updated" ${cFilter.sort === 'updated' ? 'selected' : ''}>Recently updated</option>
+          <option value="session" ${cFilter.sort === 'session' ? 'selected' : ''}>Recent session</option>
+          <option value="risk" ${cFilter.sort === 'risk' ? 'selected' : ''}>Risk (highest first)</option>
+          <option value="name" ${cFilter.sort === 'name' ? 'selected' : ''}>Name A–Z</option>
+        </select>
+        <button class="btn btn-cta" id="btnNewClient" ${full ? 'disabled title="Caseload is at the 50-client capacity"' : ''}>${icon('plus')}New client</button>
+      </div>
+      <div class="filter-chips" role="group" aria-label="Filter clients">
+        <button data-frisk="all" aria-pressed="${cFilter.risk === 'all'}">All</button>
+        ${CC.RISK_LEVELS.map(r => `<button data-frisk="${r.key}" aria-pressed="${cFilter.risk === r.key}"><span class="risk-dot" style="background:var(--${r.key === 'low' ? 'ok' : r.key === 'moderate' ? 'warn' : r.key === 'high' ? 'serious' : 'critical'})"></span>${r.label}</button>`).join('')}
+        <button data-fplan="has" aria-pressed="${cFilter.plan === 'has'}">Has plan</button>
+        <button data-fplan="none" aria-pressed="${cFilter.plan === 'none'}">Needs plan</button>
+      </div>
+      ${all.length === 0
+        ? `<div class="empty">${icon('users')}<p>Welcome. Add your first client — initials are enough to start, and the record deepens with every note, score, and formulation you add.</p><button class="btn btn-primary" id="btnNewClientEmpty">${icon('plus')}Add first client</button></div>`
+        : list.length === 0
+          ? `<div class="empty">${icon('search')}<p>No clients match this search or filter.</p><button class="btn" id="btnClearFilter">Clear filters</button></div>`
+          : `<div class="client-grid">${list.map(card).join('')}
+              ${!full ? `<button class="client-card new-card" id="btnNewClientCard">${icon('plus')}New client</button>` : ''}
+            </div>`}
     `);
+
     const open = () => V.clientForm();
-    on('#btnNewClient', 'click', open); on('#btnNewClientEmpty', 'click', open);
-    on('tr.rowlink', 'click', (e) => { location.hash = '#/client/' + e.currentTarget.dataset.id; });
-    on('tr.rowlink', 'keydown', (e) => { if (e.key === 'Enter') location.hash = '#/client/' + e.currentTarget.dataset.id; });
+    on('#btnNewClient', 'click', open); on('#btnNewClientEmpty', 'click', open); on('#btnNewClientCard', 'click', open);
+    on('.client-card[data-id]', 'click', (e) => { location.hash = '#/client/' + e.currentTarget.dataset.id; });
+    const cq = view().querySelector('#cq');
+    if (cq) cq.addEventListener('input', () => { cFilter.q = cq.value; const pos = cq.selectionStart; V.clients(); const cq2 = view().querySelector('#cq'); cq2.focus(); cq2.setSelectionRange(pos, pos); });
+    on('#csort', 'change', (e) => { cFilter.sort = e.target.value; V.clients(); });
+    on('[data-frisk]', 'click', (e) => { cFilter.risk = e.currentTarget.dataset.frisk; V.clients(); });
+    on('[data-fplan]', 'click', (e) => { cFilter.plan = cFilter.plan === e.currentTarget.dataset.fplan ? 'all' : e.currentTarget.dataset.fplan; V.clients(); });
+    on('#btnClearFilter', 'click', () => { Object.assign(cFilter, { q: '', risk: 'all', plan: 'all' }); V.clients(); });
     if (params?.get('new') === '1' && !full) setTimeout(open, 50);
   };
 
@@ -146,10 +223,48 @@
      CLIENT WORKSPACE (tabs)
      ============================================================ */
   const TABS = [
-    ['overview', 'Overview'], ['notes', 'DAP Notes'], ['plan', 'Treatment Plan'], ['profile', 'Full Profile'],
-    ['formulation', 'Formulation'], ['interventions', 'Interventions'], ['safety', 'Safety/Trust'],
-    ['assessments', 'Assessments'], ['risk', 'Risk'], ['timeline', 'Timeline'], ['documents', 'Documents'], ['history', 'Change History'],
+    ['overview', 'Overview', 'home'], ['notes', 'DAP Notes', 'note'], ['plan', 'Treatment Plan', 'map'], ['profile', 'Full Profile', 'id'],
+    ['formulation', 'Formulation', 'lightbulb'], ['interventions', 'Interventions', 'tools'], ['safety', 'Safety & Trust', 'heart'],
+    ['assessments', 'Assessments', 'gauge'], ['risk', 'Risk', 'alert'], ['timeline', 'Timeline', 'clock'],
+    ['documents', 'Documents', 'file'], ['history', 'Change History', 'history'], ['settings', 'Client Settings', 'gear'],
   ];
+
+  /* ---- context-aware navigation (sidebar on desktop, bottom bar on mobile) ---- */
+  V.renderNav = (client, active) => {
+    const nav = document.getElementById('mainNav');
+    const bottom = document.getElementById('bottomNav');
+    if (!nav || !bottom) return;
+    if (!client) {
+      const top = [
+        ['clients', 'Clients', 'users'], ['practice', 'Practice Overview', 'home'],
+        ['knowledge', 'Knowledge Base', 'book'], ['settings', 'Settings', 'gear'],
+      ];
+      nav.innerHTML = `<div class="nav-label">Workspace</div>` + top.map(([r, l, i]) =>
+        `<a href="#/${r}" ${active === r ? 'aria-current="page"' : ''}>${icon(i)}${l}</a>`).join('');
+      bottom.innerHTML = `<div class="bn-items">` + top.map(([r, l, i]) =>
+        `<a href="#/${r}" ${active === r ? 'aria-current="page"' : ''}>${icon(i)}${l.split(' ')[0]}</a>`).join('') + `</div>`;
+    } else {
+      nav.innerHTML = `
+        <a class="nav-back" href="#/clients">${icon('back')}All clients</a>
+        <div class="sidebar-client">${UI.avatar(client, 'sm')}<div class="sc-meta"><strong>${esc(client.initials)}</strong><span>${esc(CC.RISK_LEVELS.find(r => r.key === client.riskLevel)?.label || '')} risk</span></div></div>
+        <div class="nav-label">Client sections</div>` +
+        TABS.map(([k, l, i]) => `<a href="#/client/${client.id}/${k}" ${active === k ? 'aria-current="page"' : ''}>${icon(i)}${l}</a>`).join('');
+      bottom.innerHTML = `<div class="bn-items">
+        <a href="#/clients">${icon('back')}Clients</a>
+        <a href="#/client/${client.id}/overview" ${active === 'overview' ? 'aria-current="page"' : ''}>${icon('home')}Overview</a>
+        <a href="#/client/${client.id}/notes" ${active === 'notes' ? 'aria-current="page"' : ''}>${icon('note')}Notes</a>
+        <a href="#/client/${client.id}/plan" ${active === 'plan' ? 'aria-current="page"' : ''}>${icon('map')}Plan</a>
+        <button type="button" id="bnMore" ${!['overview', 'notes', 'plan'].includes(active) ? 'style="color:var(--primary-ink)"' : ''}>${icon('more')}More</button>
+      </div>`;
+      bottom.querySelector('#bnMore').addEventListener('click', () => {
+        UI.modal({
+          title: esc(client.initials) + ' — sections',
+          body: `<div class="sheet-links">${TABS.map(([k, l, i]) => `<a href="#/client/${client.id}/${k}">${icon(i)}${l}</a>`).join('')}</div>`,
+          onOpen(scrim, close) { scrim.querySelectorAll('.sheet-links a').forEach(a => a.addEventListener('click', close)); },
+        });
+      });
+    }
+  };
 
   V.client = (id, tab) => {
     const c = S().client(id);
@@ -170,7 +285,6 @@
         </div>
         <div class="page-head-actions">
           <button class="btn btn-sm" id="btnEditClient">${icon('edit')}Edit</button>
-          <button class="btn btn-sm btn-danger" id="btnDeleteClient">${icon('trash')}Delete</button>
         </div>
       </div>
       <nav class="tabs" aria-label="Client sections">
@@ -178,11 +292,6 @@
       </nav>
       <div id="tabBody"></div>`);
     on('#btnEditClient', 'click', () => V.clientForm(c));
-    on('#btnDeleteClient', 'click', async () => {
-      if (await UI.confirm('Delete client record', `Permanently delete <strong>${esc(c.initials)}</strong> and every note, plan, and history entry? Export first if you need a copy. This cannot be undone.`, 'Delete permanently', true)) {
-        S().deleteClient(c.id); location.hash = '#/clients'; UI.toast('Client deleted');
-      }
-    });
     V['tab_' + tab](c, document.getElementById('tabBody'));
   };
 
@@ -221,74 +330,94 @@
     });
   };
 
-  /* ---- TAB: overview ---- */
+  /* ---- TAB: overview (the client dashboard) ---- */
   V.tab_overview = (c, root) => {
     const dx = c.diagnoses || [];
     const meds = (c.medications || []).filter(m => m.active !== false);
-    const goals = c.goals || [];
+    const goals = (c.goals || []).filter(g => g.status !== 'discontinued');
     const f = c.formulations[c.formulations.length - 1];
     const fPrev = c.formulations[c.formulations.length - 2];
-    const recentNotes = c.dapNotes.slice(-3).reverse();
+    const lastNote = c.dapNotes[c.dapNotes.length - 1];
     const scores = ['PHQ-9', 'GAD-7', 'PCL-5', 'AUDIT', 'C-SSRS'].map(t => ({ t, s: E.latestScore(c, t) })).filter(x => x.s);
-    const recs = E.recommendInterventions(c).slice(0, 4);
-    const changes = c.changeLog.slice(-4).reverse();
+    const recs = E.recommendInterventions(c).slice(0, 3);
+    const changes = E.changesSinceLastSession(c);
+    const focus = E.nextSessionFocus(c);
+    const riskDef = CC.RISK_LEVELS.find(r => r.key === c.riskLevel);
 
     root.innerHTML = `
       <div class="grid grid-2">
-        <div class="card"><div class="card-title">${icon('id')}<h3>Snapshot</h3></div>
+        <div class="card"><div class="card-title">${icon('id')}<h3>Current clinical snapshot</h3></div>
           <dl class="kv">
-            <dt>Presenting problem</dt><dd>${esc(c.presentingProblem || '—')}</dd>
+            <dt>Age / pronouns</dt><dd>${esc([c.age, c.pronouns].filter(Boolean).join(' · ') || '—')}</dd>
             <dt>Level of care</dt><dd>${esc(c.levelOfCare || '—')}</dd>
-            <dt>Risk level</dt><dd>${UI.riskChip(c.riskLevel)}</dd>
             <dt>Attachment</dt><dd>${esc(c.attachmentStyle || '—')}</dd>
             <dt>Stage of change</dt><dd>${esc(c.motivationStage || '—')}</dd>
             <dt>Substance use</dt><dd>${esc(c.substanceUse || '—')}</dd>
-            <dt>Safety concerns</dt><dd>${esc(c.safetyConcerns || 'None documented')}</dd>
+            <dt>Latest measures</dt><dd>${scores.length ? scores.map(({ t, s }) => `${t} ${s.score}`).join(' · ') : '—'}</dd>
           </dl>
         </div>
-        <div class="card"><div class="card-title">${icon('file')}<h3>Diagnoses &amp; medications</h3><span class="spacer"></span>
+        <div class="card" style="border-left:4px solid var(--${c.riskLevel === 'low' ? 'ok' : c.riskLevel === 'moderate' ? 'warn' : c.riskLevel === 'high' ? 'serious' : 'critical'})">
+          <div class="card-title">${icon('alert')}<h3>Risk level &amp; safety notes</h3><span class="spacer"></span><a class="btn btn-sm" href="#/client/${c.id}/risk">Open risk</a></div>
+          <div class="chip-row" style="margin-bottom:.5rem">${UI.riskChip(c.riskLevel)}</div>
+          <p class="small muted" style="margin-bottom:.5rem">${esc(riskDef?.desc || '')}</p>
+          <p class="small" style="margin:0"><strong>Safety notes:</strong> ${esc(c.safetyConcerns || 'None documented.')}</p>
+          ${(c.riskFactors || []).length ? `<p class="tiny muted" style="margin:.4rem 0 0">Risk factors: ${esc(c.riskFactors.join(', '))}</p>` : ''}
+        </div>
+      </div>
+
+      <div class="focus-card" style="margin-top:1rem">
+        <div class="card-title">${icon('sparkle')}<h3>What to focus on next session</h3><span class="draft-tag">suggested</span></div>
+        <ol>${focus.map(x => `<li>${esc(x)}</li>`).join('')}</ol>
+      </div>
+
+      <div class="grid grid-2" style="margin-top:1rem">
+        <div class="card"><div class="card-title">${icon('flag')}<h3>Main presenting problem</h3></div>
+          <p class="small" style="margin:0">${esc(c.presentingProblem || 'Not recorded yet — edit the client or fill the profile’s presenting-problem section.')}</p>
+        </div>
+        <div class="card"><div class="card-title">${icon('file')}<h3>Key diagnoses &amp; medications</h3><span class="spacer"></span>
             <button class="btn btn-sm" id="btnAddDx">${icon('plus')}Dx</button><button class="btn btn-sm" id="btnAddMed">${icon('plus')}Med</button></div>
           ${dx.length ? `<div class="chip-row" style="margin-bottom:.6rem">${dx.map((d, i) => `<span class="chip ${d.status === 'confirmed' ? 'chip-primary' : d.status === 'ruled-out' ? '' : 'chip-warn'}" title="${d.status}">${esc(d.label)} <button class="btn btn-icon" style="min-width:22px;min-height:22px;padding:0" data-dxdel="${i}" aria-label="Remove">${icon('x')}</button></span>`).join('')}</div>` : '<p class="small muted">No diagnoses / impressions recorded.</p>'}
           ${meds.length ? `<dl class="kv">${meds.map(m => `<dt>${esc(m.name)}</dt><dd>${esc(m.dose || '')} ${m.prescriber ? '· ' + esc(m.prescriber) : ''}</dd>`).join('')}</dl>` : '<p class="small muted" style="margin:0">No active medications recorded.</p>'}
         </div>
       </div>
 
-      <div class="card" style="margin-top:1rem"><div class="card-title">${icon('lightbulb')}<h3>Current formulation</h3><span class="spacer"></span><a class="btn btn-sm" href="#/client/${c.id}/formulation">Open</a></div>
+      <div class="card" style="margin-top:1rem"><div class="card-title">${icon('lightbulb')}<h3>Updated case formulation</h3><span class="spacer"></span><a class="btn btn-sm" href="#/client/${c.id}/formulation">Open</a></div>
         ${f ? `<p class="small">${esc(f.text)}</p><p class="tiny muted">v${c.formulations.length} · ${UI.fmtDateTime(f.ts)} · ${f.author === 'clinician' ? 'clinician-authored' : 'assistant draft, clinician-reviewed'}</p>` : `<p class="small muted">No formulation yet. Generate a draft from the record on the Formulation tab.</p>`}
         ${f && fPrev ? `<details class="acc"><summary>${icon('history')}What changed from the previous formulation</summary><div class="acc-body">${UI.diffBlock(fPrev.text, f.text, f.rationale, UI.fmtDate(fPrev.ts), UI.fmtDate(f.ts))}</div></details>` : ''}
       </div>
 
       <div class="grid grid-2" style="margin-top:1rem">
-        <div class="card"><div class="card-title">${icon('flag')}<h3>Treatment goals</h3><span class="spacer"></span><button class="btn btn-sm" id="btnAddGoal">${icon('plus')}Goal</button></div>
-          ${goals.length ? goals.map((g, i) => `
-            <div style="display:flex;gap:.6rem;align-items:center;margin-bottom:.5rem">
+        <div class="card"><div class="card-title">${icon('map')}<h3>Current treatment plan goals</h3><span class="spacer"></span>
+            <button class="btn btn-sm" id="btnAddGoal">${icon('plus')}Goal</button><a class="btn btn-sm" href="#/client/${c.id}/plan">Plan</a></div>
+          ${goals.length ? goals.slice(0, 6).map((g) => { const i = c.goals.indexOf(g); return `
+            <div style="display:flex;gap:.6rem;align-items:center;margin-bottom:.55rem">
               <span class="chip ${g.status === 'met' ? 'chip-ok' : g.term === 'short' ? 'chip-primary' : ''}">${g.term === 'short' ? 'ST' : 'LT'}</span>
-              <div style="flex:1"><div class="small">${esc(g.text)}</div>
+              <div style="flex:1;min-width:0"><div class="small">${esc(g.text)}</div>
                 <div style="height:6px;border-radius:3px;background:var(--bg-soft);margin-top:3px"><div style="height:100%;width:${g.progress || 0}%;background:var(--cta);border-radius:3px"></div></div></div>
               <button class="btn btn-icon" data-goaledit="${i}" aria-label="Edit goal">${icon('edit')}</button>
-            </div>`).join('') : '<p class="small muted">No goals recorded — the treatment plan generator can propose measurable objectives.</p>'}
+            </div>`; }).join('') : `<p class="small muted" style="margin:0">No goals yet — <a href="#/client/${c.id}/plan">generate a master treatment plan</a> to propose measurable objectives.</p>`}
         </div>
-        <div class="card"><div class="card-title">${icon('gauge')}<h3>Latest measures</h3><span class="spacer"></span><a class="btn btn-sm" href="#/client/${c.id}/assessments">All</a></div>
-          ${scores.length ? `<dl class="kv">${scores.map(({ t, s }) => { const b = E.interpretScore(t, s.score).band; return `<dt>${t}</dt><dd><strong>${s.score}</strong> — ${b.label} <span class="tiny muted">(${s.date})</span></dd>`; }).join('')}</dl>` : '<p class="small muted">No assessment scores yet.</p>'}
+        <div class="card"><div class="card-title">${icon('tools')}<h3>Recommended next interventions</h3><span class="spacer"></span><a class="btn btn-sm" href="#/client/${c.id}/interventions">All</a></div>
+          ${recs.length ? recs.map(r => `<p class="small" style="margin-bottom:.5rem"><strong>${esc(r.iv.name)}</strong><br><span class="muted">${esc(r.why.slice(0, 2).join('; ') || r.iv.fits.slice(0, 90))}</span></p>`).join('') : '<p class="small muted" style="margin:0">Add diagnoses, risk data, and profile sections to unlock matched suggestions.</p>'}
         </div>
       </div>
 
       <div class="grid grid-2" style="margin-top:1rem">
-        ${chipEditor(c, 'themes', 'Main themes')}
+        <div class="card"><div class="card-title">${icon('note')}<h3>Most recent DAP note</h3><span class="spacer"></span><a class="btn btn-sm" href="#/client/${c.id}/notes">All notes</a></div>
+          ${lastNote ? `
+            <p class="small" style="margin-bottom:.35rem"><strong>${esc(lastNote.sessionDate || UI.fmtDate(lastNote.ts))}</strong> · ${esc(CC.DAP_STYLES.find(s => s.key === lastNote.style)?.label || lastNote.style)} ${lastNote.riskFlags?.length ? '<span class="chip chip-critical">risk flagged</span>' : ''}</p>
+            <p class="small muted" style="margin:0">${esc(lastNote.data.slice(0, 220))}…</p>`
+          : `<p class="small muted" style="margin:0">No sessions documented yet — <a href="#/client/${c.id}/notes">write the first DAP note</a>.</p>`}
+        </div>
+        <div class="card"><div class="card-title">${icon('history')}<h3>Recent changes since last session</h3><span class="spacer"></span><a class="btn btn-sm" href="#/client/${c.id}/history">History</a></div>
+          ${changes.length ? `<ul class="timeline">${changes.slice(0, 5).map(ch => `<li><div class="tl-when">${UI.fmtDateTime(ch.ts)}</div><div class="tl-what">${esc(ch.label)}${ch.reason ? ` — <span class="muted">${esc(ch.reason)}</span>` : ''}</div></li>`).join('')}</ul>` : '<p class="small muted" style="margin:0">Nothing has changed since the last documented session.</p>'}
+        </div>
+      </div>
+
+      <div class="grid grid-3" style="margin-top:1rem">
+        ${chipEditor(c, 'themes', 'Core clinical themes')}
         ${chipEditor(c, 'coreIssues', 'Core issues')}
         ${chipEditor(c, 'traumaThemes', 'Trauma themes')}
-        <div class="card"><div class="card-title"><h3>Recommended interventions</h3><span class="spacer"></span><a class="btn btn-sm" href="#/client/${c.id}/interventions">Why</a></div>
-          ${recs.length ? `<div class="chip-row">${recs.map(r => `<span class="chip chip-primary">${esc(r.iv.name)}</span>`).join('')}</div>` : '<p class="small muted">Add diagnoses/profile data to get matched suggestions.</p>'}
-        </div>
-      </div>
-
-      <div class="grid grid-2" style="margin-top:1rem">
-        <div class="card"><div class="card-title">${icon('note')}<h3>Recent DAP notes</h3><span class="spacer"></span><a class="btn btn-sm" href="#/client/${c.id}/notes">All notes</a></div>
-          ${recentNotes.length ? recentNotes.map(n => `<p class="small" style="margin-bottom:.4rem"><strong>${esc(n.sessionDate || UI.fmtDate(n.ts))}</strong> · ${esc(CC.DAP_STYLES.find(s => s.key === n.style)?.label || n.style)}${n.riskFlags?.length ? ' · <span class="chip chip-critical">risk flagged</span>' : ''}<br><span class="muted">${esc(n.data.slice(0, 130))}…</span></p>`).join('') : '<p class="small muted">No notes yet.</p>'}
-        </div>
-        <div class="card"><div class="card-title">${icon('history')}<h3>Recent changes</h3><span class="spacer"></span><a class="btn btn-sm" href="#/client/${c.id}/history">Full history</a></div>
-          ${changes.length ? `<ul class="timeline">${changes.map(ch => `<li><div class="tl-when">${UI.fmtDateTime(ch.ts)}</div><div class="tl-what">${esc(ch.label)}${ch.reason ? ` — <span class="muted">${esc(ch.reason)}</span>` : ''}</div></li>`).join('')}</ul>` : '<p class="small muted">No tracked changes yet.</p>'}
-        </div>
       </div>`;
 
     const rerender = () => V.client(c.id, 'overview');
@@ -915,31 +1044,50 @@
       : `<div class="empty">${icon('history')}<p>Every change to formulations, risk levels, profile sections, and clinical data is versioned here — old in red, new in green, with the why.</p></div>`;
   };
 
-  /* ============================================================
-     GLOBAL SECTION PAGES
-     ============================================================ */
-  const pickClientPage = (title, lead, tab, emptyIcon) => {
-    const clients = S().clients();
-    mount(`
-      ${pageHead(title, lead)}
-      ${clients.length ? `<div class="card"><label>Choose a client</label>${clientSelect('pick-client')}<div class="btn-row" style="margin-top:.8rem"><button class="btn btn-primary" id="pick-go">${icon('arrow-right')}Open</button></div></div>
-        <div class="grid grid-3" style="margin-top:1rem">${clients.map(c => `
-          <div class="card clickable" data-id="${c.id}" tabindex="0" role="link">
-            <div style="display:flex;align-items:center;gap:.6rem">${UI.avatar(c, 'sm')}<strong>${esc(c.initials)}</strong><span class="spacer"></span>${UI.riskChip(c.riskLevel)}</div>
-          </div>`).join('')}</div>`
-        : `<div class="empty">${icon(emptyIcon || 'users')}<p>Add a client first — then this section works per-client.</p><a class="btn btn-primary" href="#/clients?new=1">${icon('plus')}Add client</a></div>`}
-    `);
-    on('#pick-go', 'click', () => { const id = val('pick-client'); if (id) location.hash = `#/client/${id}/${tab}`; });
-    on('.card.clickable', 'click', (e) => { location.hash = `#/client/${e.currentTarget.dataset.id}/${tab}`; });
-    on('.card.clickable', 'keydown', (e) => { if (e.key === 'Enter') location.hash = `#/client/${e.currentTarget.dataset.id}/${tab}`; });
+  /* ---- TAB: client settings ---- */
+  V.tab_settings = (c, root) => {
+    root.innerHTML = `
+      <div class="grid grid-2">
+        <div class="card"><div class="card-title">${icon('id')}<h3>Client details</h3></div>
+          <p class="small muted">Initials, demographics, level of care, presenting problem, attachment hypothesis, and stage of change.</p>
+          <button class="btn" id="cs-edit">${icon('edit')}Edit client details</button>
+        </div>
+        <div class="card"><div class="card-title">${icon('download')}<h3>Export this client</h3></div>
+          <p class="small muted">Everything on file — notes, plans, profile, formulations, history — as a portable record.</p>
+          <div class="btn-row">
+            <button class="btn" id="cs-json">${icon('download')}JSON record</button>
+            <button class="btn" id="cs-print">${icon('print')}Print / PDF summary</button>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="margin-top:1rem"><div class="card-title">${icon('alert')}<h3>Danger zone</h3></div>
+        <p class="small muted">Deleting removes ${esc(c.initials)} and every associated note, plan, and history entry from this device. Export first if you may need the record.</p>
+        <button class="btn btn-danger" id="cs-delete">${icon('trash')}Delete client permanently</button>
+      </div>
+      <p class="tiny muted" style="margin-top:1rem">Workspace-wide settings (security, AI mode, profiling rubric, backups) live in <a href="#/settings">Settings</a>.</p>`;
+    on('#cs-edit', 'click', () => V.clientForm(c));
+    on('#cs-json', 'click', async () => {
+      if (await UI.confirm('Export client record', 'The file will contain <strong>readable clinical data</strong> for this client. Store it only on an encrypted volume and delete after use.', 'Export')) {
+        UI.download(`client-${c.initials.replace(/\W+/g, '')}-${UI.today()}.json`, JSON.stringify(c, null, 2), 'application/json');
+      }
+    });
+    on('#cs-print', 'click', () => {
+      const f = c.formulations[c.formulations.length - 1];
+      const plan = c.treatmentPlans[c.treatmentPlans.length - 1];
+      UI.printDocument(`Clinical Summary — ${c.initials}`, `
+        <h2>Snapshot</h2><p>${esc([c.age && 'Age ' + c.age, c.pronouns, c.levelOfCare, 'Risk: ' + c.riskLevel].filter(Boolean).join(' · '))}</p>
+        <h2>Presenting problem</h2><p>${esc(c.presentingProblem || '—')}</p>
+        <h2>Diagnoses / impressions</h2><p>${esc(E.activeDx(c).join('; ') || '—')}</p>
+        <h2>Current formulation</h2><p>${esc(f?.text || '—')}</p>
+        <h2>Active goals</h2><ul>${(c.goals || []).filter(g => g.status === 'active').map(g => `<li>${esc(g.text)} (${g.progress || 0}%)</li>`).join('') || '<li>—</li>'}</ul>
+        ${plan ? `<h2>Treatment plan (latest)</h2><p>${esc(plan.sections.goalPlan)}</p>` : ''}`);
+    });
+    on('#cs-delete', 'click', async () => {
+      if (await UI.confirm('Delete client record', `Permanently delete <strong>${esc(c.initials)}</strong> and every note, plan, and history entry? This cannot be undone.`, 'Delete permanently', true)) {
+        S().deleteClient(c.id); location.hash = '#/clients'; UI.toast('Client deleted');
+      }
+    });
   };
-
-  V.dap = () => pickClientPage('DAP Notes', 'Turn transcripts, rough notes, bullets, or dictation into polished, editable DAP documentation — in nine clinical styles.', 'notes', 'note');
-  V.plans = () => pickClientPage('Master Treatment Plans', 'Generate a holistic master plan: identity formulation, hierarchy of needs, evidence, goal plan, and measurable objective/plan pairs.', 'plan', 'map');
-  V.profiles = () => pickClientPage('Client Profiles', 'The living, whole-person clinical “resume” — 31 domains from presenting problem to repetition patterns, versioned over time.', 'profile', 'id');
-  V.formulationPage = () => pickClientPage('Case Formulation', 'Draft, refine, and version case formulations. Old thinking is preserved in red→green change tracking with rationale.', 'formulation', 'lightbulb');
-  V.safetyPage = () => pickClientPage('Safety & Rapport', 'Per-client guidance on how to speak, pace, validate, confront, and repair — driven by attachment, trauma, shame, and cultural data.', 'safety', 'heart');
-  V.assessmentsPage = () => pickClientPage('Assessments', 'Record PHQ-9, GAD-7, PCL-5, AUDIT, DAST-10, BAM-R, C-SSRS, ACE, ORS and SRS scores; get interpretation bands and trend charts.', 'assessments', 'gauge');
 
   V.interventionsLibrary = () => {
     mount(`
@@ -1155,31 +1303,34 @@
      ============================================================ */
   V.route = () => {
     if (S().locked) return;
-    const hash = location.hash.replace(/^#\/?/, '') || 'dashboard';
+    const hash = location.hash.replace(/^#\/?/, '') || 'clients';
     const [path, query] = hash.split('?');
     const params = new URLSearchParams(query || '');
     const parts = path.split('/').filter(Boolean);
+
+    /* client-first: old tool-first routes land on Choose Client */
+    const redirects = { dap: 'clients', plans: 'clients', profiles: 'clients', formulation: 'clients', safety: 'clients', assessments: 'clients', dashboard: 'practice' };
+    if (redirects[parts[0]]) { location.hash = '#/' + redirects[parts[0]]; return; }
+
     const routes = {
-      dashboard: () => V.dashboard(),
       clients: () => V.clients(params),
-      dap: () => V.dap(),
-      plans: () => V.plans(),
-      profiles: () => V.profiles(),
-      formulation: () => V.formulationPage(),
+      practice: () => V.dashboard(),
       interventions: () => V.interventionsLibrary(),
-      safety: () => V.safetyPage(),
-      assessments: () => V.assessmentsPage(),
       risk: () => V.riskTracking(),
       knowledge: () => V.knowledge(params),
       settings: () => V.settings(),
     };
-    document.querySelectorAll('#mainNav a').forEach(a => {
-      a.toggleAttribute('aria-current', false);
-      if (a.dataset.route === parts[0] || (parts[0] === 'client' && a.dataset.route === 'clients')) a.setAttribute('aria-current', 'page');
-      else a.removeAttribute('aria-current');
-    });
-    if (parts[0] === 'client' && parts[1]) V.client(parts[1], parts[2]);
-    else (routes[parts[0]] || routes.dashboard)();
+
+    if (parts[0] === 'client' && parts[1]) {
+      const c = S().client(parts[1]);
+      const tab = TABS.some(t => t[0] === parts[2]) ? parts[2] : 'overview';
+      V.renderNav(c, tab);
+      V.client(parts[1], parts[2]);
+    } else {
+      const key = routes[parts[0]] ? parts[0] : 'clients';
+      V.renderNav(null, key === 'risk' ? 'practice' : key === 'interventions' ? 'knowledge' : key);
+      routes[key]();
+    }
     document.getElementById('sidebar').classList.remove('open');
     document.getElementById('sidebarScrim').hidden = true;
   };

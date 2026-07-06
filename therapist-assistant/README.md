@@ -16,13 +16,21 @@ installs as an app (PWA).
 
 ---
 
-## Quick start
+## Quick start (client-first flow)
 
 1. Open the app and create your encrypted workspace with a passphrase
    (**it cannot be recovered** — store it in a password manager).
-2. Add a client (initials are enough to start).
-3. Work in the client's tabs: paste rough session notes → generate a DAP draft →
-   edit → save. Generate a master treatment plan. Build the 31-domain profile over time.
+2. The home screen is **Choose Client** — a searchable, filterable, sortable grid
+   of client cards (initials, risk level, diagnosis, last session, plan status,
+   recent-update indicator). Pick a client, or add one (initials are enough).
+3. Everything happens **inside that client's workspace**: Overview dashboard,
+   DAP Notes, Treatment Plan, Full Profile, Formulation, Interventions,
+   Safety & Trust, Assessments, Risk, Timeline, Documents, Change History, and
+   per-client Settings. Anything you generate or record updates that client's
+   memory, formulation, plan, and history automatically.
+4. Return to Choose Client anytime via "All clients" (sidebar) or the bottom
+   navigation on mobile. Desktop uses a contextual sidebar; phones get a bottom
+   nav bar — the layout adapts across iOS, Android, macOS, and Windows.
 
 ## Features
 

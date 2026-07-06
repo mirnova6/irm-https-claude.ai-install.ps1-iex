@@ -384,6 +384,42 @@
   };
 
   /* ============================================================
+     NEXT-SESSION FOCUS + CHANGES SINCE LAST SESSION
+     ============================================================ */
+  E.nextSessionFocus = (client) => {
+    const c = client, items = [];
+    if (c.riskLevel === 'acute' || c.riskLevel === 'high') {
+      items.push(`Re-assess risk first — current level is ${c.riskLevel}. Review the safety plan and means restriction before any other agenda.`);
+    } else if (c.riskLevel === 'moderate') {
+      items.push('Brief risk check-in (level is moderate) — confirm no escalation since last contact.');
+    }
+    const srs = E.latestScore(c, 'SRS');
+    if (srs && srs.score < 36) items.push(`Alliance check: last SRS was ${srs.score} (<36) — invite open feedback about how sessions are landing.`);
+    const lastNote = c.dapNotes[c.dapNotes.length - 1];
+    if (lastNote?.inputs?.homework) items.push(`Review the assigned between-session work: ${lastNote.inputs.homework}.`);
+    if (lastNote?.inputs?.nextFocus) items.push(`Planned focus from last note: ${lastNote.inputs.nextFocus}.`);
+    const goal = (c.goals || []).find(g => g.status === 'active');
+    if (goal) items.push(`Advance the active objective: “${goal.text}” (${goal.progress || 0}% progress).`);
+    const recentRiskEvents = (c.timeline || []).filter(t => t.type === 'risk').slice(-1);
+    if (recentRiskEvents.length && c.riskLevel === 'low') items.push(`Follow up on the recent flagged item: ${recentRiskEvents[0].summary}.`);
+    const overdue = CC.ASSESSMENTS.filter(t => ['PHQ-9', 'GAD-7'].includes(t.key)).filter(t => {
+      const s = E.latestScore(c, t.key);
+      return s && (Date.now() - new Date(s.date).getTime()) > 28 * 86400000;
+    });
+    if (overdue.length) items.push(`Re-administer ${overdue.map(t => t.key).join(' and ')} — last administration is over 4 weeks old.`);
+    if ((c.themes || []).length) items.push(`Bridge session material back to the core themes on file: ${c.themes.slice(0, 3).join(', ')}.`);
+    if (!items.length) items.push('Open with the client’s agenda, then return to the treatment plan’s current objective.');
+    return items.slice(0, 6);
+  };
+
+  E.changesSinceLastSession = (client) => {
+    const c = client;
+    const lastNote = c.dapNotes[c.dapNotes.length - 1];
+    const since = lastNote ? lastNote.ts : (Date.now() - 14 * 86400000);
+    return (c.changeLog || []).filter(ch => ch.ts > since).slice(-8).reverse();
+  };
+
+  /* ============================================================
      OPTIONAL: Claude API polish (online mode, explicit opt-in)
      Direct browser call to the Anthropic Messages API using the
      clinician's own key. Nothing is sent unless the clinician
